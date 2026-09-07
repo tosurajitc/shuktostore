@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-sp-page-title>AI with Sayuj — Shukto Press</title>
+  <meta name="description" content="A 12-year-old's real guide to understanding artificial intelligence. Written kid-to-kid. Genuinely accurate. Ages 11–13." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    :root { --accent: #2FAE9D; --accent-hi: #59C7B8; }
+
+    .b3-hero { background: #0D3A35; color: var(--text-on-dark); }
+    .b3-hero .blob-1 { background: radial-gradient(circle, rgba(47,174,157,0.55) 0%, transparent 65%); }
+    .b3-hero .blob-2 { background: radial-gradient(circle, rgba(89,199,184,0.3) 0%, transparent 65%); }
+    .b3-hero .blob-3 { background: radial-gradient(circle, rgba(238,123,57,0.25) 0%, transparent 65%); }
+
+    .b3-btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      background: #2FAE9D; color: white;
+      border-radius: 9999px; font-weight: 700; font-size: 1.0625rem;
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 200ms cubic-bezier(0.16,1,0.3,1),
+                  filter 200ms;
+    }
+    .b3-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(47,174,157,0.4);
+      filter: brightness(1.08);
+    }
+    .b3-btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      border: 1.5px solid rgba(255,255,255,0.2); color: rgba(248,245,239,0.85);
+      border-radius: 9999px; font-weight: 600; font-size: 1.0625rem;
+      transition: border-color 200ms, background 200ms;
+    }
+    .b3-btn-ghost:hover {
+      border-color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .sayuj-aside {
+      background: rgba(47,174,157,0.08);
+      border-left: 4px solid #2FAE9D;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .sayuj-aside-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2FAE9D, #59C7B8);
+      color: white;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sayuj-aside-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #2FAE9D;
+      margin-bottom: 0.25rem;
+    }
+    .sayuj-aside-text { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .promise-band-b3 {
+      background: #0D3A35;
+      color: var(--text-on-dark);
+      padding-block: var(--section-gap);
+      position: relative;
+      overflow: hidden;
+    }
+    .promise-band-b3::before {
+      content: '';
+      position: absolute;
+      bottom: -150px; left: -150px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(238,123,57,0.15) 0%, transparent 65%);
+      border-radius: 50%;
+    }
+
+    .author-card { display: flex; gap: 2rem; align-items: flex-start; background: white; border: 1px solid var(--divider); border-radius: var(--radius-xl); padding: 2.5rem; }
+    .author-avatar-b3 { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, #2FAE9D, #59C7B8); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 2.25rem; color: white; flex-shrink: 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .author-card { flex-direction: column; } }
+
+    .bento-spark { background: rgba(238,123,57,0.1); }
+    .bento-teal  { background: rgba(47,174,157,0.1); }
+  </style>
+</head>
+<body data-sp-slug="ai-with-sayuj" data-sp-slug-alias="ai-handbook-for-kids">
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);" data-sp="publisher">Shukto Press</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="../../index.html#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ" class="nav-cta" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--text-on-dark);" data-sp-razorpay>Get this eBook →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero b3-hero" data-sp-hero-bg>
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid" style="gap:4rem;">
+      <div class="hero-text">
+        <div class="hero-eyebrow" style="background:rgba(47,174,157,0.15);border-color:rgba(47,174,157,0.35);color:#59C7B8;">
+          <span data-sp-audience-line>Kids · Ages 11–13</span>
+          <span>·</span>
+          <span>eBook</span>
+        </div>
+        <h1 data-sp-title style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);font-weight:800;letter-spacing:-0.045em;line-height:1.02;color:white;margin-bottom:1.25rem;">
+          AI with <span style="color:#2FAE9D;">Sayuj</span>
+        </h1>
+        <p data-sp-subtitle style="font-family:var(--font-display);font-size:clamp(1rem,2vw,1.375rem);font-weight:500;color:rgba(248,245,239,0.65);letter-spacing:-0.01em;margin-bottom:1.5rem;line-height:1.5;">
+          A 12-Year-Old's Real Guide to Understanding Artificial Intelligence
+        </p>
+        <p data-sp-positioning style="font-size:1.0625rem;color:rgba(248,245,239,0.55);max-width:500px;line-height:1.7;margin-bottom:2.25rem;">
+          Written by a real 12-year-old who got curious about AI and taught himself — then wrote the explanation he wished someone had given him. No textbook language. No hype.
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ" class="b3-btn-primary" data-sp-razorpay>Get this eBook — <span data-sp-price>₹XX</span> →</a>
+          <a href="#inside" class="b3-btn-ghost">See what's inside</a>
+        </div>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">PDF · Instant delivery · 30-day refund guarantee</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-wrap" style="padding:2rem 2rem 3rem;position:relative;">
+          <div class="mockup-cover" data-tilt data-base-rotation="-2" data-sp-cover style="--cover-rotation:-2deg;width:280px;height:373px;background:linear-gradient(145deg,#0A2A28,#1B5E57,#0D3A35);border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;box-shadow:var(--shadow-float);transform:rotate(-2deg);">
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;color:#2FAE9D;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;">Shukto Press</div>
+            <div data-sp-title style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:white;line-height:1.15;margin-bottom:0.375rem;">AI with Sayuj</div>
+            <div data-sp-subtitle style="font-size:0.8125rem;color:rgba(255,255,255,0.5);line-height:1.4;">A 12-Year-Old's Real Guide to Understanding AI</div>
+            <div style="margin-top:1.5rem;width:40px;height:2px;background:#2FAE9D;border-radius:1px;"></div>
+          </div>
+          <div style="position:absolute;top:1rem;right:-1rem;background:#EE7B39;border-radius:var(--radius-md);padding:0.75rem 1rem;box-shadow:var(--shadow-lg);font-size:0.8125rem;font-weight:700;color:white;white-space:nowrap;transform:rotate(3deg);">
+            Sayuj Says →
+          </div>
+          <div style="position:absolute;bottom:1.5rem;left:-1.5rem;background:white;border-radius:var(--radius-md);padding:0.75rem 1rem;box-shadow:var(--shadow-lg);font-size:0.8125rem;font-weight:600;color:var(--ink);">
+            <span data-sp-audience-line style="color:#2FAE9D;">Ages 11–13</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ───────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <p data-sp-pull-quote style="font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2.75rem);font-weight:700;letter-spacing:-0.03em;line-height:1.25;border-left:4px solid #2FAE9D;padding-left:2rem;color:var(--ink);">
+          "Every AI explainer was either too simple and treated me like I was five, or too technical and assumed I knew things I didn't. I wrote the one I wanted to read."
+        </p>
+        <p style="margin-top:1rem;font-size:0.875rem;color:var(--text-muted);padding-left:2rem;">— <span data-sp-author-name>Sayuj</span>, age 12</p>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <h2 class="heading-3" style="margin-bottom:1.25rem;">Why this book is different</h2>
+        <p data-sp-positioning class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;">Most AI books for kids are dumbed down to the point of being misleading. Most adult books assume you already understand machine learning basics. This book sits in the gap: genuinely accurate, written in the language a curious 11–13-year-old actually speaks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMISE — DARK BAND ───────────────────────────────────── -->
+<section class="promise-band-b3" data-sp-promise-bg>
+  <div class="container">
+    <div class="two-col" style="align-items:center;">
+      <div class="reveal">
+        <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#59C7B8;margin-bottom:1rem;">The promise</div>
+        <h2 data-sp-promise-heading style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3.25rem);font-weight:800;letter-spacing:-0.035em;line-height:1.1;margin-bottom:1.5rem;">
+          By the last page, you'll understand AI better than most adults.
+        </h2>
+        <p data-sp-promise-body style="font-size:1.0625rem;color:var(--text-on-dark-muted);line-height:1.7;">
+          No simplifications that are secretly wrong. No hype about robots taking over. Just a clear, honest picture of what AI is, how it works, where it's already in your life, and how to use it well.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-2" style="display:grid;gap:1rem;" data-sp-promise-items>
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">🐱</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Machine Learning via Cat Photos</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">How computers learn to recognise patterns — explained with an example you'll actually remember</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">🛡️</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Safety Chapter</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Deepfakes, personal info, trusting your instincts — the stuff parents actually want covered</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">🧠</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Self-Check Quiz &amp; Glossary</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Test what you know and have a reference you can look up anytime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S INSIDE — BENTO ─────────────────────────────────── -->
+<section class="section" id="inside" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">What's inside</h2>
+    </div>
+    <div class="bento" data-sp-bento>
+      <div class="bento-cell span-6" style="text-align:center;color:var(--text-muted);padding:3rem 1rem;">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STAT STRIP ────────────────────────────────────────────── -->
+<section class="stat-strip">
+  <div class="container">
+    <div class="stat-grid" data-sp-stats></div>
+  </div>
+</section>
+
+<!-- ── WHO IS IT FOR ─────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Is this book for you?</h2>
+    </div>
+    <div class="for-grid">
+      <div class="for-card for-card-yes reveal">
+        <div class="for-card-title"><span>✅</span> This is for you if…</div>
+        <ul class="for-list" data-sp-for-list></ul>
+      </div>
+      <div class="for-card for-card-no reveal reveal-delay-2">
+        <div class="for-card-title"><span style="color:#DC2626;">✕</span> This is not for you if…</div>
+        <ul class="for-list" data-sp-not-for-list></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AUTHOR ────────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container" style="max-width:860px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">About the author</h2>
+    </div>
+    <div class="author-card reveal">
+      <div class="author-avatar-b3" data-sp-author-avatar>S</div>
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.25rem;" data-sp-author-name>Sayuj</h3>
+        <p style="font-size:0.8125rem;color:#2FAE9D;font-weight:600;margin-bottom:0.75rem;" data-sp-audience-line>Age 12 at time of writing · with Shukto</p>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;" data-sp-author-bio>Sayuj got curious about AI and started researching it on his own. The more he learned, the more he noticed that most explanations were either too simple, too scary, or too technical. So he wrote the guide he wished existed — in his own words, for kids his age. Shukto helped edit and publish it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF ──────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2">What readers say</h2>
+    </div>
+    <div class="marquee-wrap" style="margin-bottom:3rem;">
+      <div class="marquee-track" aria-hidden="true">
+        <div class="marquee-item">⭐ "My 12-year-old read it in one afternoon"</div>
+        <div class="marquee-item">⭐ "Finally something I can hand to my kid"</div>
+        <div class="marquee-item">⭐ "The safety chapter is excellent"</div>
+        <div class="marquee-item">⭐ "Genuinely accurate, not dumbed down"</div>
+        <div class="marquee-item">⭐ "Sayuj's voice is brilliant"</div>
+        <div class="marquee-item">⭐ "Using this in my classroom"</div>
+        <div class="marquee-item">⭐ "My 12-year-old read it in one afternoon"</div>
+        <div class="marquee-item">⭐ "Finally something I can hand to my kid"</div>
+        <div class="marquee-item">⭐ "The safety chapter is excellent"</div>
+        <div class="marquee-item">⭐ "Genuinely accurate, not dumbed down"</div>
+        <div class="marquee-item">⭐ "Sayuj's voice is brilliant"</div>
+        <div class="marquee-item">⭐ "Using this in my classroom"</div>
+      </div>
+    </div>
+    <!-- Filled dynamically by book-page-data.js; empty when no testimonials saved -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--grid-gap);" data-sp-testimonials></div>
+  </div>
+</section>
+
+<!-- ── PRICING ───────────────────────────────────────────────── -->
+<section class="section" id="pricing" style="background:var(--paper);">
+  <div class="container" style="max-width:680px;">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2">Get the eBook</h2>
+      <p class="section-subtitle">One payment. Yours forever. PDF delivered instantly.</p>
+    </div>
+    <div class="pricing-card reveal" style="--accent:#2FAE9D;text-align:center;">
+      <div data-sp-title style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#2FAE9D;">AI with Sayuj</div>
+      <div class="pricing-price-display" style="color:#2FAE9D;" data-sp-price>₹XX</div>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;">One-time payment · PDF format · Instant download</p>
+      <ul class="pricing-features" style="text-align:left;" data-sp-pricing-features></ul>
+      <div style="margin-top:2.5rem;">
+        <a href="RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ" class="b3-btn-primary" style="justify-content:center;width:100%;font-size:1.125rem;padding:1.125rem 2rem;" data-sp-razorpay>
+          Get this eBook — <span data-sp-price>₹XX</span> →
+        </a>
+      </div>
+      <p style="margin-top:1rem;font-size:0.8125rem;color:var(--text-muted);">Secure payment via Razorpay · 30-day refund guarantee</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ───────────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container" style="max-width:760px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">FAQ</h2>
+    </div>
+    <div class="faq-list" data-sp-faq-list></div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ─────────────────────────────────────────────── -->
+<section data-sp-cta-bg style="background:#0D3A35;position:relative;overflow:hidden;padding-block:var(--section-gap);text-align:center;">
+  <div class="hero-bg">
+    <div class="blob blob-1" style="background:radial-gradient(circle,rgba(47,174,157,0.35) 0%,transparent 65%);"></div>
+    <div class="blob blob-2" style="background:radial-gradient(circle,rgba(238,123,57,0.2) 0%,transparent 65%);"></div>
+  </div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="reveal">
+      <h2 data-sp-cta-heading style="font-family:var(--font-display);font-size:clamp(2rem,5vw,4rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;">
+        Understand AI better than most adults.
+      </h2>
+      <p data-sp-cta-body style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:480px;margin:0 auto 2.5rem;line-height:1.65;">
+        Written by a 12-year-old. Genuinely accurate. No hype. <span data-sp-price>₹XX</span>. Instant delivery.
+      </p>
+      <a href="RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ" class="b3-btn-primary" style="font-size:1.125rem;padding:1.25rem 2.75rem;" data-sp-razorpay>
+        Get this eBook — <span data-sp-price>₹XX</span> →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── YOU MIGHT ALSO LIKE ───────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal"><h2 class="heading-3">You might also like</h2></div>
+    <!-- Filled dynamically by book-page-data.js -->
+    <div class="mini-book-grid" data-sp-also-like></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand" data-sp="publisher">Shukto Press</div>
+        <p class="footer-tagline" data-sp="tagline">Practical, non-hyped eBooks on AI, money, and the future of work.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links" id="sp-footer-books-nav">
+          <a href="../one-person-company/index.html">The One-Person Company</a>
+          <a href="../money-sorted/index.html">Money, Sorted</a>
+          <a href="../ai-with-sayuj/index.html">AI with Sayuj</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Info</div>
+        <nav class="footer-links">
+          <a href="../../index.html">Home</a>
+          <a href="mailto:hello@shuktopress.com" data-sp="contact-email">Contact</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-sp="year">2025</span> <span data-sp="publisher">Shukto Press</span>. All rights reserved.</span>
+      <span>Practical books for practical people.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../main.js"></script>
+<script src="../../book-page-data.js"></script>
+</body>
+</html>

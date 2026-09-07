@@ -1,0 +1,2510 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Shukto Press — Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & BASE ─────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:#0E1117;color:#E8E4DC;min-height:100%;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+/* ── LAYOUT ───────────────────────────────────────────── */
+.shell{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:#12181F;border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;padding:1.5rem 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{padding:2.5rem 2.5rem 4rem;overflow-y:auto}
+/* ── SIDEBAR ──────────────────────────────────────────── */
+.sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:1.25rem}
+.sidebar-logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1.125rem;letter-spacing:-0.03em;color:#F8F5EF}
+.sidebar-logo-sub{font-size:0.6875rem;color:rgba(248,245,239,0.4);margin-top:2px;font-weight:500}
+.nav-section{padding:0 1rem;margin-bottom:0.5rem}
+.nav-section-label{font-size:0.625rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,245,239,0.3);padding:0 0.5rem;margin-bottom:0.5rem}
+.nav-btn{display:flex;align-items:center;gap:0.75rem;width:100%;padding:0.625rem 0.75rem;border-radius:0.5rem;border:none;background:none;color:rgba(248,245,239,0.6);font-size:0.875rem;font-weight:500;transition:background 150ms,color 150ms;text-align:left}
+.nav-btn:hover{background:rgba(255,255,255,0.06);color:rgba(248,245,239,0.9)}
+.nav-btn.active{background:rgba(184,135,75,0.15);color:#D4A868}
+.nav-btn .icon{width:18px;height:18px;opacity:0.7;flex-shrink:0}
+.nav-btn.active .icon{opacity:1}
+.sidebar-footer{margin-top:auto;padding:1.25rem 1.5rem 0;border-top:1px solid rgba(255,255,255,0.07)}
+.sidebar-footer a{font-size:0.8125rem;color:rgba(248,245,239,0.4);display:block;margin-top:0.75rem;transition:color 150ms}
+.sidebar-footer a:hover{color:rgba(248,245,239,0.8)}
+.sidebar-footer-btn{font-size:0.8125rem;color:rgba(248,245,239,0.4);display:block;margin-top:0.75rem;background:none;border:none;cursor:pointer;text-align:left;padding:0;font-family:inherit;transition:color 150ms;width:100%}
+.sidebar-footer-btn:hover{color:rgba(248,245,239,0.8)}
+/* ── MODAL ────────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 200ms}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:#12181F;border:1px solid rgba(255,255,255,0.1);border-radius:1rem;width:100%;max-width:720px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 32px 64px rgba(0,0,0,0.5)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.0625rem;color:#F8F5EF}
+.modal-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:rgba(248,245,239,0.6);font-size:1.125rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 150ms,color 150ms}
+.modal-close:hover{background:rgba(255,255,255,0.12);color:#F8F5EF}
+.modal-body{padding:1.5rem;overflow-y:auto;flex:1;font-size:0.9rem;line-height:1.7;color:rgba(248,245,239,0.75)}
+.modal-body h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.125rem;color:#F8F5EF;margin:1.25rem 0 0.5rem;letter-spacing:-0.02em}
+.modal-body h2:first-child{margin-top:0}
+.modal-body h3{font-family:'Syne',sans-serif;font-weight:600;font-size:0.9375rem;color:#D4A868;margin:1rem 0 0.375rem}
+.modal-body p{margin-bottom:0.75rem}
+.modal-body ul,.modal-body ol{padding-left:1.25rem;margin-bottom:0.75rem}
+.modal-body li{margin-bottom:0.25rem}
+.modal-body code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:0.8125rem;font-family:'Cascadia Code','Fira Code',monospace;color:#59C7B8}
+.modal-body table{width:100%;border-collapse:collapse;margin-bottom:0.75rem;font-size:0.85rem}
+.modal-body th{background:rgba(255,255,255,0.06);color:#F8F5EF;padding:0.5rem 0.75rem;text-align:left;font-weight:600}
+.modal-body td{padding:0.5rem 0.75rem;border-top:1px solid rgba(255,255,255,0.06);color:rgba(248,245,239,0.7)}
+.modal-body .warn{background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.2);border-radius:0.5rem;padding:0.75rem 1rem;margin-bottom:0.75rem;color:rgba(234,179,8,0.85)}
+/* ── PAGE HEADER ──────────────────────────────────────── */
+.page-header{margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.page-title{font-family:'Syne',sans-serif;font-size:1.625rem;font-weight:800;letter-spacing:-0.03em;color:#F8F5EF}
+.page-subtitle{font-size:0.875rem;color:rgba(248,245,239,0.45);margin-top:0.25rem}
+/* ── CARDS ────────────────────────────────────────────── */
+.card{background:#12181F;border:1px solid rgba(255,255,255,0.07);border-radius:0.875rem;padding:1.75rem}
+.card+.card{margin-top:1.25rem}
+.card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:#F8F5EF;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
+/* ── FORM ─────────────────────────────────────────────── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr}
+.form-col{display:flex;flex-direction:column;gap:0.375rem}
+.form-col.span-2{grid-column:span 2}
+label{font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.6);letter-spacing:0.01em}
+.required::after{content:' *';color:#B8874B}
+input[type=text],input[type=url],input[type=number],input[type=color],textarea,select{
+  width:100%;padding:0.625rem 0.875rem;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);border-radius:0.5rem;color:#F8F5EF;
+  font-size:0.9375rem;transition:border-color 150ms,box-shadow 150ms;outline:none}
+input[type=text]:focus,input[type=url]:focus,input[type=number]:focus,textarea:focus,select:focus{
+  border-color:rgba(184,135,75,0.6);box-shadow:0 0 0 3px rgba(184,135,75,0.12)}
+input[type=color]{padding:0.25rem;height:40px;cursor:pointer}
+textarea{resize:vertical;min-height:80px}
+select option{background:#1A2130;color:#F8F5EF}
+.field-hint{font-size:0.75rem;color:rgba(248,245,239,0.35);margin-top:0.25rem}
+/* ── DYNAMIC LISTS ────────────────────────────────────── */
+.dynamic-list{display:grid;gap:0.625rem;margin-top:0.25rem}
+.dynamic-item{display:flex;gap:0.5rem;align-items:center}
+.dynamic-item input{flex:1}
+.btn-icon{width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(248,245,239,0.5);font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 150ms,color 150ms}
+.btn-icon:hover{background:rgba(255,255,255,0.1);color:#F8F5EF}
+.btn-icon.danger:hover{background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);color:#f87171}
+.add-item-btn{display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:rgba(184,135,75,0.8);background:none;border:1px dashed rgba(184,135,75,0.3);border-radius:0.5rem;padding:0.5rem 0.875rem;width:100%;justify-content:center;transition:background 150ms,color 150ms,border-color 150ms;margin-top:0.375rem}
+.add-item-btn:hover{background:rgba(184,135,75,0.08);color:#D4A868;border-color:rgba(184,135,75,0.5)}
+/* ── COVER UPLOAD ─────────────────────────────────────── */
+.cover-upload-wrap{display:flex;gap:1.25rem;align-items:flex-start}
+.cover-drop{flex:1;border:2px dashed rgba(255,255,255,0.12);border-radius:0.75rem;padding:2rem 1rem;text-align:center;cursor:pointer;transition:border-color 150ms,background 150ms;position:relative}
+.cover-drop:hover,.cover-drop.drag-over{border-color:rgba(184,135,75,0.5);background:rgba(184,135,75,0.05)}
+.cover-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cover-drop-icon{font-size:2rem;margin-bottom:0.5rem}
+.cover-drop-text{font-size:0.875rem;color:rgba(248,245,239,0.45)}
+.cover-drop-text strong{color:rgba(184,135,75,0.9)}
+.cover-preview{width:120px;flex-shrink:0}
+.cover-preview-img{width:120px;height:160px;border-radius:0.625rem;object-fit:cover;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.cover-preview-placeholder{width:120px;height:160px;border-radius:0.625rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:rgba(248,245,239,0.3);text-align:center;padding:0.75rem}
+/* ── COLOR SWATCH ROW ─────────────────────────────────── */
+.color-row{display:flex;gap:0.75rem;align-items:center}
+.color-swatch{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);cursor:pointer;flex-shrink:0;transition:transform 150ms}
+.color-swatch:hover{transform:scale(1.15)}
+/* ── BUTTONS ──────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;border-radius:9999px;font-size:0.875rem;font-weight:600;border:none;transition:transform 150ms,box-shadow 150ms,filter 150ms}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#B8874B;color:white}
+.btn-primary:hover{box-shadow:0 8px 24px rgba(184,135,75,0.35);filter:brightness(1.08)}
+.btn-secondary{background:rgba(255,255,255,0.08);color:rgba(248,245,239,0.85);border:1px solid rgba(255,255,255,0.12)}
+.btn-secondary:hover{background:rgba(255,255,255,0.13)}
+.btn-success{background:#2FAE9D;color:white}
+.btn-success:hover{box-shadow:0 8px 24px rgba(47,174,157,0.35)}
+.btn-danger{background:rgba(220,38,38,0.15);color:#f87171;border:1px solid rgba(220,38,38,0.25)}
+.btn-danger:hover{background:rgba(220,38,38,0.25)}
+.btn-lg{padding:0.875rem 2rem;font-size:1rem}
+.btn-row{display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;margin-top:1.5rem}
+/* ── BOOK LIST ────────────────────────────────────────── */
+.book-list{display:grid;gap:0.875rem}
+.book-list-item{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.75rem;padding:1rem 1.25rem;transition:border-color 150ms,background 150ms}
+.book-list-item:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.12)}
+.book-list-cover{width:42px;height:56px;border-radius:0.375rem;object-fit:cover;flex-shrink:0}
+.book-list-cover-ph{width:42px;height:56px;border-radius:0.375rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.book-list-info{flex:1;min-width:0}
+.book-list-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9375rem;color:#F8F5EF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.book-list-meta{font-size:0.75rem;color:rgba(248,245,239,0.4);margin-top:2px}
+.book-list-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:600;margin-left:0.5rem}
+.book-list-actions{display:flex;gap:0.5rem;flex-shrink:0}
+/* ── OUTPUT AREA ──────────────────────────────────────── */
+.output-area{position:relative}
+.output-tabs{display:flex;gap:0.25rem;margin-bottom:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.625rem;padding:0.25rem;width:fit-content}
+.output-tab{padding:0.375rem 0.875rem;border-radius:0.4rem;font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.45);background:none;border:none;transition:background 150ms,color 150ms;cursor:pointer}
+.output-tab.active{background:rgba(255,255,255,0.1);color:#F8F5EF}
+.code-block{background:#0A0E13;border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;padding:1.25rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:0.8125rem;color:#C9D1D9;line-height:1.6;overflow-x:auto;max-height:500px;overflow-y:auto;white-space:pre;tab-size:2}
+.copy-btn{position:absolute;top:0.75rem;right:0.75rem;display:flex;align-items:center;gap:0.375rem;padding:0.375rem 0.75rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:0.4rem;font-size:0.75rem;font-weight:600;color:rgba(248,245,239,0.7);cursor:pointer;transition:background 150ms,color 150ms}
+.copy-btn:hover{background:rgba(255,255,255,0.14);color:#F8F5EF}
+/* ── TOAST ────────────────────────────────────────────── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#12181F;border:1px solid rgba(255,255,255,0.12);border-radius:0.75rem;padding:0.875rem 1.25rem;display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;font-weight:500;color:#F8F5EF;box-shadow:0 16px 40px rgba(0,0,0,0.4);transform:translateY(80px);opacity:0;transition:transform 300ms cubic-bezier(0.16,1,0.3,1),opacity 300ms;z-index:9999;max-width:360px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-icon{font-size:1.125rem;flex-shrink:0}
+/* ── BADGE ────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:700;letter-spacing:0.04em}
+.badge-warn{background:rgba(234,179,8,0.12);color:#ca8a04}
+.badge-ok{background:rgba(47,174,157,0.12);color:#2FAE9D}
+/* ── SECTION TABS ─────────────────────────────────────── */
+.view{display:none}.view.active{display:block}
+/* ── DIVIDER ──────────────────────────────────────────── */
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin:1.5rem 0}
+/* ── PROGRESS STEPS ───────────────────────────────────── */
+.steps{display:flex;gap:0;margin-bottom:2rem;background:rgba(255,255,255,0.04);border-radius:0.625rem;padding:0.25rem;overflow-x:auto}
+.step-btn{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:0.4rem;font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.4);background:none;border:none;white-space:nowrap;cursor:pointer;transition:background 150ms,color 150ms}
+.step-btn.active{background:rgba(184,135,75,0.15);color:#D4A868}
+.step-btn.done{color:rgba(47,174,157,0.9)}
+.step-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.08);font-size:0.6875rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-btn.active .step-num{background:#B8874B;color:white}
+.step-btn.done .step-num{background:#2FAE9D;color:white}
+/* ── INLINE ALERT ─────────────────────────────────────── */
+.alert{border-radius:0.625rem;padding:0.875rem 1rem;font-size:0.875rem;display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:1.25rem}
+.alert-info{background:rgba(59,130,212,0.1);border:1px solid rgba(59,130,212,0.2);color:rgba(248,245,239,0.7)}
+.alert-warn{background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.2);color:rgba(234,179,8,0.85)}
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:1rem}
+  .sidebar-logo{border-bottom:none;padding:0;margin:0}
+  .main{padding:1.5rem 1rem 3rem}
+  .form-grid{grid-template-columns:1fr}
+  .form-col.span-2{grid-column:span 1}
+  .form-grid-3{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<!-- ── SIDEBAR ─────────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-text">Shukto Press</div>
+    <div class="sidebar-logo-sub">Admin Panel</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Manage</div>
+    <button class="nav-btn active" onclick="showView('books')" id="nav-books">
+      <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.7.378 3.8 1.029A7.969 7.969 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+      Books
+    </button>
+    <button class="nav-btn" onclick="showView('add-book')" id="nav-add-book">
+      <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+      Add / Edit Book
+    </button>
+    <button class="nav-btn" onclick="showView('settings')" id="nav-settings">
+      <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h4a1 1 0 001-1v-3h2v3a1 1 0 001 1h4a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+      Homepage &amp; Settings
+    </button>
+  </div>
+  <div class="nav-section" style="margin-top:1rem">
+    <div class="nav-section-label">Generate</div>
+    <button class="nav-btn" onclick="showView('generate')" id="nav-generate">
+      <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/></svg>
+      Export / Download
+    </button>
+  </div>
+  <div class="sidebar-footer">
+    <a href="index.html" target="_blank">↗ View live site</a>
+    <button class="sidebar-footer-btn" onclick="showModal('readme')">📖 README</button>
+    <button class="sidebar-footer-btn" onclick="showModal('add-book-guide')">📋 Add-a-book guide</button>
+  </div>
+</aside>
+<!-- ── MAIN ─────────────────────────────────────────────────── -->
+<main class="main">
+<!-- ════════════════════════════════════════════════════════
+     VIEW: BOOKS LIST
+═════════════════════════════════════════════════════════ -->
+<div class="view active" id="view-books">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Your Books</div>
+      <div class="page-subtitle">All books in the catalog. Click Edit to update details.</div>
+    </div>
+    <button class="btn btn-primary" onclick="startNewBook()">+ Add New Book</button>
+  </div>
+  <div class="card">
+    <div id="book-list-container" class="book-list">
+      <!-- populated by JS -->
+    </div>
+    <div id="no-books" style="text-align:center;padding:3rem 1rem;color:rgba(248,245,239,0.35);display:none">
+      <div style="font-size:3rem;margin-bottom:1rem">📚</div>
+      <div style="font-size:0.9375rem">No books yet. Click <strong style="color:#D4A868">+ Add New Book</strong> to get started.</div>
+    </div>
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════════════
+     VIEW: ADD / EDIT BOOK
+═════════════════════════════════════════════════════════ -->
+<div class="view" id="view-add-book">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="form-view-title">Add New Book</div>
+      <div class="page-subtitle">Fill in the details below. All fields marked * are required.</div>
+    </div>
+    <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-primary" id="save-edits-btn" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
+      <button class="btn btn-secondary" onclick="showView('books')">← Back to books</button>
+    </div>
+  </div>
+  <!-- Step indicator -->
+  <div class="steps" id="form-steps">
+    <button class="step-btn active" onclick="goStep(1)" id="step-btn-1"><span class="step-num">1</span>Identity</button>
+    <button class="step-btn" onclick="goStep(2)" id="step-btn-2"><span class="step-num">2</span>Design</button>
+    <button class="step-btn" onclick="goStep(3)" id="step-btn-3"><span class="step-num">3</span>Content</button>
+    <button class="step-btn" onclick="goStep(4)" id="step-btn-4"><span class="step-num">4</span>Links &amp; Price</button>
+    <button class="step-btn" onclick="goStep(5)" id="step-btn-5"><span class="step-num">5</span>Review</button>
+  </div>
+  <!-- Unsaved changes banner -->
+  <div id="unsaved-banner" style="display:none;align-items:center;gap:1rem;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.3);border-radius:0.625rem;padding:0.75rem 1.25rem;margin-bottom:1.25rem;">
+    <span style="font-size:1rem;">⚠️</span>
+    <span style="font-size:0.875rem;color:rgba(234,179,8,0.9);flex:1;">You have unsaved changes.</span>
+    <button class="btn btn-success" style="padding:0.4rem 1rem;font-size:0.8125rem;" onclick="saveBookEdits()">💾 Save Changes</button>
+  </div>
+  <!-- ── STEP 1: Identity ── -->
+  <div id="step-1" class="step-panel">
+    <div class="card">
+      <div class="card-title">📖 Book Identity</div>
+      <div class="form-grid">
+        <div class="form-col">
+          <label class="required">Book Title</label>
+          <input type="text" id="f-title" placeholder="e.g. The One-Person Company" oninput="autoSlug()"/>
+        </div>
+        <div class="form-col">
+          <label class="required">Subtitle</label>
+          <input type="text" id="f-subtitle" placeholder="e.g. How AI Agents Are Creating the Business of the Future"/>
+        </div>
+        <div class="form-col">
+          <label class="required">Author</label>
+          <input type="text" id="f-author" placeholder="e.g. Shukto"/>
+        </div>
+        <div class="form-col">
+          <label class="required">Category Label</label>
+          <input type="text" id="f-category" placeholder="e.g. Business &amp; AI"/>
+        </div>
+        <div class="form-col">
+          <label class="required">URL Slug</label>
+          <input type="text" id="f-slug" placeholder="e.g. one-person-company"/>
+          <span class="field-hint">Used in URL: /books/<strong id="slug-preview">your-slug</strong>/</span>
+        </div>
+        <div class="form-col">
+          <label>Audience (one-liner)</label>
+          <input type="text" id="f-audience-line" placeholder="e.g. Entrepreneurs, freelancers, AI-curious professionals"/>
+        </div>
+        <div class="form-col span-2">
+          <label class="required">Positioning Paragraph</label>
+          <textarea id="f-positioning" rows="3" placeholder="2–4 sentences: what the book is, who it's for, what makes it different."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(2)">Next: Design →</button>
+    </div>
+  </div>
+  <!-- ── STEP 2: Design ── -->
+  <div id="step-2" class="step-panel" style="display:none">
+    <div class="card">
+      <div class="card-title">🎨 Cover &amp; Colors</div>
+      <div class="form-grid">
+        <div class="form-col span-2">
+          <label>Book Cover Image</label>
+          <div class="cover-upload-wrap">
+            <div class="cover-drop" id="cover-drop" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+              <input type="file" id="f-cover" accept="image/*" onchange="handleCoverFile(event)"/>
+              <div class="cover-drop-icon">🖼️</div>
+              <div class="cover-drop-text"><strong>Click to upload</strong> or drag &amp; drop<br/>JPG, PNG, WebP — recommended 600×800px</div>
+            </div>
+            <div class="cover-preview">
+              <div class="cover-preview-placeholder" id="cover-ph">No cover yet</div>
+              <img class="cover-preview-img" id="cover-img-preview" src="" alt="Cover preview"/>
+            </div>
+          </div>
+          <span class="field-hint">The image will be saved as <code id="cover-save-path">assets/covers/{slug}.jpg</code></span>
+        </div>
+        <div class="form-col">
+          <label class="required">Primary Accent Color</label>
+          <div class="color-row">
+            <input type="color" id="f-accent" value="#B8874B" oninput="syncColorText('f-accent','f-accent-hex')"/>
+            <input type="text" id="f-accent-hex" value="#B8874B" maxlength="7" placeholder="#B8874B" oninput="syncHexToColor('f-accent-hex','f-accent')" style="max-width:100px"/>
+            <span style="font-size:0.75rem;color:rgba(248,245,239,0.35)">Main CTAs, highlights</span>
+          </div>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap">
+            <span style="font-size:0.75rem;color:rgba(248,245,239,0.4)">Quick pick:</span>
+            <div class="color-swatch" style="background:#B8874B" title="Brass Gold" onclick="setAccent('#B8874B')"></div>
+            <div class="color-swatch" style="background:#DD7C3F" title="Amber Orange" onclick="setAccent('#DD7C3F')"></div>
+            <div class="color-swatch" style="background:#2FAE9D" title="Teal Mint" onclick="setAccent('#2FAE9D')"></div>
+            <div class="color-swatch" style="background:#6366f1" title="Indigo" onclick="setAccent('#6366f1')"></div>
+            <div class="color-swatch" style="background:#e11d48" title="Rose" onclick="setAccent('#e11d48')"></div>
+            <div class="color-swatch" style="background:#7c3aed" title="Violet" onclick="setAccent('#7c3aed')"></div>
+          </div>
+        </div>
+        <div class="form-col">
+          <label>Light Accent Variant</label>
+          <div class="color-row">
+            <input type="color" id="f-accent-hi" value="#D4A868" oninput="syncColorText('f-accent-hi','f-accent-hi-hex')"/>
+            <input type="text" id="f-accent-hi-hex" value="#D4A868" maxlength="7" placeholder="#D4A868" oninput="syncHexToColor('f-accent-hi-hex','f-accent-hi')" style="max-width:100px"/>
+            <span style="font-size:0.75rem;color:rgba(248,245,239,0.35)">Lighter tint</span>
+          </div>
+        </div>
+        <div class="form-col">
+          <label class="required">Hero Background Color</label>
+          <div class="color-row">
+            <input type="color" id="f-hero-bg" value="#0A0E13" oninput="syncColorText('f-hero-bg','f-hero-bg-hex')"/>
+            <input type="text" id="f-hero-bg-hex" value="#0A0E13" maxlength="7" placeholder="#0A0E13" oninput="syncHexToColor('f-hero-bg-hex','f-hero-bg')" style="max-width:100px"/>
+          </div>
+        </div>
+        <div class="form-col">
+          <label>Cover Tilt (degrees)</label>
+          <input type="number" id="f-rotation" value="-3" min="-8" max="8" step="1"/>
+          <span class="field-hint">Negative = tilt left, positive = tilt right</span>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Next: Content →</button>
+    </div>
+  </div>
+  <!-- ── STEP 3: Content ── -->
+  <div id="step-3" class="step-panel" style="display:none">
+    <div class="card">
+      <div class="card-title">📋 "What's Inside" — Bento Points</div>
+      <span class="field-hint" style="margin-bottom:0.75rem;display:block">8–10 items. Each becomes a bento grid cell on the sales page.</span>
+      <div class="dynamic-list" id="inside-list"></div>
+      <button class="add-item-btn" onclick="addInsideItem()">+ Add item</button>
+    </div>
+    <div class="card">
+      <div class="card-title">✅ Who It's For</div>
+      <div class="dynamic-list" id="for-list"></div>
+      <button class="add-item-btn" onclick="addForItem()">+ Add "for you if…" point</button>
+    </div>
+    <div class="card">
+      <div class="card-title">❌ Who It's Not For</div>
+      <div class="dynamic-list" id="not-for-list"></div>
+      <button class="add-item-btn" onclick="addNotForItem()">+ Add "not for you if…" point</button>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Stat Strip (4 numbers)</div>
+      <div class="form-grid form-grid-3" id="stats-grid">
+        <!-- 4 stat pairs generated by JS -->
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💬 Promise Section</div>
+      <div class="form-grid">
+        <div class="form-col">
+          <label>Problem Pull-Quote</label>
+          <textarea id="f-pull-quote" rows="2" placeholder="A vivid sentence from the reader's frustration POV, shown as a large blockquote."></textarea>
+        </div>
+        <div class="form-col">
+          <label>Promise Heading</label>
+          <input type="text" id="f-promise-heading" placeholder="e.g. By the last chapter, you'll have a plan — not just a perspective."/>
+        </div>
+        <div class="form-col span-2">
+          <label>Promise Body</label>
+          <textarea id="f-promise-body" rows="2" placeholder="1–2 sentences expanding on the promise."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">❓ FAQ</div>
+      <div class="dynamic-list" id="faq-list"></div>
+      <button class="add-item-btn" onclick="addFaqItem()">+ Add FAQ item</button>
+    </div>
+    <div class="card">
+      <div class="card-title">👤 Author Bio</div>
+      <div class="form-grid">
+        <div class="form-col">
+          <label>Author Name</label>
+          <input type="text" id="f-author-bio-name" placeholder="e.g. Shukto"/>
+        </div>
+        <div class="form-col">
+          <label>Author Avatar Initial(s) <span style="font-size:0.75rem;color:rgba(248,245,239,0.4)">(used when no photo)</span></label>
+          <input type="text" id="f-author-initial" placeholder="e.g. S" maxlength="2"/>
+        </div>
+        <div class="form-col span-2">
+          <label>Author Bio Paragraph</label>
+          <textarea id="f-author-bio" rows="3" placeholder="2–3 sentences about the author."></textarea>
+        </div>
+        <!-- Author photo upload -->
+        <div class="form-col span-2">
+          <label>Author Photo <span style="font-size:0.75rem;color:rgba(248,245,239,0.4)">(optional — replaces the initial circle)</span></label>
+          <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+            <div style="position:relative;width:80px;height:80px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,0.06);border:1.5px dashed rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="document.getElementById('f-author-photo').click()" title="Click to upload photo">
+              <img id="author-photo-preview" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;border-radius:50%;"/>
+              <span id="author-photo-icon" style="font-size:1.5rem;color:rgba(248,245,239,0.3);">👤</span>
+            </div>
+            <div>
+              <input type="file" id="f-author-photo" accept="image/*" style="display:none" onchange="handleAuthorPhotoFile(event)"/>
+              <button class="btn btn-secondary" style="padding:0.5rem 1rem;font-size:0.8125rem;" onclick="document.getElementById('f-author-photo').click()">Upload photo</button>
+              <button class="btn btn-secondary" id="author-photo-clear-btn" style="padding:0.5rem 1rem;font-size:0.8125rem;display:none;margin-left:0.5rem;" onclick="clearAuthorPhoto()">Remove</button>
+              <div class="field-hint" style="margin-top:0.5rem;">Square crop recommended · JPG, PNG, WebP · shown as a circle</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🚀 Final CTA</div>
+      <div class="form-grid">
+        <div class="form-col">
+          <label>CTA Heading</label>
+          <input type="text" id="f-cta-heading" placeholder="e.g. Start building your one-person company."/>
+        </div>
+        <div class="form-col">
+          <label>CTA Body</label>
+          <input type="text" id="f-cta-body" placeholder="e.g. Get the frameworks, the blueprint, and the 30-day plan."/>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💬 "What Readers Say" — Testimonials</div>
+      <span class="field-hint" style="margin-bottom:0.75rem;display:block">Quote cards shown in the "What readers say" section on the sales page.</span>
+      <div class="dynamic-list" id="book-testimonials-list"></div>
+      <button class="add-item-btn" onclick="addBookTestimonial()">+ Add testimonial</button>
+    </div>
+    <div class="card">
+      <div class="card-title">📦 Thank-You — "Where to Start" Steps</div>
+      <span class="field-hint" style="margin-bottom:0.75rem;display:block">4 steps shown on the thank-you page after purchase.</span>
+      <div class="dynamic-list" id="start-steps-list"></div>
+      <button class="add-item-btn" onclick="addStartStep()">+ Add step</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-success save-edits-inline" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Next: Links &amp; Price →</button>
+    </div>
+  </div>
+  <!-- ── STEP 4: Links ── -->
+  <div id="step-4" class="step-panel" style="display:none">
+    <div class="card">
+      <div class="card-title">💳 Pricing &amp; Links</div>
+      <div class="form-grid">
+        <div class="form-col">
+          <label class="required">Price</label>
+          <input type="text" id="f-price" placeholder="e.g. ₹99 or ₹XX if not set yet"/>
+        </div>
+        <div class="form-col">
+          <label>Pricing Features (comma-separated)</label>
+          <input type="text" id="f-pricing-features" placeholder="Full eBook (PDF), Worksheets, 30-Day Plan"/>
+        </div>
+        <div class="form-col span-2">
+          <label>Razorpay Payment Link URL</label>
+          <input type="url" id="f-razorpay" placeholder="https://rzp.io/l/yourlink (or leave as placeholder)"/>
+          <span class="field-hint">Leave blank to use the placeholder text — replace it later once you create the link in Razorpay dashboard.</span>
+        </div>
+        <div class="form-col span-2">
+          <label>PDF Download Link URL (for thank-you page)</label>
+          <input type="url" id="f-download" placeholder="https://drive.google.com/... or leave blank"/>
+          <span class="field-hint">Where the actual PDF is hosted. Leave blank to use the placeholder.</span>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-success save-edits-inline" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
+      <button class="btn btn-primary" onclick="goStep(5)">Next: Review →</button>
+    </div>
+  </div>
+  <!-- ── STEP 5: Review ── -->
+  <div id="step-5" class="step-panel" style="display:none">
+    <div class="alert alert-info">
+      <span>ℹ️</span>
+      <span>Review your book details below. When ready, click <strong>Generate Files</strong> — this creates the HTML for you to download and place in the right folders.</span>
+    </div>
+    <div class="card" id="review-card">
+      <!-- populated on enter -->
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
+      <button class="btn btn-success btn-lg" onclick="generateFiles()">⚡ Generate HTML Files</button>
+    </div>
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════════════
+     VIEW: HOMEPAGE & SETTINGS (unified)
+═════════════════════════════════════════════════════════ -->
+<div class="view" id="view-homepage" style="display:none"></div>
+<div class="view" id="view-settings">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Homepage &amp; Settings</div>
+      <div class="page-subtitle">Edit every section of your homepage, nav, and footer here. Hit Save at the top or bottom when done.</div>
+    </div>
+    <div style="display:flex;gap:0.75rem;">
+      <button class="btn btn-primary btn-lg" onclick="saveAll()">💾 Save All</button>
+      <button class="btn btn-secondary" onclick="previewHomepage()">↗ Preview</button>
+    </div>
+  </div>
+
+  <div class="alert alert-info" style="margin-bottom:1.5rem">
+    <span>ℹ️</span>
+    <span>All changes are saved to your browser. Open or reload <strong>index.html</strong> to see them live — no file editing needed.</span>
+  </div>
+
+  <!-- ══════════ SECTION A: NAVIGATION ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:0 0 1rem;">
+    <div style="width:3px;height:20px;background:#7C6AF5;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#c4baff;letter-spacing:0.03em;">A — Navigation Bar</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">Visible on every page at the top</span>
+  </div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-col">
+        <label>Site Name (Logo text)</label>
+        <input type="text" id="s-publisher" value="Shukto Press" placeholder="Shukto Press"/>
+        <span class="field-hint">Top-left logo text in nav. Also used in the footer and copyright line.</span>
+      </div>
+      <div class="form-col">
+        <label>Nav Button Text</label>
+        <input type="text" id="s-nav-cta" value="Browse Books →" placeholder="Browse Books →"/>
+        <span class="field-hint">The pill-shaped button on the top-right of the nav bar</span>
+      </div>
+      <div class="form-col">
+        <label>"Books" Link Text</label>
+        <input type="text" id="s-nav-books" value="Books" placeholder="Books"/>
+        <span class="field-hint">First link — jumps to the catalog section on the homepage</span>
+      </div>
+      <div class="form-col">
+        <label>"About" Link Text</label>
+        <input type="text" id="s-nav-about" value="About" placeholder="About"/>
+        <span class="field-hint">Second link — jumps to the About/Promise section on the homepage</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION B: HERO ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#B8874B;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#D4A868;letter-spacing:0.03em;">B — Hero Section</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">The large banner at the top of the homepage</span>
+  </div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-col span-2">
+        <label>Small Badge Label</label>
+        <input type="text" id="hp-hero-label" value="Shukto Press — Practical Books" placeholder="Shukto Press — Practical Books"/>
+        <span class="field-hint">The small animated dot-label above the main headline (e.g. "Shukto Press — Practical Books")</span>
+      </div>
+      <div class="form-col span-2">
+        <label>Main Headline</label>
+        <textarea id="hp-hero-title" rows="2" placeholder="Books that actually change how you work.">Books that actually change how you work.</textarea>
+        <span class="field-hint">The large bold title in the hero area</span>
+      </div>
+      <div class="form-col span-2">
+        <label>Sub-headline</label>
+        <textarea id="hp-hero-sub" rows="2" placeholder="No hype. No filler...">No hype. No filler. Practical, framework-driven guides on AI, money, and the future of solo work — written to be re-read.</textarea>
+        <span class="field-hint">The paragraph below the main headline</span>
+      </div>
+      <div class="form-col">
+        <label>Primary Button Text</label>
+        <input type="text" id="hp-hero-primary" value="Browse the catalog →" placeholder="Browse the catalog →"/>
+        <span class="field-hint">The filled button below the sub-headline</span>
+      </div>
+      <div class="form-col">
+        <label>Secondary Button Text</label>
+        <input type="text" id="hp-hero-ghost" value="About Shukto Press" placeholder="About Shukto Press"/>
+        <span class="field-hint">The outline/ghost button next to the primary button</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION C: CATALOG ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#2FAE9D;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#5ecdc0;letter-spacing:0.03em;">C — Books Catalog Section</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">"The full catalog" grid on the homepage</span>
+  </div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-col span-2">
+        <label>Section Heading</label>
+        <input type="text" id="hp-catalog-heading" value="The full catalog" placeholder="The full catalog"/>
+        <span class="field-hint">The large heading above the book cards grid</span>
+      </div>
+      <div class="form-col span-2">
+        <label>Section Subtitle</label>
+        <textarea id="hp-catalog-subtitle" rows="2" placeholder="Each tackles a topic that deserved a better treatment than it was getting.">Each tackles a topic that deserved a better treatment than it was getting.</textarea>
+        <span class="field-hint">The line below the heading. The book count (e.g. "3 books.") is added automatically in front.</span>
+      </div>
+    </div>
+    <div class="alert alert-info" style="margin-top:1.25rem;margin-bottom:0;">
+      <span>📚</span>
+      <span>The book cards themselves (title, price, cover, description) are edited in <strong>Books → Add/Edit Book</strong>.</span>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION C.5: MARQUEE / RUNNING TEXT ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#2FAE9D;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#5ecdc0;letter-spacing:0.03em;">C.5 — Running Text Strip (Marquee)</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">The scrolling ticker between hero and catalog</span>
+  </div>
+  <div class="card">
+    <label style="display:block;margin-bottom:0.75rem;">Marquee Items <span class="field-hint">(each item scrolls across the strip — add up to 12)</span></label>
+    <div id="hp-marquee-list" style="display:grid;gap:0.5rem;"></div>
+    <button class="add-item-btn" style="margin-top:0.75rem" onclick="addMarqueeItem()">+ Add item</button>
+  </div>
+
+  <!-- ══════════ SECTION D: ABOUT / PROMISE ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#E05C8A;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#f09dbf;letter-spacing:0.03em;">D — About / Promise Section</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">The "Shukto Press promise" section with 3 trust cards</span>
+  </div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-col span-2">
+        <label>Section Heading</label>
+        <input type="text" id="hp-about-heading" value="The Shukto Press promise" placeholder="The Shukto Press promise"/>
+        <span class="field-hint">Large heading for the About/Promise section</span>
+      </div>
+      <div class="form-col span-2">
+        <label>Section Subtitle</label>
+        <textarea id="hp-about-subtitle" rows="2" placeholder="Every book we publish passes the same test...">Every book we publish passes the same test: could this have been a blog post? If yes, we don't publish it.</textarea>
+        <span class="field-hint">The paragraph below the heading in the About section</span>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;border-top:1px solid rgba(255,255,255,0.07);padding-top:1.25rem;">
+      <label style="display:block;margin-bottom:0.75rem;">Trust / Feature Cards <span class="field-hint">(the 3 icon cards below the heading)</span></label>
+      <div id="hp-trust-list" style="display:grid;gap:0.75rem;"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION E: TESTIMONIALS ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#DD7C3F;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#e8956a;letter-spacing:0.03em;">E — Reader Testimonials Section</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">"What readers say" quote cards</span>
+  </div>
+  <div class="card">
+    <div class="form-grid" style="margin-bottom:1.25rem;">
+      <div class="form-col span-2">
+        <label>Section Heading</label>
+        <input type="text" id="hp-testimonials-heading" value="What readers say" placeholder="What readers say"/>
+        <span class="field-hint">The heading above all the quote cards</span>
+      </div>
+    </div>
+    <label style="display:block;margin-bottom:0.75rem;">Reader Quotes <span class="field-hint">(leave quote blank to show a placeholder — add up to 6)</span></label>
+    <div id="hp-testimonials-list" style="display:grid;gap:1rem;"></div>
+    <button class="add-item-btn" style="margin-top:0.75rem" onclick="addTestimonial()">+ Add testimonial</button>
+  </div>
+
+  <!-- ══════════ SECTION F: BOOK COVERS ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#57606a;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:rgba(248,245,239,0.5);letter-spacing:0.03em;">F — Book Cover Images</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">Covers shown in the hero stack and catalog cards</span>
+  </div>
+  <div class="card">
+    <div class="alert alert-info" style="margin-bottom:1.25rem;margin-top:0;">
+      <span>🖼️</span>
+      <span>These covers appear on the homepage catalog cards and the hero book stack. To update covers on individual <strong>sales pages</strong>, go to <strong>Books → Edit Book</strong> instead.</span>
+    </div>
+    <div id="hp-covers-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;"></div>
+  </div>
+
+  <!-- ══════════ SECTION G: FOOTER ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#B8874B;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#D4A868;letter-spacing:0.03em;">G — Footer</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">Bottom of every page</span>
+  </div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-col span-2">
+        <label>Contact Email</label>
+        <input type="text" id="s-email" value="shuktoai@gmail.com" placeholder="hello@yoursite.com"/>
+        <span class="field-hint">Shown as a clickable mailto link in the footer Contact column</span>
+      </div>
+      <div class="form-col span-2">
+        <label>Footer Tagline</label>
+        <input type="text" id="s-tagline" value="Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto." placeholder="Your one-liner tagline…"/>
+        <span class="field-hint">One line of text under your site name in the footer's left column</span>
+      </div>
+      <div class="form-col span-2">
+        <label>Footer Bottom Text</label>
+        <input type="text" id="s-footer-bottom" value="Practical books for practical people." placeholder="Practical books for practical people."/>
+        <span class="field-hint">Small text on the right side of the very bottom footer strip, next to the copyright</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION H: BACKUP ══════════ -->
+  <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
+    <div style="width:3px;height:20px;background:#57606a;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:rgba(248,245,239,0.45);letter-spacing:0.03em;">H — Backup &amp; Restore</span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">All data lives in this browser — export regularly</span>
+  </div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
+      <div style="background:rgba(47,174,157,0.06);border:1px solid rgba(47,174,157,0.2);border-radius:8px;padding:1rem;">
+        <div style="font-weight:700;font-size:0.875rem;color:#2FAE9D;margin-bottom:0.375rem;">⬇ Export — Save a backup</div>
+        <p style="font-size:0.78rem;color:rgba(248,245,239,0.45);margin-bottom:0.875rem;">Downloads a <code style="background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:3px;">.json</code> file containing all books, settings, and homepage text. Keep this file safe.</p>
+        <button class="btn btn-success" style="width:100%;justify-content:center;" onclick="exportData()">⬇ Export all data</button>
+      </div>
+      <div style="background:rgba(124,106,245,0.06);border:1px solid rgba(124,106,245,0.2);border-radius:8px;padding:1rem;">
+        <div style="font-weight:700;font-size:0.875rem;color:#a89cf5;margin-bottom:0.375rem;">⬆ Import — Restore a backup</div>
+        <p style="font-size:0.78rem;color:rgba(248,245,239,0.45);margin-bottom:0.875rem;">Select a previously exported <code style="background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:3px;">.json</code> file. This replaces all current data with the file.</p>
+        <button class="btn btn-secondary" style="width:100%;justify-content:center;" onclick="importDataClick()">⬆ Import data</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)"/>
+      </div>
+    </div>
+    <div style="background:rgba(220,38,38,0.05);border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+      <div>
+        <div style="font-weight:700;font-size:0.875rem;color:#f87171;margin-bottom:0.25rem;">🗑 Clear all data</div>
+        <p style="font-size:0.78rem;color:rgba(248,245,239,0.35);margin:0;">Permanently erases all books, settings, and homepage content from this browser. This cannot be undone.</p>
+      </div>
+      <button class="btn btn-danger" style="flex-shrink:0;" onclick="clearAllData()">Clear all data</button>
+    </div>
+  </div>
+
+  <div class="btn-row" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.07);">
+    <button class="btn btn-primary btn-lg" onclick="saveAll()">💾 Save All Changes</button>
+    <button class="btn btn-secondary" onclick="previewHomepage()">↗ Open live homepage</button>
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════════════
+     VIEW: GENERATE / EXPORT
+═════════════════════════════════════════════════════════ -->
+<div class="view" id="view-generate">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Export / Download</div>
+      <div class="page-subtitle">Select a book and generate its HTML files to download.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Select Book</div>
+    <select id="gen-book-select" onchange="onGenBookChange()" style="max-width:400px">
+      <option value="">— choose a book —</option>
+    </select>
+  </div>
+  <div id="gen-output" style="display:none">
+    <div class="card" style="margin-top:1.25rem">
+      <div class="card-title">Generated Files</div>
+      <div class="output-tabs" id="output-tabs">
+        <button class="output-tab active" onclick="showTab('sales')">Sales Page</button>
+        <button class="output-tab" onclick="showTab('thanks')">Thank-You Page</button>
+        <button class="output-tab" onclick="showTab('card')">Homepage Card</button>
+      </div>
+      <div class="output-area" id="tab-sales">
+        <button class="copy-btn" onclick="copyTab('sales')">📋 Copy</button>
+        <div class="code-block" id="code-sales"></div>
+      </div>
+      <div class="output-area" id="tab-thanks" style="display:none">
+        <button class="copy-btn" onclick="copyTab('thanks')">📋 Copy</button>
+        <div class="code-block" id="code-thanks"></div>
+      </div>
+      <div class="output-area" id="tab-card" style="display:none">
+        <button class="copy-btn" onclick="copyTab('card')">📋 Copy</button>
+        <div class="code-block" id="code-card"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.25rem">
+      <div class="card-title">📥 Download Files</div>
+      <div class="alert alert-info"><span>ℹ️</span><span>Download each file and place it in the correct folder as shown below.</span></div>
+      <div id="download-instructions"></div>
+      <div class="btn-row" style="margin-top:1rem">
+        <button class="btn btn-success" onclick="downloadSalesPage()">⬇ Download sales page HTML</button>
+        <button class="btn btn-success" onclick="downloadThanksPage()">⬇ Download thank-you page HTML</button>
+        <button id="download-cover-btn" class="btn btn-secondary" style="display:none" onclick="downloadCover()">⬇ Download cover image</button>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+<!-- ── MODALS ──────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBackdrop(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Guide</div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✓</span>
+  <span id="toast-msg">Done</span>
+</div>
+
+<script>
+/* ============================================================
+   SHUKTO PRESS ADMIN — All JavaScript
+   Data stored in localStorage under key: "sp_books" and "sp_settings"
+   ============================================================ */
+
+/* ── DATA LAYER ─────────────────────────────────────────────── */
+const DB = {
+  load() {
+    try { return JSON.parse(localStorage.getItem('sp_books') || '[]'); } catch { return []; }
+  },
+  save(books) {
+    localStorage.setItem('sp_books', JSON.stringify(books));
+  },
+  loadSettings() {
+    try {
+      return JSON.parse(localStorage.getItem('sp_settings') || '{}');
+    } catch { return {}; }
+  },
+  saveSettings(s) {
+    localStorage.setItem('sp_settings', JSON.stringify(s));
+  },
+  loadHomepage() {
+    try { return JSON.parse(localStorage.getItem('sp_homepage') || '{}'); } catch { return {}; }
+  },
+  saveHomepage(hp) {
+    localStorage.setItem('sp_homepage', JSON.stringify(hp));
+  },
+  getById(id) {
+    return this.load().find(b => b.id === id) || null;
+  },
+  upsert(book) {
+    const books = this.load();
+    const idx = books.findIndex(b => b.id === book.id);
+    if (idx >= 0) books[idx] = book; else books.push(book);
+    this.save(books);
+  },
+  delete(id) {
+    this.save(this.load().filter(b => b.id !== id));
+  }
+};
+
+/* ── STATE ──────────────────────────────────────────────────── */
+let currentStep = 1;
+let editingId = null;   // null = new book, string = editing existing
+let coverDataURL    = null; // base64 of uploaded cover
+let authorPhotoURL  = null; // base64 of uploaded author photo
+let _formDirty = false;
+
+function markDirty() {
+  if (!editingId) return; // only track dirty state in edit mode
+  if (_formDirty) return;
+  _formDirty = true;
+  const banner = document.getElementById('unsaved-banner');
+  if (banner) banner.style.display = 'flex';
+}
+function markClean() {
+  _formDirty = false;
+  const banner = document.getElementById('unsaved-banner');
+  if (banner) banner.style.display = 'none';
+}
+
+/* ── NAV / VIEWS ────────────────────────────────────────────── */
+function showView(name) {
+  // homepage is now merged into settings
+  if (name === 'homepage') name = 'settings';
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const viewEl = document.getElementById('view-' + name);
+  if (viewEl) viewEl.classList.add('active');
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+  if (name === 'books')    renderBookList();
+  if (name === 'generate') populateGenSelect();
+  if (name === 'settings') { loadSettings(); loadHomepageEditor(); }
+}
+
+function saveAll() {
+  saveSettings();
+  saveHomepage();
+  toast('All changes saved — reload homepage to see them live', '💾', 4000);
+}
+
+/* ── TOAST ──────────────────────────────────────────────────── */
+let toastTimer;
+function toast(msg, icon = '✓', duration = 3000) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').textContent = icon;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+}
+
+/* ── STEP WIZARD ────────────────────────────────────────────── */
+function goStep(n) {
+  if (n === 5) buildReview();
+  document.querySelectorAll('.step-panel').forEach((p, i) => {
+    p.style.display = (i + 1 === n) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.step-btn').forEach((b, i) => {
+    b.classList.remove('active', 'done');
+    if (i + 1 === n) b.classList.add('active');
+    else if (i + 1 < n) b.classList.add('done');
+  });
+  currentStep = n;
+}
+
+/* ── SLUG AUTO-GENERATE ─────────────────────────────────────── */
+function autoSlug() {
+  const title = document.getElementById('f-title').value;
+  const slugField = document.getElementById('f-slug');
+  if (!slugField.dataset.manuallyEdited) {
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    slugField.value = slug;
+    document.getElementById('slug-preview').textContent = slug || 'your-slug';
+    document.getElementById('cover-save-path').textContent = `assets/covers/${slug || 'your-slug'}.jpg`;
+  }
+}
+document.getElementById('f-slug').addEventListener('input', function() {
+  this.dataset.manuallyEdited = 'true';
+  document.getElementById('slug-preview').textContent = this.value || 'your-slug';
+  document.getElementById('cover-save-path').textContent = `assets/covers/${this.value || 'your-slug'}.jpg`;
+});
+
+/* ── COLOR HELPERS ──────────────────────────────────────────── */
+function syncColorText(colorId, textId) {
+  document.getElementById(textId).value = document.getElementById(colorId).value;
+}
+function syncHexToColor(textId, colorId) {
+  const v = document.getElementById(textId).value;
+  if (/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById(colorId).value = v;
+}
+function setAccent(hex) {
+  document.getElementById('f-accent').value = hex;
+  document.getElementById('f-accent-hex').value = hex;
+  // Auto-compute lighter variant
+  const light = lightenHex(hex, 0.25);
+  document.getElementById('f-accent-hi').value = light;
+  document.getElementById('f-accent-hi-hex').value = light;
+}
+function lightenHex(hex, amount) {
+  let r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  r = Math.min(255, Math.round(r + (255 - r) * amount));
+  g = Math.min(255, Math.round(g + (255 - g) * amount));
+  b = Math.min(255, Math.round(b + (255 - b) * amount));
+  return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
+}
+
+/* ── COVER UPLOAD ───────────────────────────────────────────── */
+function handleCoverFile(e) { readCover(e.target.files[0]); }
+function handleDragOver(e) { e.preventDefault(); document.getElementById('cover-drop').classList.add('drag-over'); }
+function handleDragLeave() { document.getElementById('cover-drop').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('cover-drop').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) readCover(file);
+}
+function readCover(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    coverDataURL = ev.target.result;
+    const img = document.getElementById('cover-img-preview');
+    img.src = coverDataURL;
+    img.style.display = 'block';
+    document.getElementById('cover-ph').style.display = 'none';
+    toast('Cover image loaded ✓', '🖼️');
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── AUTHOR PHOTO UPLOAD ─────────────────────────────────────── */
+function handleAuthorPhotoFile(e) { readAuthorPhoto(e.target.files[0]); }
+function readAuthorPhoto(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    authorPhotoURL = ev.target.result;
+    const img = document.getElementById('author-photo-preview');
+    img.src = authorPhotoURL;
+    img.style.display = 'block';
+    document.getElementById('author-photo-icon').style.display = 'none';
+    document.getElementById('author-photo-clear-btn').style.display = '';
+    toast('Author photo loaded ✓', '👤');
+  };
+  reader.readAsDataURL(file);
+}
+function clearAuthorPhoto() {
+  authorPhotoURL = null;
+  const img = document.getElementById('author-photo-preview');
+  img.src = ''; img.style.display = 'none';
+  document.getElementById('author-photo-icon').style.display = '';
+  document.getElementById('author-photo-clear-btn').style.display = 'none';
+  document.getElementById('f-author-photo').value = '';
+}
+
+/* ── DYNAMIC LISTS ──────────────────────────────────────────── */
+function makeItemRow(listId, value = '', placeholder = '', extraFields = null) {
+  const row = document.createElement('div');
+  row.className = 'dynamic-item';
+  // Branch on listId FIRST so each list type gets the right markup
+  if (listId === 'inside-list') {
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
+    row.style.gap = '0.375rem';
+    row.style.background = 'rgba(255,255,255,0.03)';
+    row.style.border = '1px solid rgba(255,255,255,0.07)';
+    row.style.borderRadius = '0.5rem';
+    row.style.padding = '0.75rem';
+    const vals = extraFields || { icon: '📌', title: '', body: '' };
+    row.innerHTML = `
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <input type="text" class="inside-icon" maxlength="4" value="${esc(vals.icon)}" style="width:56px;text-align:center;font-size:1.25rem" placeholder="📌"/>
+        <input type="text" class="inside-title" placeholder="Title (4–6 words)" value="${esc(vals.title)}" style="flex:1"/>
+        <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+      </div>
+      <input type="text" class="inside-body" placeholder="One-sentence description" value="${esc(vals.body)}" style="width:100%"/>`;
+  } else if (listId === 'start-steps-list') {
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
+    row.style.gap = '0.375rem';
+    row.style.background = 'rgba(255,255,255,0.03)';
+    row.style.border = '1px solid rgba(255,255,255,0.07)';
+    row.style.borderRadius = '0.5rem';
+    row.style.padding = '0.75rem';
+    const vals = extraFields || { title: '', body: '' };
+    row.innerHTML = `
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <input type="text" class="step-title-f" placeholder="Step title, e.g. Chapter 1 — The Core Framework" value="${esc(vals.title)}" style="flex:1"/>
+        <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+      </div>
+      <input type="text" class="step-body-f" placeholder="One-sentence instruction" value="${esc(vals.body)}" style="width:100%"/>`;
+  } else if (listId === 'faq-list') {
+    const ef = extraFields || { q: '', a: '' };
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
+    row.style.gap = '0.5rem';
+    row.style.background = 'rgba(255,255,255,0.03)';
+    row.style.border = '1px solid rgba(255,255,255,0.07)';
+    row.style.borderRadius = '0.5rem';
+    row.style.padding = '0.75rem';
+    row.innerHTML = `
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <input type="text" class="faq-q" placeholder="Question" value="${esc(ef.q)}" style="flex:1"/>
+        <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+      </div>
+      <textarea class="faq-a" placeholder="Answer" rows="2" style="width:100%">${esc(ef.a)}</textarea>`;
+  } else if (listId === 'book-testimonials-list') {
+    const ef = extraFields || { quote: '', name: '', role: '', avatarInitial: 'R' };
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
+    row.style.gap = '0.375rem';
+    row.style.background = 'rgba(255,255,255,0.03)';
+    row.style.border = '1px solid rgba(255,255,255,0.07)';
+    row.style.borderRadius = '0.5rem';
+    row.style.padding = '0.75rem';
+    row.innerHTML = `
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <input type="text" class="bt-quote" placeholder="Reader quote (leave blank for placeholder)" value="${esc(ef.quote)}" style="flex:1"/>
+        <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+      </div>
+      <div style="display:flex;gap:0.5rem;">
+        <input type="text" class="bt-name" placeholder="Reader name" value="${esc(ef.name)}" style="flex:1"/>
+        <input type="text" class="bt-role" placeholder="Role / context (e.g. Parent of a 12-year-old)" value="${esc(ef.role)}" style="flex:2"/>
+        <input type="text" class="bt-initial" placeholder="Initial" value="${esc(ef.avatarInitial||'R')}" maxlength="2" style="width:56px;text-align:center"/>
+      </div>`;
+  } else {
+    // for-list, not-for-list — simple single text row
+    row.innerHTML = `
+      <input type="text" placeholder="${placeholder}" value="${esc(value)}"/>
+      <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>`;
+  }
+  document.getElementById(listId).appendChild(row);
+}
+function addInsideItem() { makeItemRow('inside-list', '', '', { icon: '📌', title: '', body: '' }); }
+function addForItem()    { makeItemRow('for-list', '', 'e.g. You are a freelancer or consultant'); }
+function addNotForItem() { makeItemRow('not-for-list', '', 'e.g. You want a technical deep-dive'); }
+function addFaqItem()    { makeItemRow('faq-list', '', '', { q: '', a: '' }); }
+function addStartStep()  { makeItemRow('start-steps-list', '', '', { title: '', body: '' }); }
+function addBookTestimonial() { makeItemRow('book-testimonials-list', '', '', { quote: '', name: '', role: '', avatarInitial: 'R' }); }
+function esc(s) { return String(s || '').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── STATS GRID INIT ────────────────────────────────────────── */
+function initStatsGrid(stats) {
+  const grid = document.getElementById('stats-grid');
+  grid.innerHTML = '';
+  const defaults = [
+    { num: '10', label: 'Chapters' },
+    { num: '0', label: 'Hype or get-rich promises' },
+    { num: '30', label: 'Day action plan' },
+    { num: '100%', label: 'Written to be re-read' }
+  ];
+  for (let i = 0; i < 4; i++) {
+    const s = (stats && stats[i]) || defaults[i];
+    const col1 = document.createElement('div');
+    col1.className = 'form-col';
+    col1.innerHTML = `<label>Stat ${i+1} — Number</label><input type="text" class="stat-num" value="${esc(s.num)}" placeholder="e.g. 10"/>`;
+    const col2 = document.createElement('div');
+    col2.className = 'form-col';
+    col2.innerHTML = `<label>Stat ${i+1} — Label</label><input type="text" class="stat-label-f" value="${esc(s.label)}" placeholder="e.g. Chapters"/>`;
+    grid.appendChild(col1);
+    grid.appendChild(col2);
+  }
+}
+
+/* ── COLLECT FORM DATA ──────────────────────────────────────── */
+function collectFormData() {
+  const insideItems = [...document.querySelectorAll('#inside-list .dynamic-item')].map(row => ({
+    icon: row.querySelector('.inside-icon')?.value || '📌',
+    title: row.querySelector('.inside-title')?.value || '',
+    body: row.querySelector('.inside-body')?.value || ''
+  }));
+  const forItems = [...document.querySelectorAll('#for-list .dynamic-item input')].map(i => i.value);
+  const notForItems = [...document.querySelectorAll('#not-for-list .dynamic-item input')].map(i => i.value);
+  const faqItems = [...document.querySelectorAll('#faq-list .dynamic-item')].map(row => ({
+    q: row.querySelector('.faq-q')?.value || '',
+    a: row.querySelector('.faq-a')?.value || ''
+  }));
+  const statNums = [...document.querySelectorAll('.stat-num')].map(i => i.value);
+  const statLabels = [...document.querySelectorAll('.stat-label-f')].map(i => i.value);
+  const stats = statNums.map((n, i) => ({ num: n, label: statLabels[i] || '' }));
+  const startSteps = [...document.querySelectorAll('#start-steps-list .dynamic-item')].map(row => ({
+    title: row.querySelector('.step-title-f')?.value || '',
+    body: row.querySelector('.step-body-f')?.value || ''
+  }));
+  const bookTestimonials = [...document.querySelectorAll('#book-testimonials-list .dynamic-item')].map(row => ({
+    quote: row.querySelector('.bt-quote')?.value || '',
+    name: row.querySelector('.bt-name')?.value || '',
+    role: row.querySelector('.bt-role')?.value || '',
+    avatarInitial: row.querySelector('.bt-initial')?.value || 'R'
+  }));
+
+  return {
+    id: editingId || (document.getElementById('f-slug').value || Date.now().toString()),
+    title: document.getElementById('f-title').value.trim(),
+    subtitle: document.getElementById('f-subtitle').value.trim(),
+    author: document.getElementById('f-author').value.trim(),
+    category: document.getElementById('f-category').value.trim(),
+    audienceLine: document.getElementById('f-audience-line').value.trim(),
+    slug: document.getElementById('f-slug').value.trim(),
+    positioning: document.getElementById('f-positioning').value.trim(),
+    accent: document.getElementById('f-accent-hex').value.trim() || document.getElementById('f-accent').value,
+    accentHi: document.getElementById('f-accent-hi-hex').value.trim() || document.getElementById('f-accent-hi').value,
+    heroBg: document.getElementById('f-hero-bg-hex').value.trim() || document.getElementById('f-hero-bg').value,
+    rotation: document.getElementById('f-rotation').value || '-3',
+    cover: coverDataURL || null,
+    insideItems,
+    forItems: forItems.filter(Boolean),
+    notForItems: notForItems.filter(Boolean),
+    faqItems: faqItems.filter(i => i.q),
+    stats,
+    pullQuote: document.getElementById('f-pull-quote').value.trim(),
+    promiseHeading: document.getElementById('f-promise-heading').value.trim(),
+    promiseBody: document.getElementById('f-promise-body').value.trim(),
+    authorBioName: document.getElementById('f-author-bio-name').value.trim(),
+    authorInitial: document.getElementById('f-author-initial').value.trim(),
+    authorBio: document.getElementById('f-author-bio').value.trim(),
+    authorPhoto: authorPhotoURL || null,
+    ctaHeading: document.getElementById('f-cta-heading').value.trim(),
+    ctaBody: document.getElementById('f-cta-body').value.trim(),
+    startSteps,
+    bookTestimonials,
+    price: document.getElementById('f-price').value.trim() || '₹XX',
+    pricingFeatures: document.getElementById('f-pricing-features').value.split(',').map(s=>s.trim()).filter(Boolean),
+    razorpay: document.getElementById('f-razorpay').value.trim() || `RAZORPAY_PAYMENT_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`,
+    download: document.getElementById('f-download').value.trim() || `EBOOK_DOWNLOAD_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`
+  };
+}
+
+/* ── POPULATE FORM FROM BOOK ────────────────────────────────── */
+function populateForm(book) {
+  document.getElementById('f-title').value = book.title || '';
+  document.getElementById('f-subtitle').value = book.subtitle || '';
+  document.getElementById('f-author').value = book.author || '';
+  document.getElementById('f-category').value = book.category || '';
+  document.getElementById('f-audience-line').value = book.audienceLine || '';
+  document.getElementById('f-slug').value = book.slug || '';
+  document.getElementById('f-slug').dataset.manuallyEdited = 'true';
+  document.getElementById('f-positioning').value = book.positioning || '';
+  document.getElementById('slug-preview').textContent = book.slug || 'your-slug';
+  document.getElementById('cover-save-path').textContent = `assets/covers/${book.slug || 'your-slug'}.jpg`;
+
+  document.getElementById('f-accent').value = book.accent || '#B8874B';
+  document.getElementById('f-accent-hex').value = book.accent || '#B8874B';
+  document.getElementById('f-accent-hi').value = book.accentHi || '#D4A868';
+  document.getElementById('f-accent-hi-hex').value = book.accentHi || '#D4A868';
+  document.getElementById('f-hero-bg').value = book.heroBg || '#0A0E13';
+  document.getElementById('f-hero-bg-hex').value = book.heroBg || '#0A0E13';
+  document.getElementById('f-rotation').value = book.rotation || '-3';
+
+  if (book.cover) {
+    coverDataURL = book.cover;
+    const img = document.getElementById('cover-img-preview');
+    img.src = book.cover; img.style.display = 'block';
+    document.getElementById('cover-ph').style.display = 'none';
+  } else {
+    coverDataURL = null;
+    document.getElementById('cover-img-preview').style.display = 'none';
+    document.getElementById('cover-ph').style.display = '';
+  }
+
+  // Inside items
+  document.getElementById('inside-list').innerHTML = '';
+  (book.insideItems || []).forEach(item => makeItemRow('inside-list', '', '', item));
+
+  // For / Not for
+  document.getElementById('for-list').innerHTML = '';
+  (book.forItems || []).forEach(v => makeItemRow('for-list', v, 'You\'re a freelancer, consultant…'));
+  document.getElementById('not-for-list').innerHTML = '';
+  (book.notForItems || []).forEach(v => makeItemRow('not-for-list', v, 'You want a technical deep-dive'));
+
+  // FAQ
+  document.getElementById('faq-list').innerHTML = '';
+  (book.faqItems || []).forEach(item => makeItemRow('faq-list', '', '', item));
+
+  // Stats
+  initStatsGrid(book.stats);
+
+  document.getElementById('f-pull-quote').value = book.pullQuote || '';
+  document.getElementById('f-promise-heading').value = book.promiseHeading || '';
+  document.getElementById('f-promise-body').value = book.promiseBody || '';
+  document.getElementById('f-author-bio-name').value = book.authorBioName || book.author || '';
+  document.getElementById('f-author-initial').value = book.authorInitial || (book.author||'A')[0].toUpperCase();
+  document.getElementById('f-author-bio').value = book.authorBio || '';
+  // Author photo
+  if (book.authorPhoto) {
+    authorPhotoURL = book.authorPhoto;
+    const ap = document.getElementById('author-photo-preview');
+    ap.src = book.authorPhoto; ap.style.display = 'block';
+    document.getElementById('author-photo-icon').style.display = 'none';
+    document.getElementById('author-photo-clear-btn').style.display = '';
+  } else {
+    authorPhotoURL = null;
+    const ap = document.getElementById('author-photo-preview');
+    ap.src = ''; ap.style.display = 'none';
+    document.getElementById('author-photo-icon').style.display = '';
+    document.getElementById('author-photo-clear-btn').style.display = 'none';
+  }
+  document.getElementById('f-cta-heading').value = book.ctaHeading || '';
+  document.getElementById('f-cta-body').value = book.ctaBody || '';
+
+  // Start steps
+  document.getElementById('start-steps-list').innerHTML = '';
+  (book.startSteps || []).forEach(s => makeItemRow('start-steps-list', '', '', s));
+
+  // Book testimonials
+  document.getElementById('book-testimonials-list').innerHTML = '';
+  (book.bookTestimonials || []).forEach(t => makeItemRow('book-testimonials-list', '', '', t));
+
+  document.getElementById('f-price').value = book.price || '₹XX';
+  document.getElementById('f-pricing-features').value = (book.pricingFeatures || []).join(', ');
+  document.getElementById('f-razorpay').value = book.razorpay && !book.razorpay.startsWith('RAZORPAY_') ? book.razorpay : '';
+  document.getElementById('f-download').value = book.download && !book.download.startsWith('EBOOK_') ? book.download : '';
+}
+
+/* ── START NEW BOOK ─────────────────────────────────────────── */
+function startNewBook() {
+  editingId = null;
+  coverDataURL = null;
+  markClean();
+  setSaveEditsBtnsVisible(false);
+  document.getElementById('form-view-title').textContent = 'Add New Book';
+  // Reset form
+  ['f-title','f-subtitle','f-author','f-category','f-audience-line','f-slug','f-positioning',
+   'f-pull-quote','f-promise-heading','f-promise-body','f-author-bio-name','f-author-initial',
+   'f-author-bio','f-cta-heading','f-cta-body','f-price','f-pricing-features','f-razorpay','f-download']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('f-slug').dataset.manuallyEdited = '';
+  document.getElementById('slug-preview').textContent = 'your-slug';
+  document.getElementById('f-accent').value = '#B8874B';
+  document.getElementById('f-accent-hex').value = '#B8874B';
+  document.getElementById('f-accent-hi').value = '#D4A868';
+  document.getElementById('f-accent-hi-hex').value = '#D4A868';
+  document.getElementById('f-hero-bg').value = '#0A0E13';
+  document.getElementById('f-hero-bg-hex').value = '#0A0E13';
+  document.getElementById('f-rotation').value = '-3';
+  document.getElementById('cover-img-preview').style.display = 'none';
+  document.getElementById('cover-ph').style.display = '';
+  // Reset author photo
+  authorPhotoURL = null;
+  const ap = document.getElementById('author-photo-preview');
+  if (ap) { ap.src = ''; ap.style.display = 'none'; }
+  const apIcon = document.getElementById('author-photo-icon');
+  if (apIcon) apIcon.style.display = '';
+  const apClear = document.getElementById('author-photo-clear-btn');
+  if (apClear) apClear.style.display = 'none';
+  ['inside-list','for-list','not-for-list','faq-list','start-steps-list','book-testimonials-list'].forEach(id => {
+    document.getElementById(id).innerHTML = '';
+  });
+  initStatsGrid(null);
+  goStep(1);
+  showView('add-book');
+}
+
+/* ── EDIT BOOK ──────────────────────────────────────────────── */
+function editBook(id) {
+  const book = DB.getById(id);
+  if (!book) return;
+  editingId = id;
+  markClean();
+  document.getElementById('form-view-title').textContent = 'Edit Book';
+  setSaveEditsBtnsVisible(true);
+  initStatsGrid(book.stats);
+  populateForm(book);
+  goStep(1);
+  showView('add-book');
+}
+
+/* ── DELETE BOOK ────────────────────────────────────────────── */
+function deleteBook(id) {
+  if (!confirm('Delete this book? This cannot be undone.')) return;
+  DB.delete(id);
+  renderBookList();
+  toast('Book deleted', '🗑');
+}
+
+/* ── BUILD REVIEW ───────────────────────────────────────────── */
+function buildReview() {
+  const d = collectFormData();
+  const card = document.getElementById('review-card');
+  card.innerHTML = `
+    <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap">
+      ${d.cover ? `<img src="${d.cover}" style="width:80px;height:107px;border-radius:0.5rem;object-fit:cover;flex-shrink:0"/>` : `<div style="width:80px;height:107px;border-radius:0.5rem;background:${d.heroBg};display:flex;align-items:center;justify-content:center;font-size:0.625rem;color:rgba(255,255,255,0.4);text-align:center;padding:0.5rem;flex-shrink:0">No cover</div>`}
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem">
+          <span style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:#F8F5EF">${d.title || '(untitled)'}</span>
+          <span style="display:inline-flex;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:700;background:rgba(255,255,255,0.08);color:rgba(248,245,239,0.6)">${d.category}</span>
+          <span style="font-family:'Syne',sans-serif;font-weight:700;color:${d.accent}">${d.price}</span>
+        </div>
+        <div style="font-size:0.875rem;color:rgba(248,245,239,0.5);margin-bottom:0.5rem">${d.subtitle}</div>
+        <div style="font-size:0.75rem;color:rgba(248,245,239,0.35)">by ${d.author} · /books/${d.slug}/ · accent ${d.accent}</div>
+      </div>
+    </div>
+    <hr style="border-color:rgba(255,255,255,0.07);margin:1.25rem 0"/>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;font-size:0.8125rem">
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">What's inside</span><strong style="color:#F8F5EF">${d.insideItems.length} items</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">For / Not-for</span><strong style="color:#F8F5EF">${d.forItems.length} / ${d.notForItems.length}</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">FAQ items</span><strong style="color:#F8F5EF">${d.faqItems.length}</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Cover image</span><strong style="color:${d.cover ? '#2FAE9D' : '#ca8a04'}">${d.cover ? '✓ Uploaded' : '⚠ Not set'}</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Razorpay link</span><strong style="color:${d.razorpay.startsWith('RAZORPAY_') ? '#ca8a04' : '#2FAE9D'}">${d.razorpay.startsWith('RAZORPAY_') ? '⚠ Placeholder' : '✓ Set'}</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Download link</span><strong style="color:${d.download.startsWith('EBOOK_') ? '#ca8a04' : '#2FAE9D'}">${d.download.startsWith('EBOOK_') ? '⚠ Placeholder' : '✓ Set'}</strong></div>
+    </div>`;
+}
+
+function setSaveEditsBtnsVisible(visible) {
+  document.getElementById('save-edits-btn').style.display = visible ? '' : 'none';
+  document.querySelectorAll('.save-edits-inline').forEach(b => b.style.display = visible ? '' : 'none');
+}
+
+/* ── SAVE BOOK EDITS (edit mode only) ───────────────────────── */
+function saveBookEdits() {
+  const d = collectFormData();
+  if (!d.title || !d.slug) { toast('Title and slug are required', '⚠️'); return; }
+  DB.upsert(d);
+  editingId = d.id; // keep editing same record
+  markClean();
+  toast('Changes saved ✓ — book page will reflect updates on next load', '💾', 4000);
+}
+
+/* ── GENERATE FILES ─────────────────────────────────────────── */
+function generateFiles() {
+  const d = collectFormData();
+  if (!d.title || !d.slug) { toast('Title and slug are required', '⚠️'); return; }
+  DB.upsert(d);
+  toast('Book saved & files ready to download!', '✓', 4000);
+  showView('generate');
+  // Use d.id — options use book.id as value, not slug
+  document.getElementById('gen-book-select').value = d.id;
+  onGenBookChange();
+}
+
+/* ── RENDER BOOK LIST ───────────────────────────────────────── */
+function renderBookList() {
+  const books = DB.load();
+  const container = document.getElementById('book-list-container');
+  const none = document.getElementById('no-books');
+  container.innerHTML = '';
+  if (!books.length) { none.style.display = ''; return; }
+  none.style.display = 'none';
+  books.forEach(b => {
+    const item = document.createElement('div');
+    item.className = 'book-list-item';
+    item.innerHTML = `
+      ${b.cover
+        ? `<img class="book-list-cover" src="${b.cover}" alt=""/>`
+        : `<div class="book-list-cover-ph" style="background:${b.heroBg||'#12181F'}">📖</div>`}
+      <div class="book-list-info">
+        <div class="book-list-title">${esc(b.title)}
+          <span class="book-list-tag" style="background:${b.accent}22;color:${b.accent}">${esc(b.category)}</span>
+        </div>
+        <div class="book-list-meta">by ${esc(b.author)} · /books/${esc(b.slug)}/ · ${esc(b.price)}</div>
+      </div>
+      <div class="book-list-actions">
+        <button class="btn btn-secondary" style="padding:0.375rem 0.875rem;font-size:0.8125rem" onclick="editBook('${b.id}')">Edit</button>
+        <button class="btn btn-secondary" style="padding:0.375rem 0.875rem;font-size:0.8125rem" onclick="quickExport('${b.id}')">Export</button>
+        <button class="btn btn-danger" style="padding:0.375rem 0.75rem;font-size:0.8125rem" onclick="deleteBook('${b.id}')">✕</button>
+      </div>`;
+    container.appendChild(item);
+  });
+}
+
+function quickExport(id) {
+  DB.load(); // ensure fresh
+  populateGenSelect();
+  document.getElementById('gen-book-select').value = id;
+  onGenBookChange();
+  showView('generate');
+}
+
+/* ── SETTINGS ───────────────────────────────────────────────── */
+function loadSettings() {
+  const s = DB.loadSettings();
+  const sv = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+  sv('s-publisher',    s.publisher);
+  sv('s-email',        s.email);
+  sv('s-nav-books',    s.navLinkBooks);
+  sv('s-nav-about',    s.navLinkAbout);
+  sv('s-nav-cta',      s.navCta);
+  sv('s-tagline',      s.tagline);
+  sv('s-footer-bottom',s.footerBottomTagline);
+}
+function saveSettings() {
+  DB.saveSettings({
+    publisher:           document.getElementById('s-publisher').value,
+    email:               document.getElementById('s-email').value,
+    navLinkBooks:        document.getElementById('s-nav-books').value,
+    navLinkAbout:        document.getElementById('s-nav-about').value,
+    navCta:              document.getElementById('s-nav-cta').value,
+    tagline:             document.getElementById('s-tagline').value,
+    footerBottomTagline: document.getElementById('s-footer-bottom').value
+  });
+  toast('Site settings saved — reload homepage to see changes', '💾', 4000);
+}
+
+/* ── DATA IMPORT / EXPORT ───────────────────────────────────── */
+function exportData() {
+  const data = {
+    books:    DB.load(),
+    settings: DB.loadSettings(),
+    homepage: DB.loadHomepage()
+  };
+  dlText(JSON.stringify(data, null, 2), 'shukto-press-data.json', 'application/json');
+  toast('All data exported (books + settings + homepage)', '⬇', 4000);
+}
+function importDataClick() { document.getElementById('import-file').click(); }
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.books)    DB.save(data.books);
+      if (data.settings) DB.saveSettings(data.settings);
+      if (data.homepage) DB.saveHomepage(data.homepage);
+      renderBookList();
+      loadSettings();
+      loadHomepageEditor();
+      toast('Data imported — books, settings & homepage restored ✓', '⬆', 4000);
+    } catch { toast('Invalid JSON file — import failed', '⚠️', 4000); }
+  };
+  reader.readAsText(file);
+}
+function clearAllData() {
+  if (!confirm('This will delete ALL books, settings, and homepage content from this browser. Are you sure?')) return;
+  localStorage.removeItem('sp_books');
+  localStorage.removeItem('sp_settings');
+  localStorage.removeItem('sp_homepage');
+  renderBookList();
+  loadSettings();
+  loadHomepageEditor();
+  toast('All data cleared', '🗑', 4000);
+}
+
+/* ── GENERATE VIEW ──────────────────────────────────────────── */
+function populateGenSelect() {
+  const sel = document.getElementById('gen-book-select');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— choose a book —</option>';
+  DB.load().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b.id; opt.textContent = b.title;
+    sel.appendChild(opt);
+  });
+  if (current) sel.value = current;
+}
+
+let _genBook = null;
+let _genSalesHTML = '', _genThanksHTML = '', _genCardHTML = '';
+
+function onGenBookChange() {
+  const id = document.getElementById('gen-book-select').value;
+  const out = document.getElementById('gen-output');
+  if (!id) { out.style.display = 'none'; return; }
+  _genBook = DB.getById(id);
+  if (!_genBook) { out.style.display = 'none'; return; }
+  out.style.display = 'block';
+  _genSalesHTML = buildSalesPageHTML(_genBook);
+  _genThanksHTML = buildThanksPageHTML(_genBook);
+  _genCardHTML = buildHomepageCardHTML(_genBook);
+  document.getElementById('code-sales').textContent = _genSalesHTML;
+  document.getElementById('code-thanks').textContent = _genThanksHTML;
+  document.getElementById('code-card').textContent = _genCardHTML;
+  showTab('sales');
+  // Instructions
+  document.getElementById('download-instructions').innerHTML = `
+    <div style="display:grid;gap:0.625rem;font-size:0.875rem">
+      <div style="display:flex;gap:0.75rem;align-items:center;padding:0.75rem;background:rgba(255,255,255,0.04);border-radius:0.5rem">
+        <span style="font-size:1.25rem">📄</span>
+        <div><strong style="color:#F8F5EF">Sales page</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">books/${_genBook.slug}/index.html</code></div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:center;padding:0.75rem;background:rgba(255,255,255,0.04);border-radius:0.5rem">
+        <span style="font-size:1.25rem">✅</span>
+        <div><strong style="color:#F8F5EF">Thank-you page</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">books/${_genBook.slug}/thank-you.html</code></div>
+      </div>
+      ${_genBook.cover ? `<div style="display:flex;gap:0.75rem;align-items:center;padding:0.75rem;background:rgba(255,255,255,0.04);border-radius:0.5rem">
+        <span style="font-size:1.25rem">🖼️</span>
+        <div><strong style="color:#F8F5EF">Cover image</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">assets/covers/${_genBook.slug}.jpg</code></div>
+      </div>` : ''}
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.2);border-radius:0.5rem">
+        <span style="font-size:1.25rem">📋</span>
+        <div style="color:rgba(248,245,239,0.7)">Also add the <strong style="color:#F8F5EF">Homepage Card</strong> snippet (3rd tab) into <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">index.html</code> inside the <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">.catalog-book-stack</code> div, and add a footer link to every page.</div>
+      </div>
+    </div>`;
+  // Cover download button
+  document.getElementById('download-cover-btn').style.display = _genBook.cover ? '' : 'none';
+}
+
+function showTab(name) {
+  ['sales','thanks','card'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+    document.querySelectorAll('.output-tab').forEach((btn, i) => {
+      btn.classList.toggle('active', ['sales','thanks','card'][i] === name);
+    });
+  });
+}
+
+function copyTab(name) {
+  const text = name === 'sales' ? _genSalesHTML : name === 'thanks' ? _genThanksHTML : _genCardHTML;
+  navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard', '📋'));
+}
+
+function downloadSalesPage() {
+  if (!_genBook) return;
+  dlText(_genSalesHTML, 'index.html', 'text/html');
+  toast(`Saved: books/${_genBook.slug}/index.html`, '⬇');
+}
+function downloadThanksPage() {
+  if (!_genBook) return;
+  dlText(_genThanksHTML, 'thank-you.html', 'text/html');
+  toast(`Saved: books/${_genBook.slug}/thank-you.html`, '⬇');
+}
+function downloadCover() {
+  if (!_genBook || !_genBook.cover) return;
+  const a = document.createElement('a');
+  a.href = _genBook.cover;
+  a.download = `${_genBook.slug}.jpg`;
+  a.click();
+  toast(`Saved: assets/covers/${_genBook.slug}.jpg`, '⬇');
+}
+
+function dlText(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+/* ── HTML GENERATORS ────────────────────────────────────────── */
+function htmlEsc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function buildBentoItems(items, accent) {
+  return items.map((item, i) => `
+      <div class="bento-cell span-3 reveal${i===0 ? ' row-2' : ''}" style="${i===0 ? `background:linear-gradient(145deg,${accent}22,${accent}11 60%,transparent);border-color:${accent}33;` : ''}">
+        <div class="bento-icon" style="background:${accent}18;">${htmlEsc(item.icon)}</div>
+        <div class="bento-cell-title">${htmlEsc(item.title)}</div>
+        <div class="bento-cell-body">${htmlEsc(item.body)}</div>
+      </div>`).join('');
+}
+
+function buildForList(items, check = true) {
+  return items.map(item => `
+            <li><span class="${check ? 'check' : 'cross'}">${check ? '✓' : '✕'}</span> ${htmlEsc(item)}</li>`).join('');
+}
+
+function buildFaqItems(items, accent) {
+  return items.map((item, i) => `
+      <div class="faq-item reveal${i > 0 ? ` reveal-delay-${Math.min(i,4)}` : ''}" style="--accent:${accent};">
+        <button class="faq-trigger" aria-expanded="false">
+          ${htmlEsc(item.q)}
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body" role="region">
+          <div class="faq-body-inner">${htmlEsc(item.a)}</div>
+        </div>
+      </div>`).join('');
+}
+
+function buildPricingFeatures(features, accent) {
+  return features.map(f => `
+        <li><span class="pricing-check" style="background:${accent};">✓</span> ${htmlEsc(f)}</li>`).join('');
+}
+
+function buildStatStrip(stats, accent) {
+  return stats.map((s, i) => `
+      <div class="stat-item reveal${i>0?` reveal-delay-${i}`:''}">
+        <span class="stat-number" style="${i===0?`color:${accent};`:''}">
+          ${htmlEsc(s.num)}
+        </span>
+        <span class="stat-label">${htmlEsc(s.label)}</span>
+      </div>`).join('');
+}
+
+function buildStartSteps(steps, accent) {
+  return steps.map((s, i) => `
+        <div class="step-item">
+          <div class="step-num">${i+1}</div>
+          <div class="step-text">
+            <div class="step-title">${htmlEsc(s.title)}</div>
+            <p style="font-size:0.9375rem;color:var(--text-secondary);">${htmlEsc(s.body)}</p>
+          </div>
+        </div>`).join('');
+}
+
+function buildTestimonialItems(items, accent) {
+  return items.map((t, i) => {
+    const delay = i > 0 ? ` reveal-delay-${Math.min(i, 4)}` : '';
+    const initial = htmlEsc((t.avatarInitial || (t.name ? t.name[0] : 'R')).toUpperCase());
+    const quoteText = t.quote ? htmlEsc(t.quote) : '[TESTIMONIAL PLACEHOLDER — replace with real quote]';
+    return `<div class="quote-card reveal${delay}">
+        <span class="quote-mark" style="color:${accent};">"</span>
+        <p class="quote-text">${quoteText}</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:${accent};">${initial}</div>
+          <div><div class="quote-meta-name">${htmlEsc(t.name || 'Reader Name')}</div><div class="quote-meta-role">${htmlEsc(t.role || '')}</div></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function buildSalesPageHTML(b) {
+  const settings = DB.loadSettings();
+  const pub = settings.publisher || 'Shukto Press';
+  const email = settings.email || 'hello@shuktopress.com';
+  const a = b.accent || '#B8874B';
+  const aHi = b.accentHi || '#D4A868';
+  const bg = b.heroBg || '#0A0E13';
+  const rot = b.rotation || '-3';
+  const slug = b.slug;
+  /* Cover tag: always carries data-sp-cover so runtime patcher can swap it */
+  const coverTag = b.cover
+    ? `<img src="../../assets/covers/${slug}.jpg" alt="${htmlEsc(b.title)}" class="mockup-cover" data-tilt data-base-rotation="${rot}" data-sp-cover style="--cover-rotation:${rot}deg;transform:rotate(${rot}deg);width:280px;" />`
+    : `<div class="mockup-cover" data-tilt data-base-rotation="${rot}" data-sp-cover style="--cover-rotation:${rot}deg;width:280px;height:373px;background:linear-gradient(145deg,${bg},${bg}dd);border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;box-shadow:var(--shadow-float);transform:rotate(${rot}deg);">
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;color:${a};letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;">${htmlEsc(pub)}</div>
+            <div style="font-family:var(--font-display);font-size:1.375rem;font-weight:800;color:white;line-height:1.15;margin-bottom:0.375rem;">${htmlEsc(b.title)}</div>
+            <div style="font-size:0.8125rem;color:rgba(255,255,255,0.45);line-height:1.4;">${htmlEsc(b.subtitle)}</div>
+            <div style="margin-top:1.5rem;width:40px;height:2px;background:${a};border-radius:1px;"></div>
+          </div>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${htmlEsc(b.title)} — ${htmlEsc(pub)}</title>
+  <meta name="description" content="${htmlEsc(b.subtitle)}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    :root { --accent: ${a}; --accent-hi: ${aHi}; }
+    .book-hero { background: ${bg}; color: var(--text-on-dark); }
+    .book-hero .blob-1 { background: radial-gradient(circle, ${a}80 0%, transparent 65%); }
+    .book-hero .blob-2 { background: radial-gradient(circle, ${aHi}44 0%, transparent 65%); }
+    .book-hero .blob-3 { background: radial-gradient(circle, rgba(30,30,60,0.3) 0%, transparent 65%); }
+    .book-btn-primary {
+      display:inline-flex;align-items:center;gap:0.5rem;padding:1rem 2.25rem;
+      background:${a};color:white;border-radius:9999px;font-weight:700;font-size:1.0625rem;
+      transition:transform 200ms cubic-bezier(0.16,1,0.3,1),box-shadow 200ms,filter 200ms;
+    }
+    .book-btn-primary:hover { transform:translateY(-3px);box-shadow:0 20px 40px ${a}55;filter:brightness(1.08); }
+    .book-btn-ghost {
+      display:inline-flex;align-items:center;gap:0.5rem;padding:1rem 2.25rem;
+      border:1.5px solid rgba(255,255,255,0.2);color:rgba(248,245,239,0.85);
+      border-radius:9999px;font-weight:600;font-size:1.0625rem;
+      transition:border-color 200ms,background 200ms;
+    }
+    .book-btn-ghost:hover { border-color:rgba(255,255,255,0.45);background:rgba(255,255,255,0.06); }
+    .promise-band { background:${bg}cc;color:var(--text-on-dark);padding-block:var(--section-gap);position:relative;overflow:hidden; }
+    .promise-band::before { content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,${a}18 0%,transparent 65%);border-radius:50%;pointer-events:none; }
+    .author-card { display:flex;gap:2rem;align-items:flex-start;background:white;border:1px solid var(--divider);border-radius:var(--radius-xl);padding:2.5rem; }
+    .author-avatar-book { width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,${a},${aHi});display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:2.25rem;color:white;flex-shrink:0; }
+    .two-col { display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center; }
+    @media(max-width:900px) { .two-col { grid-template-columns:1fr; } .author-card { flex-direction:column; } }
+  </style>
+</head>
+<body data-sp-slug="${b.slug}">
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
+    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Books</a></div>
+    <a href="${htmlEsc(b.razorpay)}" class="nav-cta" style="background:${a};border-color:${a};" data-sp-razorpay>Get the eBook →</a>
+  </div>
+</nav>
+
+<section class="hero book-hero">
+  <div class="hero-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid" style="gap:4rem;">
+      <div class="hero-text">
+        <div class="hero-eyebrow" style="background:${a}22;border-color:${a}44;color:${aHi};">
+          <span>${htmlEsc(b.category)}</span><span>·</span><span>eBook</span>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);font-weight:800;letter-spacing:-0.045em;line-height:1.02;color:white;margin-bottom:1.25rem;">
+          ${htmlEsc(b.title)}
+        </h1>
+        <p style="font-family:var(--font-display);font-size:clamp(1rem,2vw,1.375rem);font-weight:500;color:rgba(248,245,239,0.65);letter-spacing:-0.01em;margin-bottom:1.5rem;line-height:1.4;">
+          ${htmlEsc(b.subtitle)}
+        </p>
+        <p style="font-size:1.0625rem;color:rgba(248,245,239,0.55);max-width:500px;line-height:1.7;margin-bottom:2.25rem;">
+          ${htmlEsc(b.positioning)}
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="${htmlEsc(b.razorpay)}" class="book-btn-primary" data-sp-razorpay>Get this eBook — <span data-sp-price>${htmlEsc(b.price)}</span> →</a>
+          <a href="#inside" class="book-btn-ghost">See what's inside</a>
+        </div>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">PDF · Instant delivery · 30-day refund guarantee</p>
+      </div>
+      <div class="hero-visual">
+        <div class="mockup-wrap" style="padding:2rem 2rem 3rem;position:relative;">
+          ${coverTag}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+${b.pullQuote ? `
+<section style="background:var(--paper-warm);padding-block:var(--section-gap);">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <p style="font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2.75rem);font-weight:700;letter-spacing:-0.03em;line-height:1.25;border-left:4px solid ${a};padding-left:2rem;color:var(--ink);">
+          "${htmlEsc(b.pullQuote)}"
+        </p>
+      </div>
+      ${b.positioning ? `<div class="reveal reveal-delay-2">
+        <h2 class="heading-3" style="margin-bottom:1.25rem;">The gap this book fills</h2>
+        <p class="body-base" style="color:var(--text-secondary);">${htmlEsc(b.positioning)}</p>
+      </div>` : ''}
+    </div>
+  </div>
+</section>` : ''}
+
+${b.promiseHeading ? `
+<section class="promise-band">
+  <div class="container">
+    <div class="two-col" style="align-items:center;">
+      <div class="reveal">
+        <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:${aHi};margin-bottom:1rem;">The promise</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3.25rem);font-weight:800;letter-spacing:-0.035em;line-height:1.1;margin-bottom:1.5rem;">${htmlEsc(b.promiseHeading)}</h2>
+        <p style="font-size:1.0625rem;color:var(--text-on-dark-muted);line-height:1.7;">${htmlEsc(b.promiseBody)}</p>
+      </div>
+    </div>
+  </div>
+</section>` : ''}
+
+<section class="section" id="inside" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">What's inside</h2>
+    </div>
+    <div class="bento" data-sp-bento>
+      ${b.insideItems && b.insideItems.length ? buildBentoItems(b.insideItems, a) : '<div class="bento-cell span-6" style="text-align:center;color:var(--text-muted);padding:3rem 1rem;">Coming soon</div>'}
+    </div>
+  </div>
+</section>
+
+<section class="stat-strip">
+  <div class="container">
+    <div class="stat-grid" data-sp-stats>${buildStatStrip(b.stats || [], a)}
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header reveal"><h2 class="heading-2">Is this book for you?</h2></div>
+    <div class="for-grid">
+      <div class="for-card for-card-yes reveal">
+        <div class="for-card-title"><span>✅</span> This is for you if…</div>
+        <ul class="for-list" data-sp-for-list>${buildForList(b.forItems || [], true)}
+        </ul>
+      </div>
+      <div class="for-card for-card-no reveal reveal-delay-2">
+        <div class="for-card-title"><span style="color:#DC2626;">✕</span> This is not for you if…</div>
+        <ul class="for-list" data-sp-not-for-list>${buildForList(b.notForItems || [], false)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper);">
+  <div class="container" style="max-width:860px;">
+    <div class="section-header reveal"><h2 class="heading-2">About the author</h2></div>
+    <div class="author-card reveal">
+      ${b.authorPhoto
+        ? `<img src="${b.authorPhoto}" alt="${htmlEsc(b.authorBioName || b.author)}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;flex-shrink:0;" data-sp-author-avatar />`
+        : `<div class="author-avatar-book" data-sp-author-avatar>${htmlEsc(b.authorInitial || (b.author||'A')[0])}</div>`}
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.5rem;" data-sp-author-name>${htmlEsc(b.authorBioName || b.author)}</h3>
+        <p class="body-base" style="color:var(--text-secondary);" data-sp-author-bio>${htmlEsc(b.authorBio)}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header centered reveal"><h2 class="heading-2">What readers say</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--grid-gap);" data-sp-testimonials>
+      ${b.bookTestimonials && b.bookTestimonials.length ? buildTestimonialItems(b.bookTestimonials, a) : `
+      <div class="quote-card reveal">
+        <span class="quote-mark" style="color:${a};">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:${a};">${htmlEsc((b.authorInitial||'A')[0])}</div>
+          <div><div class="quote-meta-name">Reader Name</div><div class="quote-meta-role">Reader role / context</div></div>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-1">
+        <span class="quote-mark" style="color:${a};">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:${a};">B</div>
+          <div><div class="quote-meta-name">Reader Name</div><div class="quote-meta-role">Reader role / context</div></div>
+        </div>
+      </div>`}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing" style="background:var(--paper);">
+  <div class="container" style="max-width:680px;">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2">Get the eBook</h2>
+      <p class="section-subtitle">One payment. Yours forever. PDF delivered instantly.</p>
+    </div>
+    <div class="pricing-card reveal" style="--accent:${a};text-align:center;">
+      <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${a};">${htmlEsc(b.title)}</div>
+      <div class="pricing-price-display" style="color:${a};" data-sp-price>${htmlEsc(b.price)}</div>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;">One-time payment · PDF format · Instant download</p>
+      <ul class="pricing-features" style="text-align:left;" data-sp-pricing-features>${buildPricingFeatures(b.pricingFeatures || ['Full eBook (PDF)'], a)}
+      </ul>
+      <div style="margin-top:2.5rem;">
+        <a href="${htmlEsc(b.razorpay)}" class="book-btn-primary" style="justify-content:center;width:100%;font-size:1.125rem;padding:1.125rem 2rem;" data-sp-razorpay>
+          Get ${htmlEsc(b.title)} — <span data-sp-price>${htmlEsc(b.price)}</span> →
+        </a>
+      </div>
+      <p style="margin-top:1rem;font-size:0.8125rem;color:var(--text-muted);">Secure payment via Razorpay · 30-day refund guarantee</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container" style="max-width:760px;">
+    <div class="section-header reveal"><h2 class="heading-2">FAQ</h2></div>
+    <div class="faq-list" style="--accent:${a};" data-sp-faq-list>${b.faqItems && b.faqItems.length ? buildFaqItems(b.faqItems, a) : ''}
+    </div>
+  </div>
+</section>
+
+<section style="background:${bg};position:relative;overflow:hidden;padding-block:var(--section-gap);text-align:center;">
+  <div class="hero-bg"><div class="blob blob-1" style="background:radial-gradient(circle,${a}55 0%,transparent 65%);"></div><div class="blob blob-2" style="background:radial-gradient(circle,${aHi}33 0%,transparent 65%);"></div></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="reveal">
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,4rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;">${htmlEsc(b.ctaHeading || 'Ready to get started?')}</h2>
+      <p style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:480px;margin:0 auto 2.5rem;line-height:1.65;">${htmlEsc(b.ctaBody || '')} <span data-sp-price>${htmlEsc(b.price)}</span> · Instant delivery.</p>
+      <a href="${htmlEsc(b.razorpay)}" class="book-btn-primary" style="font-size:1.125rem;padding:1.25rem 2.75rem;" data-sp-razorpay>Get ${htmlEsc(b.title)} — <span data-sp-price>${htmlEsc(b.price)}</span> →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal"><h2 class="heading-3">You might also like</h2></div>
+    <div class="mini-book-grid" data-sp-also-like></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline || 'Practical, non-hyped eBooks.')}</p></div>
+      <div><div class="footer-col-title">Books</div><nav class="footer-links"><a href="../../index.html#catalog">All Books</a></nav></div>
+      <div><div class="footer-col-title">Info</div><nav class="footer-links"><a href="../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact</a></nav></div>
+    </div>
+    <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
+  </div>
+</footer>
+<script src="../../main.js"><\/script>
+<script src="../../book-page-data.js"><\/script>
+</body>
+</html>`;
+}
+
+function buildThanksPageHTML(b) {
+  const settings = DB.loadSettings();
+  const pub = settings.publisher || 'Shukto Press';
+  const email = settings.email || 'hello@shuktopress.com';
+  const a = b.accent || '#B8874B';
+  const bg = b.heroBg || '#0A0E13';
+  const coverTag = b.cover
+    ? `<img src="../../../assets/covers/${b.slug}.jpg" alt="${htmlEsc(b.title)}" style="width:120px;height:160px;border-radius:var(--radius-md);object-fit:cover;" />`
+    : `<div style="width:120px;height:160px;background:${bg};border-radius:var(--radius-md);display:flex;align-items:flex-end;padding:0.75rem;"><div style="font-family:var(--font-display);font-size:0.625rem;font-weight:800;color:white;line-height:1.3;">${htmlEsc(b.title)}</div></div>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You — ${htmlEsc(b.title)} · ${htmlEsc(pub)}</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../../styles.css" />
+  <style>
+    :root { --accent: ${a}; }
+    .ty-hero { background:${bg};color:var(--text-on-dark);padding-top:calc(68px + 3rem);padding-bottom:4rem;position:relative;overflow:hidden; }
+    .ty-hero .blob-1 { background:radial-gradient(circle,${a}66 0%,transparent 65%); }
+    .ty-hero .blob-2 { background:radial-gradient(circle,${b.accentHi||a}44 0%,transparent 65%); }
+    .ty-hero .blob-3 { display:none; }
+    .download-btn { display:inline-flex;align-items:center;gap:0.625rem;background:${a};color:white;padding:1.125rem 2.5rem;border-radius:9999px;font-weight:700;font-size:1.0625rem;transition:transform 200ms cubic-bezier(0.16,1,0.3,1),box-shadow 200ms,filter 200ms; }
+    .download-btn:hover { transform:translateY(-3px);box-shadow:0 20px 40px ${a}55;filter:brightness(1.08); }
+    .mini-book-link { background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;text-decoration:none;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out); }
+    .mini-book-link:hover { transform:translateY(-4px);box-shadow:var(--shadow-card-hover); }
+  </style>
+</head>
+<body data-sp-slug="${b.slug}">
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
+    <div class="nav-links"><a href="../../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Books</a></div>
+  </div>
+</nav>
+
+<section class="ty-hero">
+  <div class="hero-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:1;"></div>
+  <div class="container" style="position:relative;z-index:2;text-align:center;">
+    <div style="display:inline-flex;align-items:center;gap:0.625rem;background:rgba(47,174,157,0.15);border:1px solid rgba(47,174,157,0.3);border-radius:9999px;padding:0.5rem 1.125rem;font-size:0.875rem;font-weight:600;color:#59C7B8;margin-bottom:1.5rem;">
+      <span style="width:20px;height:20px;background:#2FAE9D;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:white;">✓</span>
+      Payment confirmed
+    </div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(2.25rem,5.5vw,4.5rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;">
+      You're in.<br/><span style="color:${a};">Your book is ready.</span>
+    </h1>
+    <p style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:520px;margin:0 auto;line-height:1.65;">
+      Your copy of <strong style="color:rgba(248,245,239,0.9);">${htmlEsc(b.title)}</strong> is ready to download below.
+    </p>
+  </div>
+</section>
+
+<section style="background:var(--paper);padding-block:var(--section-gap);">
+  <div class="container" style="max-width:720px;">
+    <div class="download-card reveal" style="--accent:${a};margin-bottom:3rem;">
+      <div class="download-cover">${coverTag}</div>
+      <div class="download-body">
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${a};margin-bottom:0.5rem;">Your eBook</div>
+        <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.5rem;">${htmlEsc(b.title)}</h2>
+        <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:1.25rem;">${htmlEsc(b.subtitle)} — PDF format</p>
+        <a href="${htmlEsc(b.download)}" class="download-btn" download>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 1v10M9 11l-3.5-3.5M9 11l3.5-3.5M2 14h14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Download Your eBook (PDF)
+        </a>
+        <p style="margin-top:0.75rem;font-size:0.75rem;color:var(--text-muted);">If the download doesn't start, right-click → "Save link as". Bookmark this page.</p>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <h2 style="font-family:var(--font-display);font-size:1.75rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:0.5rem;">Where to start</h2>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;">Recommended reading order to get the most out of the book.</p>
+      <div class="step-list" style="--accent:${a};" data-sp-start-steps>${b.startSteps && b.startSteps.length ? buildStartSteps(b.startSteps, a) : ''}
+      </div>
+    </div>
+
+    <div style="background:var(--paper-warm);border:1px solid var(--divider);border-radius:var(--radius-lg);padding:1.5rem;margin-top:3rem;display:flex;gap:1rem;align-items:flex-start;" class="reveal">
+      <span style="font-size:1.5rem;flex-shrink:0;">📧</span>
+      <div>
+        <div style="font-weight:600;margin-bottom:0.25rem;">Check your email too</div>
+        <div style="font-size:0.875rem;color:var(--text-secondary);">We've sent the download link to your email. Can't find it? Check spam — or email <a href="mailto:${htmlEsc(email)}" style="color:${a};font-weight:600;">${htmlEsc(email)}</a>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-3">While you're here</h2>
+      <p class="section-subtitle">More books from ${htmlEsc(pub)} you might enjoy.</p>
+    </div>
+    <div class="mini-book-grid" data-sp-also-like></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline||'Practical, non-hyped eBooks.')}</p></div>
+      <div><div class="footer-col-title">Books</div><nav class="footer-links"><a href="../../../index.html#catalog">All Books</a></nav></div>
+      <div><div class="footer-col-title">Help</div><nav class="footer-links"><a href="../../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact support</a></nav></div>
+    </div>
+    <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
+  </div>
+</footer>
+<script src="../../../main.js"><\/script>
+<script src="../../../book-page-data.js"><\/script>
+</body>
+</html>`;
+}
+
+function buildHomepageCardHTML(b) {
+  const a = b.accent || '#B8874B';
+  const bg = b.heroBg || '#0A0E13';
+  const coverInner = b.cover
+    ? `<img src="assets/covers/${b.slug}.jpg" alt="${htmlEsc(b.title)}" style="width:100%;height:100%;object-fit:cover;" />`
+    : `<div style="width:100%;height:100%;background:${bg};display:flex;align-items:flex-end;padding:1.5rem;"><div style="font-family:var(--font-display);font-size:1rem;font-weight:800;color:white;line-height:1.2;">${htmlEsc(b.title)}</div></div>`;
+  return `<!-- Book card for ${htmlEsc(b.title)} — paste inside .catalog-book-stack in index.html -->
+<div class="reveal">
+  <a href="books/${b.slug}/index.html" class="home-book-card">
+    <div class="home-book-card-cover" style="height:240px;overflow:hidden;">
+      ${coverInner}
+    </div>
+    <div class="home-book-card-body">
+      <span class="book-card-tag" style="background:${a}18;color:${a};margin-bottom:0.75rem;">${htmlEsc(b.category)}</span>
+      <h3 class="book-card-title">${htmlEsc(b.title)}</h3>
+      <p class="book-card-desc">${htmlEsc(b.audienceLine || b.positioning)}</p>
+      <div class="book-card-footer">
+        <span class="book-card-price" style="color:${a};">${htmlEsc(b.price)}</span>
+        <span class="book-card-cta" style="background:${a};">Get this eBook →</span>
+      </div>
+    </div>
+  </a>
+</div>`;
+}
+
+/* ── MODAL ──────────────────────────────────────────────────── */
+const MODAL_CONTENT = {
+  'readme': {
+    title: '📖 README — Before you go live',
+    body: `
+      <h2>File Structure</h2>
+      <ul>
+        <li><code>index.html</code> — Homepage</li>
+        <li><code>styles.css</code> — Shared design system (all tokens)</li>
+        <li><code>main.js</code> — Shared JS</li>
+        <li><code>admin.html</code> — This admin panel</li>
+        <li><code>assets/covers/</code> — Book cover images</li>
+        <li><code>books/{slug}/index.html</code> — Sales page per book</li>
+        <li><code>books/{slug}/thank-you.html</code> — Post-purchase page</li>
+      </ul>
+      <h2>Before going live — manual steps required</h2>
+      <h3>1. Razorpay Payment Links</h3>
+      <p>In each sales page, replace the placeholder text (e.g. <code>RAZORPAY_PAYMENT_LINK_ONE_PERSON_COMPANY</code>) with your actual Razorpay Payment Link URL from the dashboard.</p>
+      <p>In the Razorpay dashboard, set the <strong>Success redirect URL</strong> for each link to:<br/>
+      <code>https://yourdomain.com/books/{slug}/thank-you.html</code></p>
+      <h3>2. PDF Download Links</h3>
+      <p>In each thank-you page, replace <code>EBOOK_DOWNLOAD_LINK_...</code> with the hosted PDF URL (Google Drive, Dropbox, S3, etc.).</p>
+      <h3>3. Prices</h3>
+      <p>Replace all <code>₹XX</code> with real prices. Use the Edit flow in this admin panel, or do a global find-and-replace in a text editor.</p>
+      <h3>4. Cover Images</h3>
+      <p>Place actual cover JPGs in <code>assets/covers/</code>. Uncomment the <code>&lt;img&gt;</code> tag in each hero and delete the placeholder div. When using the admin panel, upload the cover image in Step 2 of the book form.</p>
+      <h3>5. Testimonials</h3>
+      <p>Replace all <code>[TESTIMONIAL PLACEHOLDER — replace with real quote]</code> text with real reader quotes. Update the name and role fields below each.</p>
+      <h3>6. Contact Email</h3>
+      <p>Replace <code>hello@shuktopress.com</code> with your actual email in Site Settings (this panel) — it flows into all generated pages.</p>
+      <div class="warn">⚠️ All admin data is stored in <strong>browser localStorage</strong>. Export your data as JSON regularly (Settings → Export) so you don't lose it if you clear browser storage.</div>
+    `
+  },
+  'add-book-guide': {
+    title: '📋 Adding a New Book',
+    body: `
+      <h2>What you need to supply</h2>
+      <p>Use the <strong>Add / Edit Book</strong> form in this panel. It will walk you through 5 steps:</p>
+      <table>
+        <tr><th>Step</th><th>What to fill in</th></tr>
+        <tr><td>1. Identity</td><td>Title, subtitle, author, category, URL slug, positioning paragraph</td></tr>
+        <tr><td>2. Design</td><td>Cover image upload, accent color, hero background, cover tilt angle</td></tr>
+        <tr><td>3. Content</td><td>What's Inside (bento items), For/Not-for lists, FAQ, stats, author bio, CTA text, thank-you steps</td></tr>
+        <tr><td>4. Links &amp; Price</td><td>Price, Razorpay URL, PDF download URL, pricing features</td></tr>
+        <tr><td>5. Review &amp; Generate</td><td>Review a summary, then click ⚡ Generate to create the HTML files</td></tr>
+      </table>
+      <h2>After generating</h2>
+      <ol>
+        <li>Go to <strong>Export / Download</strong> in the sidebar</li>
+        <li>Download the <strong>Sales page HTML</strong> → place at <code>books/{slug}/index.html</code></li>
+        <li>Download the <strong>Thank-you page HTML</strong> → place at <code>books/{slug}/thank-you.html</code></li>
+        <li>Download the <strong>cover image</strong> (if uploaded) → place at <code>assets/covers/{slug}.jpg</code></li>
+        <li>Copy the <strong>Homepage Card</strong> snippet → paste into <code>index.html</code> inside the <code>.catalog-book-stack</code> div</li>
+        <li>Add a footer link to the new book in all existing pages</li>
+      </ol>
+      <h2>Folder to create</h2>
+      <p>Create the folder <code>books/{slug}/</code> before placing the files. On Windows: right-click in File Explorer → New Folder.</p>
+      <h2>Data fields reference</h2>
+      <ul>
+        <li><strong>Slug</strong> — URL-safe ID, e.g. <code>my-new-book</code>. Auto-generated from title, you can edit it.</li>
+        <li><strong>Accent color</strong> — Main brand color for this book's CTAs, stats, and highlights. Pick from swatches or enter a hex code.</li>
+        <li><strong>Razorpay link</strong> — Leave blank to use a placeholder until you create the link in Razorpay dashboard.</li>
+        <li><strong>Download link</strong> — URL where the PDF is hosted. Leave blank to use a placeholder.</li>
+      </ul>
+      <div class="warn">⚠️ No database needed. All data lives in localStorage. Export JSON from Settings to back it up.</div>
+    `
+  }
+};
+
+function showModal(id) {
+  const content = MODAL_CONTENT[id];
+  if (!content) return;
+  document.getElementById('modal-title').textContent = content.title;
+  document.getElementById('modal-body').innerHTML = content.body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOnBackdrop(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ══════════════════════════════════════════════════════════════
+   HOMEPAGE EDITOR
+══════════════════════════════════════════════════════════════ */
+
+const DEFAULT_TRUST = [
+  { icon: '🎯', title: 'Frameworks, not vibes',   body: 'Every idea is turned into something you can apply — a matrix, a checklist, a blueprint, a step-by-step plan. No vague encouragement.' },
+  { icon: '🔍', title: 'Honest about limits',      body: 'We tell you what AI can\'t do yet. We tell you what financial advice doesn\'t apply to irregular earners. We don\'t oversell.' },
+  { icon: '📖', title: 'Written to be re-read',    body: 'Dense in the right ways. Reference-grade appendices. Chapters you\'ll return to when you hit a new problem six months later.' }
+];
+
+const DEFAULT_TESTIMONIALS = [
+  { quote: '', name: 'Reader Name', role: 'Role / Context — The One-Person Company', avatarInitial: 'A', avatarColor: '#B8874B' },
+  { quote: '', name: 'Reader Name', role: 'Role / Context — Money, Sorted',          avatarInitial: 'B', avatarColor: '#DD7C3F' },
+  { quote: '', name: 'Reader Name', role: 'Role / Context — AI with Sayuj',           avatarInitial: 'C', avatarColor: '#2FAE9D' }
+];
+
+const DEFAULT_MARQUEE_ITEMS = [
+  '📚 Practical frameworks, not fluff',
+  '💡 Built for non-technical readers',
+  '🔄 Written to be re-read',
+  '📊 Real worksheets inside',
+  '🚫 No get-rich promises',
+  '✅ Written by practitioners',
+  '🤖 Honest about AI limits',
+  '💰 Built for irregular income',
+  '🧒 Kid-to-kid writing, not adult-to-kid'
+];
+
+/* Known books for the cover uploader — always includes saved books */
+function getKnownBooks() {
+  const saved = DB.load();
+  const built_in = [
+    { slug: 'one-person-company', title: 'The One-Person Company' },
+    { slug: 'money-sorted',       title: 'Money, Sorted' },
+    { slug: 'ai-with-sayuj',      title: 'AI with Sayuj' }
+  ];
+  const merged = [...built_in];
+  saved.forEach(b => {
+    if (!merged.find(m => m.slug === b.slug)) merged.push({ slug: b.slug, title: b.title });
+  });
+  return merged;
+}
+
+function loadHomepageEditor() {
+  const hp = DB.loadHomepage();
+
+  /* Hero */
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  set('hp-hero-label',   hp.heroLabel   || 'Shukto Press — Practical Books');
+  set('hp-hero-title',   hp.heroTitle   || 'Books that actually change how you work.');
+  set('hp-hero-sub',     hp.heroSub     || 'No hype. No filler. Practical, framework-driven guides on AI, money, and the future of solo work — written to be re-read.');
+  set('hp-hero-primary', hp.heroPrimary || 'Browse the catalog →');
+  set('hp-hero-ghost',   hp.heroGhost   || 'About Shukto Press');
+
+  /* Catalog */
+  set('hp-catalog-heading',  hp.catalogHeading  || 'The full catalog');
+  set('hp-catalog-subtitle', hp.catalogSubtitle || 'Each tackles a topic that deserved a better treatment than it was getting.');
+
+  /* About */
+  set('hp-about-heading',  hp.aboutHeading  || 'The Shukto Press promise');
+  set('hp-about-subtitle', hp.aboutSubtitle || "Every book we publish passes the same test: could this have been a blog post? If yes, we don't publish it.");
+
+  /* Testimonials heading */
+  set('hp-testimonials-heading', hp.testimonialsHeading || 'What readers say');
+
+  /* Marquee items */
+  const marqueeItems = (hp.marqueeItems && hp.marqueeItems.length) ? hp.marqueeItems : DEFAULT_MARQUEE_ITEMS;
+  renderMarqueeList(marqueeItems);
+
+  /* Trust items */
+  const trustItems = (hp.trustItems && hp.trustItems.length) ? hp.trustItems : DEFAULT_TRUST;
+  renderTrustList(trustItems);
+
+  /* Testimonials */
+  const testimonials = (hp.testimonials && hp.testimonials.length) ? hp.testimonials : DEFAULT_TESTIMONIALS;
+  renderTestimonialList(testimonials);
+
+  /* Cover images */
+  renderCoverUploadList();
+}
+
+/* ── Trust Items ─────────────────────────────────────────────── */
+function renderTrustList(items) {
+  const list = document.getElementById('hp-trust-list');
+  if (!list) return;
+  list.innerHTML = '';
+  items.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'dynamic-item';
+    row.style.cssText = 'flex-direction:column;align-items:stretch;gap:0.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.5rem;padding:0.875rem;';
+    row.innerHTML = `
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <input type="text" class="trust-icon-f" value="${esc(item.icon)}" maxlength="4" style="width:50px;text-align:center;font-size:1.25rem" placeholder="🎯"/>
+        <input type="text" class="trust-title-f" value="${esc(item.title)}" placeholder="Trust point title" style="flex:1"/>
+      </div>
+      <textarea class="trust-body-f" rows="2" placeholder="Description" style="width:100%">${esc(item.body)}</textarea>`;
+    list.appendChild(row);
+  });
+}
+
+/* ── Marquee Items ───────────────────────────────────────────── */
+function renderMarqueeList(items) {
+  const list = document.getElementById('hp-marquee-list');
+  if (!list) return;
+  list.innerHTML = '';
+  items.forEach(text => addMarqueeRow(text));
+}
+
+function addMarqueeItem() {
+  addMarqueeRow('');
+}
+
+function addMarqueeRow(text) {
+  const list = document.getElementById('hp-marquee-list');
+  if (!list) return;
+  const row = document.createElement('div');
+  row.className = 'dynamic-item';
+  row.style.cssText = 'align-items:center;gap:0.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.5rem;padding:0.5rem 0.75rem;';
+  row.innerHTML = `
+    <input type="text" class="marquee-text-f" value="${esc(text)}" placeholder="e.g. ✅ Written by practitioners" style="flex:1;min-width:0;"/>
+    <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>`;
+  list.appendChild(row);
+}
+
+/* ── Testimonials ────────────────────────────────────────────── */
+function renderTestimonialList(items) {
+  const list = document.getElementById('hp-testimonials-list');
+  if (!list) return;
+  list.innerHTML = '';
+  items.forEach((t, i) => addTestimonialRow(t));
+}
+
+function addTestimonial() {
+  addTestimonialRow({ quote: '', name: 'Reader Name', role: '', avatarInitial: 'A', avatarColor: '#B8874B' });
+}
+
+function addTestimonialRow(t) {
+  const list = document.getElementById('hp-testimonials-list');
+  if (!list) return;
+  const row = document.createElement('div');
+  row.className = 'dynamic-item';
+  row.style.cssText = 'flex-direction:column;align-items:stretch;gap:0.625rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.625rem;padding:1rem;';
+  row.innerHTML = `
+    <div style="display:flex;gap:0.5rem;align-items:center;justify-content:space-between">
+      <span style="font-size:0.75rem;font-weight:600;color:rgba(248,245,239,0.4);letter-spacing:0.05em;text-transform:uppercase">Testimonial</span>
+      <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+    </div>
+    <textarea class="test-quote-f" rows="3" placeholder="The quote text (leave blank to show placeholder)" style="width:100%">${esc(t.quote || '')}</textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+      <input type="text" class="test-name-f"  value="${esc(t.name || '')}"  placeholder="Reader Name"/>
+      <input type="text" class="test-role-f"  value="${esc(t.role || '')}"  placeholder="Role / Context — Book Title"/>
+    </div>
+    <div style="display:flex;gap:0.75rem;align-items:center">
+      <div style="display:flex;align-items:center;gap:0.375rem">
+        <input type="color"  class="test-color-f" value="${esc(t.avatarColor || '#B8874B')}" style="width:36px;height:36px;padding:2px;cursor:pointer"/>
+        <input type="text"   class="test-initial-f" value="${esc(t.avatarInitial || 'A')}" maxlength="2" style="width:48px;text-align:center" placeholder="A"/>
+        <span style="font-size:0.75rem;color:rgba(248,245,239,0.35)">Avatar color &amp; initial</span>
+      </div>
+      <div id="test-preview-${list.children.length}" style="width:36px;height:36px;border-radius:50%;background:${esc(t.avatarColor||'#B8874B')};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.875rem;color:white;flex-shrink:0">${esc(t.avatarInitial||'A')}</div>
+    </div>`;
+  list.appendChild(row);
+  // Live avatar preview
+  const colorInput   = row.querySelector('.test-color-f');
+  const initialInput = row.querySelector('.test-initial-f');
+  const preview      = row.querySelector('[id^="test-preview-"]');
+  function updatePreview() {
+    preview.style.background = colorInput.value;
+    preview.textContent = initialInput.value || '?';
+  }
+  colorInput.addEventListener('input', updatePreview);
+  initialInput.addEventListener('input', updatePreview);
+}
+
+/* ── Cover Image Uploader ────────────────────────────────────── */
+function renderCoverUploadList() {
+  const list = document.getElementById('hp-covers-list');
+  if (!list) return;
+  const books = DB.load();
+  const knownBooks = getKnownBooks();
+
+  list.innerHTML = '';
+  knownBooks.forEach(kb => {
+    // Find cover in saved books
+    const savedBook = books.find(b => b.slug === kb.slug);
+    const existingCover = savedBook ? savedBook.cover : null;
+
+    const card = document.createElement('div');
+    card.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;';
+    card.innerHTML = `
+      <div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:0.9375rem;color:#F8F5EF;">${esc(kb.title)}</div>
+      <div style="position:relative;cursor:pointer;" onclick="document.getElementById('cover-file-${kb.slug}').click()">
+        ${existingCover
+          ? `<img src="${existingCover}" style="width:100%;height:140px;object-fit:cover;border-radius:0.5rem;display:block;" id="cover-preview-${kb.slug}"/>`
+          : `<div id="cover-preview-${kb.slug}" style="width:100%;height:140px;border-radius:0.5rem;background:rgba(255,255,255,0.05);border:1.5px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.375rem;">
+               <span style="font-size:1.75rem;">🖼️</span>
+               <span style="font-size:0.75rem;color:rgba(248,245,239,0.4);">Click to upload</span>
+             </div>`}
+        <input type="file" id="cover-file-${kb.slug}" accept="image/*" style="display:none" onchange="handleCoverUploadForBook(event, '${kb.slug}')"/>
+      </div>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="btn btn-secondary" style="flex:1;padding:0.375rem;font-size:0.75rem;" onclick="document.getElementById('cover-file-${kb.slug}').click()">Upload cover</button>
+        ${existingCover ? `<button class="btn btn-danger" style="padding:0.375rem 0.625rem;font-size:0.75rem;" onclick="removeCoverForBook('${kb.slug}')">✕</button>` : ''}
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function handleCoverUploadForBook(e, slug) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    // Update or create the book record in DB with the cover
+    const books = DB.load();
+    const idx = books.findIndex(b => b.slug === slug);
+    if (idx >= 0) {
+      books[idx].cover = dataUrl;
+      DB.save(books);
+    } else {
+      // Book not in DB yet (it's a built-in book not yet entered via form)
+      // Store a minimal record just for the cover
+      const knownTitles = { 'one-person-company': 'The One-Person Company', 'money-sorted': 'Money, Sorted', 'ai-with-sayuj': 'AI with Sayuj' };
+      books.push({ id: slug, slug, title: knownTitles[slug] || slug, cover: dataUrl });
+      DB.save(books);
+    }
+    // Update preview image in DOM
+    const preview = document.getElementById('cover-preview-' + slug);
+    if (preview) {
+      if (preview.tagName === 'IMG') {
+        preview.src = dataUrl;
+      } else {
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.style.cssText = 'width:100%;height:140px;object-fit:cover;border-radius:0.5rem;display:block;';
+        img.id = 'cover-preview-' + slug;
+        preview.replaceWith(img);
+      }
+    }
+    // Re-render to show remove button
+    renderCoverUploadList();
+    toast('Cover uploaded for ' + slug, '🖼️');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeCoverForBook(slug) {
+  if (!confirm('Remove cover image for this book?')) return;
+  const books = DB.load();
+  const idx = books.findIndex(b => b.slug === slug);
+  if (idx >= 0) { books[idx].cover = null; DB.save(books); }
+  renderCoverUploadList();
+  toast('Cover removed', '🗑');
+}
+
+/* ── Collect & Save Homepage ─────────────────────────────────── */
+function collectHomepageData() {
+  // Trust items
+  const trustItems = [...document.querySelectorAll('#hp-trust-list .dynamic-item')].map(row => ({
+    icon:  row.querySelector('.trust-icon-f')?.value  || '📌',
+    title: row.querySelector('.trust-title-f')?.value || '',
+    body:  row.querySelector('.trust-body-f')?.value  || ''
+  }));
+
+  // Testimonials
+  const testimonials = [...document.querySelectorAll('#hp-testimonials-list .dynamic-item')].map(row => ({
+    quote:         row.querySelector('.test-quote-f')?.value   || '',
+    name:          row.querySelector('.test-name-f')?.value    || 'Reader Name',
+    role:          row.querySelector('.test-role-f')?.value    || '',
+    avatarInitial: row.querySelector('.test-initial-f')?.value || 'A',
+    avatarColor:   row.querySelector('.test-color-f')?.value   || '#B8874B'
+  }));
+
+  // Marquee items
+  const marqueeItems = [...document.querySelectorAll('#hp-marquee-list .dynamic-item')]
+    .map(row => row.querySelector('.marquee-text-f')?.value || '')
+    .filter(t => t.trim() !== '');
+
+  const v = id => document.getElementById(id)?.value || '';
+  return {
+    heroLabel:           v('hp-hero-label')           || 'Shukto Press — Practical Books',
+    heroTitle:           v('hp-hero-title')           || '',
+    heroSub:             v('hp-hero-sub')             || '',
+    heroPrimary:         v('hp-hero-primary')         || '',
+    heroGhost:           v('hp-hero-ghost')           || '',
+    catalogHeading:      v('hp-catalog-heading')      || 'The full catalog',
+    catalogSubtitle:     v('hp-catalog-subtitle')     || '',
+    aboutHeading:        v('hp-about-heading')        || 'The Shukto Press promise',
+    aboutSubtitle:       v('hp-about-subtitle')       || '',
+    testimonialsHeading: v('hp-testimonials-heading') || 'What readers say',
+    trustItems,
+    testimonials,
+    marqueeItems
+  };
+}
+
+function saveHomepage() {
+  const data = collectHomepageData();
+  DB.saveHomepage(data);
+  toast('Homepage saved — reload index.html to see changes', '💾', 4000);
+}
+
+function previewHomepage() {
+  // Save first, then open
+  saveHomepage();
+  window.open('index.html', '_blank');
+}
+
+/* ── INIT ───────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  initStatsGrid(null);
+  renderBookList();
+  loadSettings();
+  // Settings auto-save on input
+  ['s-publisher','s-email','s-tagline'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', saveSettings);
+  });
+  // Mark form dirty whenever any input/textarea/select inside the book edit form changes
+  const bookForm = document.getElementById('view-add-book');
+  if (bookForm) {
+    bookForm.addEventListener('input', markDirty);
+    bookForm.addEventListener('change', markDirty);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Money, Sorted — Shukto Press</title>
+  <meta name="description" content="A no-BS guide to budgeting, saving, taxes, and investing for freelancers, gig workers, and anyone with irregular income." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    :root { --accent: #DD7C3F; --accent-hi: #EFA36B; }
+
+    .b2-hero { background: var(--b2-teal); color: var(--text-on-dark); }
+    .b2-hero .blob-1 { background: radial-gradient(circle, rgba(221,124,63,0.55) 0%, transparent 65%); }
+    .b2-hero .blob-2 { background: radial-gradient(circle, rgba(239,163,107,0.3) 0%, transparent 65%); }
+    .b2-hero .blob-3 { background: radial-gradient(circle, rgba(30,92,86,0.5) 0%, transparent 65%); }
+
+    .b2-btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      background: #DD7C3F; color: white;
+      border-radius: 9999px; font-weight: 700; font-size: 1.0625rem;
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 200ms cubic-bezier(0.16,1,0.3,1),
+                  filter 200ms;
+    }
+    .b2-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(221,124,63,0.4);
+      filter: brightness(1.08);
+    }
+    .b2-btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      border: 1.5px solid rgba(255,255,255,0.2); color: rgba(248,245,239,0.85);
+      border-radius: 9999px; font-weight: 600; font-size: 1.0625rem;
+      transition: border-color 200ms, background 200ms;
+    }
+    .b2-btn-ghost:hover {
+      border-color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .problem-section-b2 { background: var(--paper); padding-block: var(--section-gap); }
+    .problem-pull-quote-b2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      border-left: 4px solid #DD7C3F;
+      padding-left: 2rem;
+      color: var(--ink);
+    }
+    .promise-band-b2 {
+      background: #1E5C56;
+      color: var(--text-on-dark);
+      padding-block: var(--section-gap);
+      position: relative;
+      overflow: hidden;
+    }
+    .promise-band-b2::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(221,124,63,0.15) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .author-card { display: flex; gap: 2rem; align-items: flex-start; background: white; border: 1px solid var(--divider); border-radius: var(--radius-xl); padding: 2.5rem; }
+    .author-avatar-b2 { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, #DD7C3F, #EFA36B); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 2.25rem; color: white; flex-shrink: 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .author-card { flex-direction: column; } }
+  </style>
+</head>
+<body data-sp-slug="money-sorted">
+
+<!-- NAV -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);" data-sp="publisher">Shukto Press</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="../../index.html#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="RAZORPAY_PAYMENT_LINK_MONEY_SORTED" class="nav-cta" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--text-on-dark);" data-sp-razorpay>Get this eBook →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero b2-hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid" style="gap:4rem;">
+      <div class="hero-text">
+        <div class="hero-eyebrow" style="background:rgba(221,124,63,0.15);border-color:rgba(221,124,63,0.35);color:#EFA36B;">
+          <span>Personal Finance</span>
+          <span>·</span>
+          <span>eBook</span>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);font-weight:800;letter-spacing:-0.045em;line-height:1.02;color:white;margin-bottom:1.25rem;">
+          Money,<br/><span style="color:#DD7C3F;">Sorted.</span>
+        </h1>
+        <p style="font-family:var(--font-display);font-size:clamp(1rem,2vw,1.375rem);font-weight:500;color:rgba(248,245,239,0.65);letter-spacing:-0.01em;margin-bottom:1.5rem;line-height:1.5;">
+          A no-BS guide to budgeting, saving, taxes, and investing — built for people with income that changes every month.
+        </p>
+        <p style="font-size:1.0625rem;color:rgba(248,245,239,0.55);max-width:500px;line-height:1.7;margin-bottom:2.25rem;">
+          Standard finance advice is written for people with steady paychecks. This isn't that. This is the guide for the month you make triple — and the month you make almost nothing.
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <!-- Razorpay Payment Link: replace RAZORPAY_PAYMENT_LINK_MONEY_SORTED with actual URL -->
+          <a href="RAZORPAY_PAYMENT_LINK_MONEY_SORTED" class="b2-btn-primary" data-sp-razorpay>Get this eBook — <span data-sp-price>₹XX</span> →</a>
+          <a href="#inside" class="b2-btn-ghost">See what's inside</a>
+        </div>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">PDF · Instant delivery · 30-day refund guarantee</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-wrap" style="padding:2rem 2rem 3rem;position:relative;">
+          <div class="mockup-cover" data-tilt data-base-rotation="3" data-sp-cover style="--cover-rotation:3deg;width:280px;height:373px;background:linear-gradient(145deg,#1E3630,#2A4F48,#0F2A26);border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;box-shadow:var(--shadow-float);transform:rotate(3deg);">
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;color:#DD7C3F;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;">Shukto Press</div>
+            <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:white;line-height:1.15;margin-bottom:0.375rem;">Money, Sorted</div>
+            <div style="font-size:0.8125rem;color:rgba(255,255,255,0.5);line-height:1.4;">A no-BS guide for irregular earners</div>
+            <div style="margin-top:1.5rem;width:40px;height:2px;background:#DD7C3F;border-radius:1px;"></div>
+          </div>
+          <!-- Floating income badge -->
+          <div style="position:absolute;top:1.5rem;left:-1.5rem;background:white;border-radius:var(--radius-md);padding:0.875rem 1rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:0.75rem;font-size:0.8125rem;font-weight:600;color:var(--ink);">
+            <span style="font-size:1.25rem;">💰</span>
+            <div>
+              <div style="font-size:0.6875rem;color:var(--text-muted);margin-bottom:1px;">This month</div>
+              <div style="color:#DD7C3F;">Baseline method</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ───────────────────────────────────────────────── -->
+<section class="problem-section-b2">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <p class="problem-pull-quote-b2">
+          "Every money book assumes you get paid the same amount every month. You don't. That's not a flaw — it just means you need different advice."
+        </p>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <h2 class="heading-3" style="margin-bottom:1.25rem;">The problem with standard finance advice</h2>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;">The classic advice — save 20%, max your 401k, follow the 50/30/20 rule — is designed for someone with a predictable monthly salary. If you're a freelancer, gig worker, or anyone with variable income, that advice doesn't just fail to help. It actively misleads.</p>
+        <p class="body-base" style="color:var(--text-secondary);">This book is built from the ground up for how irregular income actually works — including how to budget when you don't know what next month looks like.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMISE — DARK BAND ───────────────────────────────────── -->
+<section class="promise-band-b2">
+  <div class="container">
+    <div class="two-col" style="align-items:center;">
+      <div class="reveal">
+        <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#EFA36B;margin-bottom:1rem;">The promise</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3.25rem);font-weight:800;letter-spacing:-0.035em;line-height:1.1;margin-bottom:1.5rem;">
+          A concrete system for money — no matter what your income looks like this month.
+        </h2>
+        <p style="font-size:1.0625rem;color:var(--text-on-dark-muted);line-height:1.7;">
+          Real percentages, real worksheets, a 30-Day Money Reset, and no vague encouragement. Every chapter ends with something you can do this week.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-2" style="display:grid;gap:1rem;">
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">📉</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Baseline Income Method</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Build your budget off your lowest month — not your best</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">🏦</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Freelance Tax System</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Set-aside percentages, quarterly payments, deductible tracking</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">📅</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">30-Day Money Reset</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">A structured action plan to reset your money in one month</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S INSIDE — BENTO ─────────────────────────────────── -->
+<section class="section" id="inside" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">What's inside</h2>
+    </div>
+    <div class="bento" data-sp-bento>
+      <div class="bento-cell span-6" style="text-align:center;color:var(--text-muted);padding:3rem 1rem;">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STAT STRIP ────────────────────────────────────────────── -->
+<section class="stat-strip">
+  <div class="container">
+    <div class="stat-grid" data-sp-stats></div>
+  </div>
+</section>
+
+<!-- ── WHO IS IT FOR ─────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Is this book for you?</h2>
+    </div>
+    <div class="for-grid">
+      <div class="for-card for-card-yes reveal">
+        <div class="for-card-title"><span>✅</span> This is for you if…</div>
+        <ul class="for-list" data-sp-for-list></ul>
+      </div>
+      <div class="for-card for-card-no reveal reveal-delay-2">
+        <div class="for-card-title"><span style="color:#DC2626;">✕</span> This is not for you if…</div>
+        <ul class="for-list" data-sp-not-for-list></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AUTHOR ────────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container" style="max-width:860px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">About the author</h2>
+    </div>
+    <div class="author-card reveal">
+      <div class="author-avatar-b2" data-sp-author-avatar>S</div>
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.5rem;" data-sp-author-name>Shukto</h3>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;" data-sp-author-bio>Shukto writes for people who don't fit the standard mould — founders, freelancers, and people building non-linear lives. Money, Sorted grew from a frustration with finance books that assumed a salaried job and a fixed monthly paycheck.</p>
+        <p class="body-sm" style="color:var(--text-muted);">Publisher of Shukto Press.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF ──────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2">What readers say</h2>
+    </div>
+    <div class="marquee-wrap" style="margin-bottom:3rem;">
+      <div class="marquee-track" aria-hidden="true">
+        <div class="marquee-item">⭐ "Finally finance advice that gets irregular income"</div>
+        <div class="marquee-item">⭐ "Paid for itself in tax savings"</div>
+        <div class="marquee-item">⭐ "The baseline method changed how I budget"</div>
+        <div class="marquee-item">⭐ "Should be mandatory for every freelancer"</div>
+        <div class="marquee-item">⭐ "Concrete numbers, not vague advice"</div>
+        <div class="marquee-item">⭐ "Read it in one sitting"</div>
+        <div class="marquee-item">⭐ "Finally finance advice that gets irregular income"</div>
+        <div class="marquee-item">⭐ "Paid for itself in tax savings"</div>
+        <div class="marquee-item">⭐ "The baseline method changed how I budget"</div>
+        <div class="marquee-item">⭐ "Should be mandatory for every freelancer"</div>
+        <div class="marquee-item">⭐ "Concrete numbers, not vague advice"</div>
+        <div class="marquee-item">⭐ "Read it in one sitting"</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--grid-gap);" data-sp-testimonials>
+      <div class="quote-card reveal">
+        <span class="quote-mark" style="color:#DD7C3F;">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:#DD7C3F;">A</div>
+          <div>
+            <div class="quote-meta-name">Reader Name</div>
+            <div class="quote-meta-role">Freelancer / Gen Z earner</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-1">
+        <span class="quote-mark" style="color:#DD7C3F;">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:#DD7C3F;">B</div>
+          <div>
+            <div class="quote-meta-name">Reader Name</div>
+            <div class="quote-meta-role">Gig worker / Side-hustler</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-2">
+        <span class="quote-mark" style="color:#DD7C3F;">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:#DD7C3F;">C</div>
+          <div>
+            <div class="quote-meta-name">Reader Name</div>
+            <div class="quote-meta-role">Contractor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ───────────────────────────────────────────────── -->
+<section class="section" id="pricing" style="background:var(--paper);">
+  <div class="container" style="max-width:680px;">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2">Get the eBook</h2>
+      <p class="section-subtitle">One payment. Yours forever. PDF delivered instantly.</p>
+    </div>
+    <div class="pricing-card reveal" style="--accent:#DD7C3F;text-align:center;">
+      <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#DD7C3F;">Money, Sorted</div>
+      <div class="pricing-price-display" style="--accent:#DD7C3F;color:#DD7C3F;" data-sp-price>₹XX</div>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;">One-time payment · PDF format · Instant download</p>
+      <ul class="pricing-features" style="text-align:left;" data-sp-pricing-features></ul>
+      <div style="margin-top:2.5rem;">
+        <!-- Razorpay Payment Link: replace RAZORPAY_PAYMENT_LINK_MONEY_SORTED with actual URL -->
+        <a href="RAZORPAY_PAYMENT_LINK_MONEY_SORTED" class="b2-btn-primary" style="justify-content:center;width:100%;font-size:1.125rem;padding:1.125rem 2rem;" data-sp-razorpay>
+          Get Money, Sorted — <span data-sp-price>₹XX</span> →
+        </a>
+      </div>
+      <p style="margin-top:1rem;font-size:0.8125rem;color:var(--text-muted);">Secure payment via Razorpay · 30-day refund guarantee</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ───────────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container" style="max-width:760px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">FAQ</h2>
+    </div>
+    <div class="faq-list" style="--accent:#DD7C3F;" data-sp-faq-list></div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ─────────────────────────────────────────────── -->
+<section style="background:#1E5C56;position:relative;overflow:hidden;padding-block:var(--section-gap);text-align:center;">
+  <div class="hero-bg">
+    <div class="blob blob-1" style="background:radial-gradient(circle,rgba(221,124,63,0.35) 0%,transparent 65%);"></div>
+    <div class="blob blob-2" style="background:radial-gradient(circle,rgba(239,163,107,0.2) 0%,transparent 65%);"></div>
+  </div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.02) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="reveal">
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,4rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;">
+        Get your money sorted.<br/>Starting this month.
+      </h2>
+      <p style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:480px;margin:0 auto 2.5rem;line-height:1.65;">
+        The baseline method, the 30-day plan, and every framework you need. <span data-sp-price>₹XX</span>. Instant delivery.
+      </p>
+      <!-- Razorpay Payment Link: replace RAZORPAY_PAYMENT_LINK_MONEY_SORTED with actual URL -->
+      <a href="RAZORPAY_PAYMENT_LINK_MONEY_SORTED" class="b2-btn-primary" style="font-size:1.125rem;padding:1.25rem 2.75rem;" data-sp-razorpay>
+        Get Money, Sorted — <span data-sp-price>₹XX</span> →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── YOU MIGHT ALSO LIKE ───────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal"><h2 class="heading-3">You might also like</h2></div>
+    <div class="mini-book-grid" data-sp-also-like>
+      <a href="../one-person-company/index.html" style="background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out);text-decoration:none;" class="reveal">
+        <div style="height:180px;background:linear-gradient(135deg,#0A0E13,#1E2940,#12181F);display:flex;align-items:flex-end;padding:1.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;">The One-Person Company</div>
+        </div>
+        <div style="padding:1.25rem;">
+          <span style="font-size:0.75rem;font-weight:600;color:#8A6030;background:rgba(184,135,75,0.12);padding:0.25rem 0.75rem;border-radius:9999px;">Business &amp; AI</span>
+          <p style="font-size:0.875rem;color:var(--text-secondary);margin-top:0.75rem;line-height:1.5;">How AI agents are creating the business of the future.</p>
+        </div>
+      </a>
+      <a href="../ai-with-sayuj/index.html" style="background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out);text-decoration:none;" class="reveal reveal-delay-1">
+        <div style="height:180px;background:linear-gradient(135deg,#0A2A28,#1B5E57,#0E3A35);display:flex;align-items:flex-end;padding:1.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;">AI with Sayuj</div>
+        </div>
+        <div style="padding:1.25rem;">
+          <span style="font-size:0.75rem;font-weight:600;color:#1a7a6e;background:rgba(47,174,157,0.12);padding:0.25rem 0.75rem;border-radius:9999px;">Kids · Ages 11–13</span>
+          <p style="font-size:0.875rem;color:var(--text-secondary);margin-top:0.75rem;line-height:1.5;">A 12-year-old's real guide to understanding AI.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Shukto Press</div>
+        <p class="footer-tagline">Practical, non-hyped eBooks on AI, money, and the future of work.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links">
+          <a href="../one-person-company/index.html">The One-Person Company</a>
+          <a href="../money-sorted/index.html">Money, Sorted</a>
+          <a href="../ai-with-sayuj/index.html">AI with Sayuj</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Info</div>
+        <nav class="footer-links">
+          <a href="../../index.html">Home</a>
+          <a href="mailto:hello@shuktopress.com">Contact</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Shukto Press. All rights reserved.</span>
+      <span>Practical books for practical people.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../main.js"></script>
+<script src="../../book-page-data.js"></script>
+</body>
+</html>

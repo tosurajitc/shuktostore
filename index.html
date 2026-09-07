@@ -1,0 +1,1112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shukto Press — Practical eBooks Worth Re-Reading</title>
+  <meta name="description" content="Practical, non-hyped eBooks on AI, personal finance, and the future of work. Written by Shukto." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Homepage-specific styles ── */
+    .home-hero {
+      background: var(--ink);
+      color: var(--text-on-dark);
+    }
+    .home-hero .blob-1 {
+      background: radial-gradient(circle, rgba(184,135,75,0.45) 0%, transparent 65%);
+    }
+    .home-hero .blob-2 {
+      background: radial-gradient(circle, rgba(212,168,104,0.3) 0%, transparent 65%);
+    }
+    .home-hero .blob-3 {
+      background: radial-gradient(circle, rgba(100,80,160,0.2) 0%, transparent 65%);
+    }
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: rgba(248,245,239,0.7);
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(8px);
+    }
+    .hero-label .dot {
+      width: 6px; height: 6px;
+      background: #B8874B;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse-dot 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+    .home-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.75rem, 7vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      line-height: 1.02;
+      color: var(--text-on-dark);
+      margin-bottom: 1.5rem;
+    }
+    .home-hero-title em {
+      font-style: normal;
+      color: #B8874B;
+    }
+    .home-hero-sub {
+      font-size: clamp(1.0625rem, 2vw, 1.25rem);
+      color: rgba(248,245,239,0.65);
+      max-width: 520px;
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+    }
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-hero-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: #B8874B;
+      color: white;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 200ms cubic-bezier(0.16,1,0.3,1),
+                  filter 200ms;
+    }
+    .btn-hero-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(184,135,75,0.35);
+      filter: brightness(1.08);
+    }
+    .btn-hero-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      color: rgba(248,245,239,0.85);
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: border-color 200ms, background 200ms;
+    }
+    .btn-hero-ghost:hover {
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+    }
+    .hero-scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(248,245,239,0.35);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      animation: scroll-bounce 2.4s ease-in-out infinite;
+    }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+      50% { transform: translateX(-50%) translateY(6px); opacity: 0.7; }
+    }
+    /* Catalog section */
+    .catalog-section {
+      background: var(--paper);
+      padding-block: var(--section-gap);
+    }
+    /* Uniform catalog grid — all books equal weight */
+    .catalog-uniform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .catalog-uniform-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .catalog-uniform-grid { grid-template-columns: 1fr; }
+    }
+    /* Books 4+ overflow grid */
+    .catalog-overflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--grid-gap);
+      align-items: start;
+      margin-top: var(--grid-gap);
+    }
+    /* Trust section */
+    .trust-section {
+      background: var(--paper-warm);
+      border-top: 1px solid var(--divider);
+      border-bottom: 1px solid var(--divider);
+      padding-block: var(--space-20);
+    }
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      text-align: center;
+    }
+    .trust-item { padding: var(--space-8); }
+    .trust-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: var(--space-4);
+    }
+    .trust-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-2);
+    }
+    .trust-desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Cover placeholder styles */
+    .cover-ph-1 { background: linear-gradient(135deg, #0A0E13 0%, #1E2940 50%, #12181F 100%); }
+    .cover-ph-2 { background: linear-gradient(135deg, #1E3630 0%, #2A4F48 50%, #0F2A26 100%); }
+    .cover-ph-3 { background: linear-gradient(135deg, #0A2A28 0%, #1B5E57 50%, #0E3A35 100%); }
+
+    .cover-art {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+    }
+    .cover-art-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-art-placeholder .cover-inner-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: white;
+      line-height: 1.15;
+      position: relative;
+      z-index: 1;
+    }
+    .cover-art-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+    }
+
+    /* Homepage book card variants */
+    .home-book-card {
+      background: var(--white);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid var(--divider);
+      display: flex;
+      flex-direction: column;
+      transition: transform 300ms cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 300ms cubic-bezier(0.22,1,0.36,1),
+                  border-color 300ms ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .home-book-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
+      border-color: transparent;
+    }
+    /* Cover area: padded on all sides so the book art floats */
+    .home-book-card-cover {
+      position: relative;
+      overflow: hidden;
+      padding: 1.25rem 1.25rem 1.25rem;
+      background: var(--white);
+    }
+    /* The cover image/placeholder itself — 3:4 aspect ratio, full width */
+    .home-book-card-cover img,
+    .home-book-card-cover > div {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: contain;
+      border-radius: 0.625rem;
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .home-book-card:hover .home-book-card-cover img,
+    .home-book-card:hover .home-book-card-cover > div {
+      transform: scale(1.04) translateY(-4px);
+    }
+    .home-book-card-body {
+      padding: 1.375rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 0;
+    }
+    .book-tag-b1 { background: rgba(184,135,75,0.12); color: #8A6030; }
+    .book-tag-b2 { background: rgba(221,124,63,0.12); color: #9A4B15; }
+    .book-tag-b3 { background: rgba(47,174,157,0.12); color: #1a7a6e; }
+
+    @media (max-width: 768px) {
+      .trust-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── BOOK PREVIEW MODAL ──────────────────────────────────── */
+    .bm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: rgba(10, 14, 19, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 320ms cubic-bezier(0.16,1,0.3,1);
+    }
+    .bm-overlay.is-open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .bm-panel {
+      position: relative;
+      background: #0F1520;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 820px;
+      max-height: 90vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 360ms cubic-bezier(0.16,1,0.3,1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+    .bm-overlay.is-open .bm-panel {
+      transform: scale(1) translateY(0);
+    }
+    .bm-visual {
+      position: relative;
+      background: #060B12;
+      border-radius: 20px 0 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      min-height: 460px;
+      overflow: hidden;
+    }
+    /* Blob gradient behind the mockup */
+    .bm-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 60%, var(--bm-accent, rgba(184,135,75,0.25)) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* ── 2-D book display ─────────────────────────────────────── */
+    .bm-mockup-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    /* Outer wrapper: provides the spine strip as a visible left border
+       and the drop shadows. Spine border is offset from the cover so it
+       is always visible regardless of cover colour. */
+    .bm-book-scene {
+      display: flex;
+      align-items: stretch;
+      /* Spine side: sharp. Page side: no radius — concave corners handled by clip-path on ::after */
+      border-radius: 0;
+      overflow: visible;
+      box-shadow:
+        -2px 8px 32px rgba(0,0,0,0.7),
+         6px 8px 24px rgba(0,0,0,0.4);
+    }
+    /* Spine strip — sharp left corners, flush with binding */
+    .bm-book-scene::before {
+      content: '';
+      flex: 0 0 8px;
+      background: var(--bm-spine-color, #2a2a3a);
+      /* Gradient to give depth: lighter on the outer left edge */
+      background: linear-gradient(
+        to right,
+        rgba(255,255,255,0.18) 0%,
+        var(--bm-spine-color, #2a2a3a) 40%,
+        rgba(0,0,0,0.35) 100%
+      );
+      border-radius: 0;
+    }
+    /* Page-stack strip — concave top-right & bottom-right corners via SVG clip-path */
+    .bm-book-scene::after {
+      content: '';
+      flex: 0 0 6px;
+      background: repeating-linear-gradient(
+        to right,
+        #e8e4dc 0px,
+        #e8e4dc 1px,
+        #c8c4bc 1px,
+        #c8c4bc 2px
+      );
+      /* objectBoundingBox units (0–1). The path traces:
+         top-left (0,0) → straight across to top-right minus arc radius →
+         concave quarter-circle biting inward at top-right →
+         straight down to bottom-right minus arc radius →
+         concave quarter-circle biting inward at bottom-right →
+         straight back to bottom-left → close.
+         Arc radius = 0.15 in normalised height (≈ 15% of strip height). */
+      clip-path: url(#page-concave-clip);
+    }
+    /* Cover card: width-driven, aspect-ratio enforces full portrait height */
+    .bm-cover-card {
+      width: 150px;
+      aspect-ratio: 9 / 16;   /* exact cover image ratio */
+      overflow: hidden;
+      border-radius: 0;
+      flex-shrink: 0;
+    }
+    .bm-cover-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+    .bm-cover-card .bm-cover-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0.875rem 0.75rem;
+    }
+    .bm-cover-ph {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0.875rem 0.75rem;
+    }
+    .bm-cover-ph-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.72rem;
+      line-height: 1.2;
+      color: white;
+    }
+    .bm-content {
+      padding: 2.5rem 2rem 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+    }
+    .bm-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+    .bm-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 1.875rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      color: #F8F5EF;
+      margin-bottom: 0.5rem;
+    }
+    .bm-subtitle {
+      font-size: 0.875rem;
+      color: rgba(248,245,239,0.5);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+    .bm-desc {
+      font-size: 0.9375rem;
+      color: rgba(248,245,239,0.72);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      border-left: 2px solid var(--bm-accent-solid, #B8874B);
+      padding-left: 0.875rem;
+    }
+    .bm-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+    .bm-price {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #F8F5EF;
+    }
+    .bm-format {
+      font-size: 0.8125rem;
+      color: rgba(248,245,239,0.45);
+      font-weight: 500;
+    }
+    .bm-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .bm-btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: white;
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 200ms cubic-bezier(0.16,1,0.3,1),
+                  filter 200ms;
+    }
+    .bm-btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+    .bm-btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8125rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border: 1.5px solid rgba(255,255,255,0.14);
+      color: rgba(248,245,239,0.8);
+      transition: border-color 200ms, background 200ms;
+    }
+    .bm-btn-secondary:hover {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.05);
+    }
+    .bm-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(248,245,239,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.125rem;
+      line-height: 1;
+      transition: background 200ms, color 200ms;
+      z-index: 10;
+    }
+    .bm-close:hover {
+      background: rgba(255,255,255,0.15);
+      color: #F8F5EF;
+    }
+    @media (max-width: 640px) {
+      .bm-panel {
+        grid-template-columns: 1fr;
+        max-height: 92vh;
+      }
+      .bm-visual {
+        border-radius: 20px 20px 0 0;
+        min-height: 260px;
+        padding: 2rem 1.5rem 1.5rem;
+      }
+      .bm-cover-card { width: 120px; }
+      .bm-content { padding: 1.5rem; }
+      .bm-title { font-size: 1.375rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bm-overlay, .bm-panel { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" style="color:var(--text-on-dark);" data-sp="publisher">Shukto Press</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="#catalog" class="nav-cta" id="sp-nav-cta" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--text-on-dark);">Browse Books →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero home-hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Subtle grid texture overlay -->
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);background-size:32px 32px;pointer-events:none;"></div>
+
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-label">
+          <span class="dot"></span>
+          <span id="sp-hero-label-text">Shukto Press — Practical Books</span>
+        </div>
+        <h1 class="home-hero-title" id="sp-hero-title">
+          Books that<br/>
+          actually <em>change</em><br/>
+          how you work.
+        </h1>
+        <p class="home-hero-sub" id="sp-hero-sub">
+          No hype. No filler. Practical, framework-driven guides on AI, money, and the future of solo work — written to be re-read.
+        </p>
+        <div class="hero-cta-row">
+          <a href="#catalog" class="btn-hero-primary" id="sp-hero-cta-primary">Browse the catalog →</a>
+          <a href="#about" class="btn-hero-ghost" id="sp-hero-cta-ghost">About Shukto Press</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" style="padding-block:2rem;">
+        <div class="cover-stack" id="sp-hero-cover-stack">
+          <!-- Populated dynamically by site-data.js — last 3 books in catalog -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator">
+    <span>Scroll</span>
+    <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><rect x="1" y="1" width="10" height="18" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="5" r="2" fill="currentColor"><animate attributeName="cy" values="5;12;5" dur="2s" repeatCount="indefinite"/></circle></svg>
+  </div>
+</section>
+
+<!-- ── STAT STRIP ────────────────────────────────────────────── -->
+<section class="stat-strip">
+  <div class="container">
+    <div class="stat-grid">
+      <div class="stat-item reveal">
+        <span class="stat-number" style="color:#B8874B;">3</span>
+        <span class="stat-label">Books & counting</span>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <span class="stat-number">600<span style="font-size:0.55em;vertical-align:middle;opacity:0.6;">+</span></span>
+        <span class="stat-label">Pages of frameworks, not filler</span>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <span class="stat-number">0</span>
+        <span class="stat-label">Get-rich promises</span>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <span class="stat-number">100<span style="font-size:0.45em;vertical-align:middle;opacity:0.5;">%</span></span>
+        <span class="stat-label">Written to be re-read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MARQUEE ───────────────────────────────────────────────── -->
+<div style="background:var(--paper-warm);padding:1.5rem 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);">
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="sp-marquee-track" aria-hidden="true">
+      <!-- Items duplicated for seamless loop -->
+      <div class="marquee-item">📚 Practical frameworks, not fluff</div>
+      <div class="marquee-item">💡 Built for non-technical readers</div>
+      <div class="marquee-item">🔄 Written to be re-read</div>
+      <div class="marquee-item">📊 Real worksheets inside</div>
+      <div class="marquee-item">🚫 No get-rich promises</div>
+      <div class="marquee-item">✅ Written by practitioners</div>
+      <div class="marquee-item">🤖 Honest about AI limits</div>
+      <div class="marquee-item">💰 Built for irregular income</div>
+      <div class="marquee-item">🧒 Kid-to-kid writing, not adult-to-kid</div>
+      <div class="marquee-item">📚 Practical frameworks, not fluff</div>
+      <div class="marquee-item">💡 Built for non-technical readers</div>
+      <div class="marquee-item">🔄 Written to be re-read</div>
+      <div class="marquee-item">📊 Real worksheets inside</div>
+      <div class="marquee-item">🚫 No get-rich promises</div>
+      <div class="marquee-item">✅ Written by practitioners</div>
+      <div class="marquee-item">🤖 Honest about AI limits</div>
+      <div class="marquee-item">💰 Built for irregular income</div>
+      <div class="marquee-item">🧒 Kid-to-kid writing, not adult-to-kid</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATALOG ───────────────────────────────────────────────── -->
+<section class="catalog-section" id="catalog">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2" id="sp-catalog-heading">The full catalog</h2>
+      <p class="section-subtitle" id="sp-catalog-subtitle">Each book tackles a topic that deserved a better treatment than it was getting.</p>
+    </div>
+    <!-- Populated dynamically by site-data.js -->
+    <div id="sp-catalog-grid"></div>
+  </div>
+</section>
+
+<!-- ── TRUST / ABOUT SECTION ────────────────────────────────── -->
+<section class="trust-section" id="about">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2" id="sp-about-heading">The Shukto Press promise</h2>
+      <p class="section-subtitle" id="sp-about-subtitle">Every book we publish passes the same test: could this have been a blog post? If yes, we don't publish it.</p>
+    </div>
+    <div class="trust-grid" id="sp-trust-grid">
+      <div class="trust-item reveal">
+        <span class="trust-icon">🎯</span>
+        <h3 class="trust-title">Frameworks, not vibes</h3>
+        <p class="trust-desc">Every idea is turned into something you can apply — a matrix, a checklist, a blueprint, a step-by-step plan. No vague encouragement.</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-1">
+        <span class="trust-icon">🔍</span>
+        <h3 class="trust-title">Honest about limits</h3>
+        <p class="trust-desc">We tell you what AI can't do yet. We tell you what financial advice doesn't apply to irregular earners. We don't oversell.</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-2">
+        <span class="trust-icon">📖</span>
+        <h3 class="trust-title">Written to be re-read</h3>
+        <p class="trust-desc">Dense in the right ways. Reference-grade appendices. Chapters you'll return to when you hit a new problem six months later.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ──────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2" id="sp-testimonials-heading">What readers say</h2>
+    </div>
+    <!-- id="sp-testimonials-grid" — content replaced at runtime by site-data.js -->
+    <div id="sp-testimonials-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--grid-gap);">
+      <div class="quote-card reveal">
+        <span class="quote-mark">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:#B8874B;">A</div>
+          <div>
+            <div class="quote-meta-name">Reader Name</div>
+            <div class="quote-meta-role">Role / Context — The One-Person Company</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-1">
+        <span class="quote-mark">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:#DD7C3F;">B</div>
+          <div>
+            <div class="quote-meta-name">Reader Name</div>
+            <div class="quote-meta-role">Role / Context — Money, Sorted</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-2">
+        <span class="quote-mark">"</span>
+        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
+        <div class="quote-author">
+          <div class="quote-avatar" style="background:#2FAE9D;">C</div>
+          <div>
+            <div class="quote-meta-name">Reader Name</div>
+            <div class="quote-meta-role">Role / Context — AI with Sayuj</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand" data-sp="publisher">Shukto Press</div>
+        <p class="footer-tagline" data-sp="tagline">Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links" id="sp-footer-books-nav">
+          <a href="books/one-person-company/index.html">The One-Person Company</a>
+          <a href="books/money-sorted/index.html">Money, Sorted</a>
+          <a href="books/ai-with-sayuj/index.html">AI with Sayuj</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <nav class="footer-links">
+          <a href="#about">About</a>
+          <a href="mailto:shuktoai@gmail.com" data-sp="contact-email">shuktoai@gmail.com</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-sp="year">2025</span> <span data-sp="publisher">Shukto Press</span>. All rights reserved.</span>
+      <span id="sp-footer-bottom-tagline">Practical books for practical people.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Hidden SVG defs for book page-edge concave clip-path -->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- clipPathUnits="objectBoundingBox" means all coords are 0–1 fractions of the element's box.
+         r = 0.12 is the concave bite radius (12% of the strip height).
+         The path bites a quarter-circle inward at top-right and bottom-right. -->
+    <clipPath id="page-concave-clip" clipPathUnits="objectBoundingBox">
+      <path d="
+        M 0,0
+        L 1,0
+        Q 1,0 0.85,0.06
+        L 0.85,0.94
+        Q 1,1 1,1
+        L 0,1
+        Z
+      "/>
+    </clipPath>
+  </defs>
+</svg>
+
+<!-- ── BOOK PREVIEW MODAL ───────────────────────────────────── -->
+<div id="book-modal" class="bm-overlay" role="dialog" aria-modal="true" aria-labelledby="bm-title-text">
+  <div class="bm-panel">
+    <button class="bm-close" id="bm-close-btn" aria-label="Close preview">✕</button>
+    <!-- Left: visual — 2-D book display -->
+    <div class="bm-visual">
+      <div class="bm-mockup-wrap">
+        <div class="bm-book-scene" id="bm-book-scene">
+          <div class="bm-cover-card" id="bm-cover-card">
+            <!-- Filled by JS: either <img> or .bm-cover-ph gradient div -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Right: content -->
+    <div class="bm-content">
+      <span class="bm-tag" id="bm-tag">Category</span>
+      <h2 class="bm-title" id="bm-title-text">Book Title</h2>
+      <p class="bm-subtitle" id="bm-subtitle">Subtitle</p>
+      <p class="bm-desc" id="bm-desc">Description</p>
+      <div class="bm-meta-row">
+        <span class="bm-price" id="bm-price">₹XX</span>
+        <span class="bm-format">eBook · PDF</span>
+      </div>
+      <div class="bm-actions">
+        <a href="#" id="bm-buy-btn" class="bm-btn-primary" target="_blank" rel="noopener">
+          Get this eBook →
+        </a>
+        <a href="#" id="bm-details-btn" class="bm-btn-secondary">
+          See full details
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script src="site-data.js"></script>
+<script>
+(function () {
+  /* ── Book data ──────────────────────────────────────────────── */
+  var BOOKS = {
+    'one-person-company': {
+      id:        'one-person-company',
+      title:     'The One-Person Company',
+      subtitle:  'How AI Agents Are Creating the Business of the Future',
+      tag:       'Business & AI',
+      tagBg:     'rgba(184,135,75,0.15)',
+      tagColor:  '#A07030',
+      accent:    'rgba(184,135,75,0.28)',   /* CSS radial for bm-visual::before */
+      accentSolid: '#B8874B',
+      coverPh:   'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)',
+      coverPhAccent: '#B8874B',
+      desc:      'A grounded, non-hyped exploration of how AI agents lower the cost of running core business functions — sales, marketing, operations, finance — and what that means for who gets to start a company.',
+      price:     '₹XX',
+      salesPage: 'books/one-person-company/index.html',
+      /* Replace with real Razorpay link */
+      buyLink:   'RAZORPAY_PAYMENT_LINK_ONE_PERSON_COMPANY'
+    },
+    'money-sorted': {
+      id:        'money-sorted',
+      title:     'Money, Sorted',
+      subtitle:  'A no-BS guide to budgeting, saving, taxes, and investing — for people with income that changes every month',
+      tag:       'Personal Finance',
+      tagBg:     'rgba(221,124,63,0.15)',
+      tagColor:  '#9A4B15',
+      accent:    'rgba(221,124,63,0.25)',
+      accentSolid: '#DD7C3F',
+      coverPh:   'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)',
+      coverPhAccent: '#DD7C3F',
+      desc:      'Standard personal-finance advice assumes a salary. This guide is built for freelancers, gig workers, and side-hustlers whose income swings — covering the big month and the lean month equally.',
+      price:     '₹XX',
+      salesPage: 'books/money-sorted/index.html',
+      buyLink:   'RAZORPAY_PAYMENT_LINK_MONEY_SORTED'
+    },
+    'ai-with-sayuj': {
+      id:        'ai-with-sayuj',
+      title:     'AI with Sayuj',
+      subtitle:  'A 12-Year-Old\'s Real Guide to Understanding Artificial Intelligence',
+      tag:       'Kids · Ages 11–13',
+      tagBg:     'rgba(47,174,157,0.15)',
+      tagColor:  '#1a7a6e',
+      accent:    'rgba(47,174,157,0.22)',
+      accentSolid: '#2FAE9D',
+      coverPh:   'linear-gradient(135deg,#0A2A28 0%,#1B5E57 50%,#0E3A35 100%)',
+      coverPhAccent: '#2FAE9D',
+      desc:      'Written by a real 12-year-old who got curious about AI, taught himself, then wrote the explanation he wished someone had given him. No textbook language, no hype — just honest, accurate answers.',
+      price:     '₹XX',
+      salesPage: 'books/ai-with-sayuj/index.html',
+      buyLink:   'RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ'
+    }
+  };
+
+  /* ── DOM refs ───────────────────────────────────────────────── */
+  var overlay     = document.getElementById('book-modal');
+  var panel       = overlay.querySelector('.bm-panel');
+  var closeBtn    = document.getElementById('bm-close-btn');
+  var coverEl     = document.getElementById('bm-cover-card');
+  var bookSceneEl = document.getElementById('bm-book-scene');
+  var tagEl       = document.getElementById('bm-tag');
+  var titleEl     = document.getElementById('bm-title-text');
+  var subtitleEl  = document.getElementById('bm-subtitle');
+  var descEl      = document.getElementById('bm-desc');
+  var priceEl     = document.getElementById('bm-price');
+  var buyBtn      = document.getElementById('bm-buy-btn');
+  var detailsBtn  = document.getElementById('bm-details-btn');
+  var visual      = overlay.querySelector('.bm-visual');
+
+  var _prevFocus  = null;
+
+  /* ── Merge admin data (price + positioning) ─────────────────── */
+  try {
+    var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
+    stored.forEach(function(b) {
+      var key = b.slug || b.id;
+      if (!BOOKS[key]) return;
+      if (b.title)       BOOKS[key].title       = b.title;
+      if (b.subtitle)    BOOKS[key].subtitle    = b.subtitle;
+      if (b.price)       BOOKS[key].price       = b.price;
+      if (b.positioning) BOOKS[key].positioning = b.positioning;
+    });
+  } catch(e) {}
+
+  /* ── Cover src helper ───────────────────────────────────────── */
+  function getCoverSrc(slug) {
+    /* Check localStorage first (admin-uploaded base64) */
+    try {
+      var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
+      for (var i = 0; i < stored.length; i++) {
+        var b = stored[i];
+        if ((b.slug === slug || b.id === slug) && b.cover) return b.cover;
+      }
+    } catch(e) {}
+    /* Fallback: try conventional assets/covers/<slug>.jpg */
+    return 'assets/covers/' + slug + '.jpg';
+  }
+
+  /* ── Open modal ─────────────────────────────────────────────── */
+  function openBookModal(slug) {
+    var book = BOOKS[slug];
+
+    /* Fall back to sp_books (admin-added books not in hardcoded BOOKS dict) */
+    if (!book) {
+      try {
+        var accentCycle = [
+          { solid:'#B8874B', bg:'rgba(184,135,75,0.15)', color:'#A07030', accent:'rgba(184,135,75,0.28)', grad:'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
+          { solid:'#DD7C3F', bg:'rgba(221,124,63,0.15)',  color:'#9A4B15', accent:'rgba(221,124,63,0.25)', grad:'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)' },
+          { solid:'#2FAE9D', bg:'rgba(47,174,157,0.15)',  color:'#1a7a6e', accent:'rgba(47,174,157,0.22)', grad:'linear-gradient(135deg,#0A2A28 0%,#1B5E57 50%,#0E3A35 100%)' },
+          { solid:'#7C6AF5', bg:'rgba(124,106,245,0.15)', color:'#4B3CBF', accent:'rgba(124,106,245,0.22)', grad:'linear-gradient(135deg,#1A1240 0%,#2E2470 50%,#110E30 100%)' },
+          { solid:'#E05C8A', bg:'rgba(224,92,138,0.15)',  color:'#A02050', accent:'rgba(224,92,138,0.22)', grad:'linear-gradient(135deg,#2A0A18 0%,#5A1535 50%,#200812 100%)' },
+        ];
+        var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
+        var idx = stored.findIndex(function(b) { return (b.slug || b.id) === slug; });
+        var b = stored[idx];
+        if (b) {
+          var ac = accentCycle[idx % accentCycle.length];
+          book = {
+            id:          slug,
+            title:       b.title    || 'Untitled',
+            subtitle:    b.subtitle || '',
+            tag:         b.tag      || b.genre || '',
+            tagBg:       b.tagBg    || ac.bg,
+            tagColor:    b.tagColor || ac.color,
+            accent:      ac.accent,
+            accentSolid: b.accentSolid || ac.solid,
+            coverPh:     b.coverPh  || ac.grad,
+            coverPhAccent: b.accentSolid || ac.solid,
+            positioning: b.positioning || b.desc || b.description || '',
+            desc:        b.desc     || b.description || '',
+            price:       b.price    || '',
+            salesPage:   b.salesPage || ('books/' + slug + '/index.html'),
+            buyLink:     b.razorpay || '#'
+          };
+        }
+      } catch(e) {}
+    }
+
+    if (!book) return;
+
+    /* Store focus origin */
+    _prevFocus = document.activeElement;
+
+    /* Apply accent glow + spine strip colour on the book scene */
+    visual.style.setProperty('--bm-accent', book.accent);
+    panel.style.setProperty('--bm-accent-solid', book.accentSolid);
+    if (bookSceneEl) bookSceneEl.style.setProperty('--bm-spine-color', book.accentSolid || '#111');
+
+    /* Tag */
+    tagEl.textContent        = book.tag;
+    tagEl.style.background   = book.tagBg;
+    tagEl.style.color        = book.tagColor;
+
+    /* Text content */
+    titleEl.textContent    = book.title;
+    subtitleEl.textContent = book.subtitle;
+    descEl.textContent     = book.positioning || book.desc;
+    /* Prepend ₹ if the stored value is a bare number (e.g. "99" → "₹99") */
+    var rawPrice = book.price || '';
+    priceEl.textContent = rawPrice && /^\d/.test(rawPrice) && !rawPrice.startsWith('₹')
+      ? '₹' + rawPrice
+      : rawPrice;
+    descEl.style.borderLeftColor = book.accentSolid;
+
+    /* Buttons */
+    buyBtn.href            = book.buyLink;
+    buyBtn.style.background = book.accentSolid;
+    detailsBtn.href        = book.salesPage;
+
+    /* Cover card — try real image first, fall back to gradient placeholder */
+    var src = getCoverSrc(slug);
+    var phHtml =
+      '<div class="bm-cover-ph" style="background:' + book.coverPh + ';">' +
+        '<div class="bm-cover-ph-title" style="color:' + book.coverPhAccent + ';font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.25rem;">' + book.tag.toUpperCase() + '</div>' +
+        '<div class="bm-cover-ph-title">' + book.title + '</div>' +
+      '</div>';
+    if (src) {
+      var imgEl = document.createElement('img');
+      imgEl.alt = book.title + ' cover';
+      imgEl.onerror = function() { coverEl.innerHTML = phHtml; };
+      imgEl.src = src;
+      coverEl.innerHTML = '';
+      coverEl.appendChild(imgEl);
+    } else {
+      coverEl.innerHTML = phHtml;
+    }
+
+    /* Open */
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+
+    /* Focus the panel for keyboard nav */
+    setTimeout(function() {
+      closeBtn.focus();
+    }, 60);
+  }
+
+  /* ── Close modal ────────────────────────────────────────────── */
+  function closeBookModal() {
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (_prevFocus) {
+      try { _prevFocus.focus(); } catch(e) {}
+      _prevFocus = null;
+    }
+  }
+
+  /* ── Trigger buttons ────────────────────────────────────────── */
+  document.querySelectorAll('.book-modal-trigger').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      openBookModal(this.dataset.book);
+    });
+  });
+
+  /* ── Close on backdrop click ────────────────────────────────── */
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeBookModal();
+  });
+
+  /* ── Close button ───────────────────────────────────────────── */
+  closeBtn.addEventListener('click', closeBookModal);
+
+  /* ── Escape key ─────────────────────────────────────────────── */
+  document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Escape' || e.key === 'Esc') && overlay.classList.contains('is-open')) {
+      closeBookModal();
+    }
+  });
+
+  /* ── Focus trap ─────────────────────────────────────────────── */
+  panel.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    var focusable = panel.querySelectorAll(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    var first = focusable[0];
+    var last  = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ── Expose for site-data.js price refresh ──────────────────── */
+  window._spOpenBookModal  = openBookModal;
+  window._spCloseBookModal = closeBookModal;
+  window._spBooksData      = BOOKS;
+})();
+</script>
+</body>
+</html>
