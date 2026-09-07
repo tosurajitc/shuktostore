@@ -1,0 +1,11 @@
+{
+  "name": "shuktostore",
+  "version": "1.0.0",
+  "description": "Shukto Press — eBook storefront",
+  "scripts": {
+    "start": "serve . --single --listen $PORT"
+  },
+  "dependencies": {
+    "serve": "^14.2.3"
+  }
+}
