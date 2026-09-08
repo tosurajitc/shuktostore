@@ -16,6 +16,7 @@ const { seedData } = require('./seed');
 const authRouter     = require('./auth');
 const dataRouter     = require('./data');
 const downloadRouter = require('./download');
+const webhookRouter  = require('./webhook');
 
 const app  = express();
 const ROOT = path.join(__dirname, '..'); // project root (where index.html lives)
@@ -23,6 +24,9 @@ const ROOT = path.join(__dirname, '..'); // project root (where index.html lives
 /* ── Middleware ──────────────────────────────────────────────── */
 app.use(express.json({ limit: '50mb' }));   // large base64 images in book data
 app.use(cookieParser());
+
+/* ── Razorpay Webhook (raw body — must come BEFORE express.json parses it) ── */
+app.use('/api/webhook', webhookRouter);
 
 /* ── Auth API ────────────────────────────────────────────────── */
 app.use('/api/auth', authRouter);

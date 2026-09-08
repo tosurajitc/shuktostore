@@ -134,6 +134,44 @@ router.post('/books/reorder', requireSession, async (req, res) => {
   }
 });
 
+/* ════════════════════════════════════════════════════════════════
+   BUYERS ROUTES  (all require valid session cookie)
+════════════════════════════════════════════════════════════════ */
+
+/* GET /api/buyers — list all buyers, newest first */
+router.get('/buyers', requireSession, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, email, name, phone, book_slug, razorpay_payment_id,
+              amount_paise, currency, purchased_at, email_sent
+       FROM buyers
+       ORDER BY purchased_at DESC`
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('[data] GET /buyers error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/* GET /api/buyers/stats — per-book counts + total revenue */
+router.get('/buyers/stats', requireSession, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT book_slug,
+              COUNT(*)            AS buyer_count,
+              SUM(amount_paise)   AS total_paise
+       FROM buyers
+       GROUP BY book_slug
+       ORDER BY buyer_count DESC`
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('[data] GET /buyers/stats error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 /* POST /api/settings */
 router.post('/settings', requireSession, async (req, res) => {
   const { settings } = req.body || {};

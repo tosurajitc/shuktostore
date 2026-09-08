@@ -49,6 +49,21 @@ const MIGRATION = `
     data            JSONB NOT NULL DEFAULT '{}',
     updated_at      TIMESTAMPTZ DEFAULT now()
   );
+
+  CREATE TABLE IF NOT EXISTS buyers (
+    id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email                TEXT NOT NULL,
+    name                 TEXT,
+    phone                TEXT,
+    book_slug            TEXT NOT NULL,
+    razorpay_payment_id  TEXT UNIQUE,
+    razorpay_link_id     TEXT,
+    amount_paise         INTEGER,
+    currency             TEXT DEFAULT 'INR',
+    purchased_at         TIMESTAMPTZ DEFAULT now(),
+    email_sent           BOOLEAN DEFAULT false,
+    marketing_opt_in     BOOLEAN DEFAULT false
+  );
 `;
 
 async function migrate() {
