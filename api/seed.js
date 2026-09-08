@@ -10,13 +10,6 @@ const fs   = require('fs');
 const { pool } = require('./db');
 
 async function seedData() {
-  // Check if books table already has data
-  const existing = await pool.query('SELECT COUNT(*) FROM books');
-  if (parseInt(existing.rows[0].count, 10) > 0) {
-    console.log('[seed] Books already in DB — skipping seed.');
-    return;
-  }
-
   // Load the JSON export file
   const jsonPath = path.join(__dirname, '..', 'shukto-press-data.json');
   if (!fs.existsSync(jsonPath)) {
@@ -45,30 +38,30 @@ async function seedData() {
         await client.query(
           `INSERT INTO books (id, slug, data, sort_order)
            VALUES ($1, $2, $3, $4)
-           ON CONFLICT (id) DO UPDATE SET data = $3, sort_order = $4, updated_at = now()`,
+           ON CONFLICT (id) DO NOTHING`,
           [id, slug, JSON.stringify(book), i]
         );
       }
       console.log(`[seed] Inserted ${data.books.length} books.`);
     }
 
-    // Seed settings
+    // Seed settings (only if not already set)
     if (data.settings) {
       await client.query(
         `INSERT INTO settings (id, data)
          VALUES (1, $1)
-         ON CONFLICT (id) DO UPDATE SET data = $1, updated_at = now()`,
+         ON CONFLICT (id) DO NOTHING`,
         [JSON.stringify(data.settings)]
       );
       console.log('[seed] Settings inserted.');
     }
 
-    // Seed homepage
+    // Seed homepage (only if not already set)
     if (data.homepage) {
       await client.query(
         `INSERT INTO homepage (id, data)
          VALUES (1, $1)
-         ON CONFLICT (id) DO UPDATE SET data = $1, updated_at = now()`,
+         ON CONFLICT (id) DO NOTHING`,
         [JSON.stringify(data.homepage)]
       );
       console.log('[seed] Homepage data inserted.');
