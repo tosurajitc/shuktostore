@@ -262,10 +262,10 @@
   var link = document.getElementById('download-link');
   var txt  = document.getElementById('download-btn-text');
   fetch('/api/download/' + slug)
-    .then(function (res) {
-      if (!res.ok) throw new Error('Failed');
-      link.href = res.url;
-      link.setAttribute('download', '');
+    .then(function (res) { if (!res.ok) throw new Error('Failed'); return res.json(); })
+    .then(function (data) {
+      link.href = data.url;
+      link.setAttribute('download', data.filename || 'ebook.pdf');
       link.style.opacity = '1';
       link.style.pointerEvents = 'auto';
       txt.textContent = 'Download Your eBook (PDF)';

@@ -71,8 +71,8 @@ router.get('/:slug', async (req, res) => {
 
     const signedUrl = await getSignedUrl(r2, command, { expiresIn: EXPIRES_SEC });
 
-    /* Redirect browser directly to the signed R2 URL */
-    return res.redirect(302, signedUrl);
+    /* Return URL as JSON — frontend sets it on the <a> tag directly */
+    return res.json({ url: signedUrl, filename: fileKey });
 
   } catch (err) {
     console.error('[download] R2 signed URL error:', err.message);
