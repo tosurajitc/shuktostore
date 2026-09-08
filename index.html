@@ -875,8 +875,7 @@
       desc:      'A grounded, non-hyped exploration of how AI agents lower the cost of running core business functions — sales, marketing, operations, finance — and what that means for who gets to start a company.',
       price:     '₹XX',
       salesPage: 'books/one-person-company/index.html',
-      /* Replace with real Razorpay link */
-      buyLink:   'RAZORPAY_PAYMENT_LINK_ONE_PERSON_COMPANY'
+      buyLink:   'https://rzp.io/rzp/rzpzqaSc'
     },
     'money-sorted': {
       id:        'money-sorted',
@@ -929,7 +928,7 @@
 
   var _prevFocus  = null;
 
-  /* ── Merge admin data (price + positioning) ─────────────────── */
+  /* ── Merge admin data (price + positioning + razorpay) ─────── */
   try {
     var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
     stored.forEach(function(b) {
@@ -939,6 +938,7 @@
       if (b.subtitle)    BOOKS[key].subtitle    = b.subtitle;
       if (b.price)       BOOKS[key].price       = b.price;
       if (b.positioning) BOOKS[key].positioning = b.positioning;
+      if (b.razorpay && !b.razorpay.startsWith('RAZORPAY_')) BOOKS[key].buyLink = b.razorpay;
     });
   } catch(e) {}
 
