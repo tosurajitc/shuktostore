@@ -51,6 +51,19 @@
     }
   }
 
+  /* ── Fetch bundles from API, fall back to localStorage ───────── */
+  async function fetchBundles() {
+    try {
+      const res = await fetch('/api/bundles');
+      if (!res.ok) throw new Error(res.status);
+      const bundles = await res.json();
+      localStorage.setItem('sp_bundles', JSON.stringify(bundles));
+      return bundles;
+    } catch (e) {
+      try { return JSON.parse(localStorage.getItem('sp_bundles') || '[]'); } catch { return []; }
+    }
+  }
+
   function applyBookData(books) {
     /* Determine which book this page belongs to. */
     const slug      = document.body.dataset.spSlug;
@@ -376,6 +389,10 @@
       });
     }
 
+    /* ── Bundle offer section ──────────────────────────────────── */
+    /* Rendered into any [data-sp-bundle] element present on the page.
+       Populated later by applyBundleData() which receives the bundles array. */
+
     /* ── "You might also like" grid ────────────────────────────── */
     document.querySelectorAll('[data-sp-also-like]').forEach(container => {
       const others = books.filter(b => b.slug !== slug && b.title);
@@ -400,9 +417,60 @@
     });
   }
 
+  /* ── Bundle rendering ──────────────────────────────────────── */
+  function applyBundleData(books, bundles) {
+    const slug = document.body.dataset.spSlug;
+    if (!slug || !bundles || !bundles.length) return;
+
+    /* Find bundles that include this book */
+    const relevantBundles = bundles.filter(b =>
+      b.bookSlugs && b.bookSlugs.includes(slug)
+    );
+    if (!relevantBundles.length) return;
+
+    document.querySelectorAll('[data-sp-bundle]').forEach(container => {
+      container.innerHTML = relevantBundles.map(bundle => {
+        /* Resolve titles for all other books in the bundle */
+        const otherBooks = (bundle.bookSlugs || [])
+          .filter(s => s !== slug)
+          .map(s => {
+            const b = books.find(x => x.slug === s || x.id === s);
+            return b ? b.title : s;
+          });
+
+        const hasRazorpay = bundle.razorpay && !bundle.razorpay.startsWith('BUNDLE_');
+        const btnHref = hasRazorpay ? esc(bundle.razorpay) : '#';
+        const crossedPrice = bundle.originalPrice
+          ? `<span style="text-decoration:line-through;opacity:0.45;margin-left:0.5rem;font-size:0.9375rem;">${esc(bundle.originalPrice)}</span>`
+          : '';
+
+        return `<div style="background:linear-gradient(135deg,var(--paper-warm),var(--paper));border:1.5px solid var(--divider);border-radius:var(--radius-xl);padding:2rem;display:flex;flex-direction:column;gap:1.25rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+            <span style="font-size:1.375rem;">🎁</span>
+            <span style="font-family:var(--font-display);font-size:1.125rem;font-weight:800;letter-spacing:-0.02em;color:var(--ink);">${esc(bundle.title)}</span>
+            ${bundle.badge ? `<span style="font-size:0.6875rem;font-weight:700;padding:3px 10px;border-radius:9999px;background:rgba(47,174,157,0.12);color:#2FAE9D;letter-spacing:0.04em;">${esc(bundle.badge)}</span>` : ''}
+          </div>
+          ${bundle.description ? `<p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.65;margin:0;">${esc(bundle.description)}</p>` : ''}
+          ${otherBooks.length ? `<div style="font-size:0.875rem;color:var(--text-secondary);">Also includes: <strong style="color:var(--ink);">${otherBooks.map(esc).join(', ')}</strong></div>` : ''}
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+            <span style="font-family:var(--font-display);font-size:1.75rem;font-weight:800;color:var(--ink);">${esc(bundle.bundlePrice)}${crossedPrice}</span>
+            <a href="${btnHref}" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 1.75rem;border-radius:9999px;background:var(--ink);color:white;font-weight:700;font-size:1rem;text-decoration:none;transition:opacity 150ms;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+              Get the bundle →
+            </a>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin:0;">Secure payment via Razorpay · 30-day refund guarantee</p>
+        </div>`;
+      }).join('');
+      container.querySelectorAll('.reveal').forEach(el => {
+        if (window._spRevealObserver) window._spRevealObserver.observe(el);
+      });
+    });
+  }
+
   async function init() {
-    const books = await fetchBooks();
+    const [books, bundles] = await Promise.all([fetchBooks(), fetchBundles()]);
     applyBookData(books);
+    applyBundleData(books, bundles);
   }
 
   if (document.readyState === 'loading') {
@@ -413,8 +481,12 @@
 
   window._spApplyBookData = function () {
     try {
-      const books = JSON.parse(localStorage.getItem('sp_books') || '[]');
+      const books   = JSON.parse(localStorage.getItem('sp_books')   || '[]');
+      const bundles = JSON.parse(localStorage.getItem('sp_bundles') || '[]');
       applyBookData(books);
-    } catch { applyBookData([]); }
+      applyBundleData(books, bundles);
+    } catch {
+      applyBookData([]);
+    }
   };
 })();
