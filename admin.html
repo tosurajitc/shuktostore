@@ -503,9 +503,14 @@ select option{background:#1A2130;color:#F8F5EF}
           <input type="text" id="f-pricing-features" placeholder="Full eBook (PDF), Worksheets, 30-Day Plan"/>
         </div>
         <div class="form-col span-2">
-          <label>Razorpay Payment Link URL</label>
+          <label>Razorpay Payment Link URL <span style="font-size:0.75rem;font-weight:400;color:rgba(248,245,239,0.35)">(India / UPI)</span></label>
           <input type="text" id="f-razorpay" placeholder="https://rzp.io/l/yourlink (or leave as placeholder)"/>
-          <span class="field-hint">Leave blank to use the placeholder text — replace it later once you create the link in Razorpay dashboard.</span>
+          <span class="field-hint">Shown to visitors from India. Leave blank to use the placeholder — replace once you create the link in Razorpay.</span>
+        </div>
+        <div class="form-col span-2">
+          <label>International Payment Link URL <span style="font-size:0.75rem;font-weight:400;color:rgba(248,245,239,0.35)">(non-India — Stripe, Gumroad, Lemon Squeezy, etc.)</span></label>
+          <input type="url" id="f-intl-payment" placeholder="https://buy.stripe.com/... or https://gum.co/..."/>
+          <span class="field-hint">Shown to visitors outside India instead of the Razorpay link. Leave blank and international buyers will see the Razorpay link as fallback.</span>
         </div>
         <div class="form-col span-2">
           <label>PDF Download Link URL (for thank-you page)</label>
@@ -1497,6 +1502,7 @@ function collectFormData() {
     price: document.getElementById('f-price').value.trim() || '₹XX',
     pricingFeatures: document.getElementById('f-pricing-features').value.split(',').map(s=>s.trim()).filter(Boolean),
     razorpay: document.getElementById('f-razorpay').value.trim() || `RAZORPAY_PAYMENT_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`,
+    intlPayment: document.getElementById('f-intl-payment').value.trim() || '',
     download: document.getElementById('f-download').value.trim() || `EBOOK_DOWNLOAD_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`
   };
 }
@@ -1584,6 +1590,7 @@ function populateForm(book) {
   document.getElementById('f-price').value = book.price || '₹XX';
   document.getElementById('f-pricing-features').value = (book.pricingFeatures || []).join(', ');
   document.getElementById('f-razorpay').value = book.razorpay && !book.razorpay.startsWith('RAZORPAY_') ? book.razorpay : '';
+  document.getElementById('f-intl-payment').value = book.intlPayment || '';
   document.getElementById('f-download').value = book.download && !book.download.startsWith('EBOOK_') ? book.download : '';
 }
 
@@ -1597,7 +1604,7 @@ function startNewBook() {
   // Reset form
   ['f-title','f-subtitle','f-author','f-category','f-audience-line','f-slug','f-positioning',
    'f-pull-quote','f-promise-heading','f-promise-body','f-author-bio-name','f-author-initial',
-   'f-author-bio','f-cta-heading','f-cta-body','f-price','f-pricing-features','f-razorpay','f-download']
+   'f-author-bio','f-cta-heading','f-cta-body','f-price','f-pricing-features','f-razorpay','f-intl-payment','f-download']
     .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('f-slug').dataset.manuallyEdited = '';
   document.getElementById('slug-preview').textContent = 'your-slug';
@@ -1682,7 +1689,8 @@ function buildReview() {
       <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">For / Not-for</span><strong style="color:#F8F5EF">${d.forItems.length} / ${d.notForItems.length}</strong></div>
       <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">FAQ items</span><strong style="color:#F8F5EF">${d.faqItems.length}</strong></div>
       <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Cover image</span><strong style="color:${d.cover ? '#2FAE9D' : '#ca8a04'}">${d.cover ? '✓ Uploaded' : '⚠ Not set'}</strong></div>
-      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Razorpay link</span><strong style="color:${d.razorpay.startsWith('RAZORPAY_') ? '#ca8a04' : '#2FAE9D'}">${d.razorpay.startsWith('RAZORPAY_') ? '⚠ Placeholder' : '✓ Set'}</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Razorpay link (India)</span><strong style="color:${d.razorpay.startsWith('RAZORPAY_') ? '#ca8a04' : '#2FAE9D'}">${d.razorpay.startsWith('RAZORPAY_') ? '⚠ Placeholder' : '✓ Set'}</strong></div>
+      <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Intl payment link</span><strong style="color:${d.intlPayment ? '#2FAE9D' : '#ca8a04'}">${d.intlPayment ? '✓ Set' : '⚠ Not set'}</strong></div>
       <div><span style="color:rgba(248,245,239,0.4);display:block;font-size:0.6875rem;margin-bottom:2px">Download link</span><strong style="color:${d.download.startsWith('EBOOK_') ? '#ca8a04' : '#2FAE9D'}">${d.download.startsWith('EBOOK_') ? '⚠ Placeholder' : '✓ Set'}</strong></div>
     </div>`;
 }

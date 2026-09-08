@@ -205,10 +205,13 @@
       });
     }
 
-    /* ── Razorpay link ─────────────────────────────────────────── */
-    if (book.razorpay && !book.razorpay.startsWith('RAZORPAY_')) {
+    /* ── Payment link — Razorpay (India) or intlPayment (non-India) */
+    const paymentUrl = (country !== 'IN' && book.intlPayment)
+      ? book.intlPayment
+      : (book.razorpay && !book.razorpay.startsWith('RAZORPAY_') ? book.razorpay : null);
+    if (paymentUrl) {
       document.querySelectorAll('[data-sp-razorpay]').forEach(el => {
-        el.href = book.razorpay;
+        el.href = paymentUrl;
       });
     }
 
