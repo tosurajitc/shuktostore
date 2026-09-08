@@ -1544,11 +1544,18 @@ function editBook(id) {
 
 /* ── DELETE BOOK ────────────────────────────────────────────── */
 async function deleteBook(id) {
-  if (!confirm('Delete this book? This cannot be undone.')) return;
+  if (!confirm('Delete this book? This will also delete the books/' + id + '/ folder on the server. This cannot be undone.')) return;
   try {
     await DB.delete(id);
     renderBookList();
-    toast('Book deleted', '🗑');
+    toast('Book deleted from database', '🗑', 2000);
+    // Also delete the book folder from disk
+    try {
+      await fetch('/api/books/' + encodeURIComponent(id) + '/files', { method: 'DELETE' });
+      toast('Book folder deleted ✓', '🗑', 3000);
+    } catch (e) {
+      toast('DB deleted but folder delete failed — remove books/' + id + '/ manually', '⚠️', 5000);
+    }
   } catch (err) {
     toast('Delete failed: ' + err.message, '⚠️', 4000);
   }
@@ -1595,7 +1602,24 @@ async function saveBookEdits() {
     await DB.upsert(d);
     editingId = d.id;
     markClean();
-    toast('Changes saved ✓ — book page will reflect updates on next load', '💾', 4000);
+    toast('Changes saved ✓ — writing page files…', '💾', 2000);
+    // Auto-write book page files to disk on the server
+    try {
+      const salesHtml  = buildSalesPageHTML(d);
+      const thanksHtml = buildThanksPageHTML(d);
+      const r = await fetch('/api/books/write-files', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: d.slug, salesHtml, thanksHtml })
+      });
+      if (r.ok) {
+        toast(`✓ Saved & pages written to books/${d.slug}/`, '📄', 4000);
+      } else {
+        toast('Data saved but file write failed — download files manually', '⚠️', 5000);
+      }
+    } catch (fileErr) {
+      toast('Data saved but file write failed — download files manually', '⚠️', 5000);
+    }
   } catch (err) {
     toast('Save failed: ' + err.message, '⚠️', 4000);
   }
@@ -1919,6 +1943,7 @@ function buildSalesPageHTML(b) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../../favicon.png" />
   <title>${htmlEsc(b.title)} — ${htmlEsc(pub)}</title>
   <meta name="description" content="${htmlEsc(b.subtitle)}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2180,11 +2205,12 @@ function buildThanksPageHTML(b) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../../favicon.png" />
   <title>Thank You — ${htmlEsc(b.title)} · ${htmlEsc(pub)}</title>
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="../../../styles.css" />
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
     :root { --accent: ${a}; }
     .ty-hero { background:${bg};color:var(--text-on-dark);padding-top:calc(68px + 3rem);padding-bottom:4rem;position:relative;overflow:hidden; }
@@ -2201,8 +2227,8 @@ function buildThanksPageHTML(b) {
 <div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
 <nav class="nav nav-dark" aria-label="Main navigation">
   <div class="nav-inner">
-    <a href="../../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
-    <div class="nav-links"><a href="../../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Books</a></div>
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
+    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Books</a></div>
   </div>
 </nav>
 
@@ -2270,14 +2296,14 @@ function buildThanksPageHTML(b) {
   <div class="container">
     <div class="footer-grid">
       <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline||'Practical, non-hyped eBooks.')}</p></div>
-      <div><div class="footer-col-title">Books</div><nav class="footer-links"><a href="../../../index.html#catalog">All Books</a></nav></div>
-      <div><div class="footer-col-title">Help</div><nav class="footer-links"><a href="../../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact support</a></nav></div>
+      <div><div class="footer-col-title">Books</div><nav class="footer-links"><a href="../../index.html#catalog">All Books</a></nav></div>
+      <div><div class="footer-col-title">Help</div><nav class="footer-links"><a href="../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact support</a></nav></div>
     </div>
     <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
   </div>
 </footer>
-<script src="../../../main.js"><\/script>
-<script src="../../../book-page-data.js"><\/script>
+<script src="../../main.js"><\/script>
+<script src="../../book-page-data.js"><\/script>
 </body>
 </html>`;
 }

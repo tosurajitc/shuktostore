@@ -2,21 +2,27 @@
  * data.js — Public read + admin write routes for books, settings, homepage.
  *
  * Public (no auth):
- *   GET  /api/books           → all books ordered by sort_order
- *   GET  /api/settings        → publisher settings
- *   GET  /api/homepage        → homepage copy
+ *   GET  /api/books                  → all books ordered by sort_order
+ *   GET  /api/settings               → publisher settings
+ *   GET  /api/homepage               → homepage copy
  *
  * Admin (requires valid session cookie):
- *   POST /api/books           → upsert a single book  { book: {...} }
- *   DELETE /api/books/:id     → delete a book
- *   POST /api/settings        → save settings         { settings: {...} }
- *   POST /api/homepage        → save homepage data    { homepage: {...} }
- *   POST /api/books/reorder   → save sort order       { ids: [...] }
+ *   POST /api/books                  → upsert a single book  { book: {...} }
+ *   POST /api/books/write-files      → write index.html + thank-you.html for a book { slug, salesHtml, thanksHtml }
+ *   DELETE /api/books/:id            → delete a book from DB
+ *   DELETE /api/books/:id/files      → delete books/<slug>/ folder from disk
+ *   POST /api/settings               → save settings         { settings: {...} }
+ *   POST /api/homepage               → save homepage data    { homepage: {...} }
+ *   POST /api/books/reorder          → save sort order       { ids: [...] }
  */
 'use strict';
 
+const path   = require('path');
+const fs     = require('fs');
 const router   = require('express').Router();
 const { pool } = require('./db');
+
+const BOOKS_DIR = path.join(__dirname, '..', 'books');
 
 /* ── Session guard (inline — avoids circular require) ────────── */
 async function requireSession(req, res, next) {
@@ -105,6 +111,29 @@ router.post('/books', requireSession, async (req, res) => {
   }
 });
 
+/* POST /api/books/write-files — write index.html + thank-you.html to disk */
+router.post('/books/write-files', requireSession, async (req, res) => {
+  const { slug, salesHtml, thanksHtml } = req.body || {};
+  if (!slug || !salesHtml || !thanksHtml) {
+    return res.status(400).json({ error: 'slug, salesHtml and thanksHtml required' });
+  }
+  // Sanitise slug — only allow URL-safe chars
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    return res.status(400).json({ error: 'Invalid slug' });
+  }
+  try {
+    const dir = path.join(BOOKS_DIR, slug);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'index.html'),     salesHtml,  'utf8');
+    fs.writeFileSync(path.join(dir, 'thank-you.html'), thanksHtml, 'utf8');
+    console.log(`[data] write-files: wrote books/${slug}/`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[data] POST /books/write-files error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 /* DELETE /api/books/:id */
 router.delete('/books/:id', requireSession, async (req, res) => {
   try {
@@ -112,6 +141,26 @@ router.delete('/books/:id', requireSession, async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.error('[data] DELETE /books error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/* DELETE /api/books/:id/files — delete books/<slug>/ folder from disk */
+router.delete('/books/:id/files', requireSession, async (req, res) => {
+  const id = req.params.id;
+  // Sanitise — only allow URL-safe chars
+  if (!/^[a-z0-9-]+$/.test(id)) {
+    return res.status(400).json({ error: 'Invalid id' });
+  }
+  try {
+    const dir = path.join(BOOKS_DIR, id);
+    if (fs.existsSync(dir)) {
+      fs.rmSync(dir, { recursive: true, force: true });
+      console.log(`[data] delete-files: removed books/${id}/`);
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[data] DELETE /books/:id/files error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
