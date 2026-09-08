@@ -1,48 +1,46 @@
 /**
  * SHUKTO PRESS — site-data.js
- * Loads editable homepage content from localStorage and renders it live.
- * Included in index.html only. Admin writes to the same keys.
+ * Loads homepage content from the API (/api/books, /api/settings, /api/homepage)
+ * and renders it live. Falls back to localStorage for local development.
  *
- * Keys used:
- *   sp_settings       — { publisher, email, tagline, navCta, navLinkBooks, navLinkAbout, footerBottomTagline }
- *   sp_homepage       — { heroLabel, heroTitle, heroSub, heroPrimary, heroGhost,
- *                         catalogHeading, catalogSubtitle,
- *                         aboutHeading, aboutSubtitle,
- *                         testimonialsHeading, trustItems[], testimonials[],
- *                         marqueeItems[] }
- *   sp_books          — book catalog (for cover images & prices)
+ * Included in index.html only.
  */
 
 (function () {
   'use strict';
 
-  function load(key, fallback) {
+  /* ── Fetch helpers ───────────────────────────────────────────── */
+  async function fetchJSON(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /* ── localStorage fallback (local dev only) ──────────────────── */
+  function loadLocal(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch { return fallback; }
   }
 
-  /* ── Default content (matches what is hard-coded in index.html) ──── */
+  /* ── Default content (matches hard-coded index.html) ──────────── */
   const DEFAULTS = {
-    /* Nav */
     navLinkBooks: 'Books',
     navLinkAbout: 'About',
     navCta: 'Browse Books →',
-    /* Hero */
     heroLabel:    'Shukto Press — Practical Books',
     heroTitle:    'Books that actually change how you work.',
     heroSub:      'No hype. No filler. Practical, framework-driven guides on AI, money, and the future of solo work — written to be re-read.',
     heroPrimary:  'Browse the catalog →',
     heroGhost:    'About Shukto Press',
-    /* Catalog */
     catalogHeading:  'The full catalog',
     catalogSubtitle: 'Each tackles a topic that deserved a better treatment than it was getting.',
-    /* About */
     aboutHeading: 'The Shukto Press promise',
     aboutSubtitle: 'Every book we publish passes the same test: could this have been a blog post? If yes, we don\'t publish it.',
-    /* Testimonials */
     testimonialsHeading: 'What readers say',
-    /* Footer */
     footerBottomTagline: 'Practical books for practical people.',
-    /* Marquee */
     marqueeItems: [
       '📚 Practical frameworks, not fluff',
       '💡 Built for non-technical readers',
@@ -66,27 +64,33 @@
     ]
   };
 
-  function applyAll() {
-    const settings = load('sp_settings', {});
-    const hp       = load('sp_homepage', {});
-    const books    = load('sp_books',    []);
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
-    /* ── Site-wide: email ───────────────────────────────────────── */
+  function applyAll(settings, hp, books) {
+    settings = settings || {};
+    hp       = hp       || {};
+    books    = books    || [];
+
+    /* ── Email ───────────────────────────────────────────────── */
     const email = settings.email || 'shuktoai@gmail.com';
     document.querySelectorAll('[data-sp="contact-email"]').forEach(el => {
       el.textContent = email;
       if (el.tagName === 'A') el.href = 'mailto:' + email;
     });
 
-    /* ── Publisher name ─────────────────────────────────────────── */
+    /* ── Publisher name ──────────────────────────────────────── */
     const pub = settings.publisher || 'Shukto Press';
     document.querySelectorAll('[data-sp="publisher"]').forEach(el => { el.textContent = pub; });
 
-    /* ── Tagline ────────────────────────────────────────────────── */
+    /* ── Tagline ─────────────────────────────────────────────── */
     const tagline = settings.tagline || 'Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.';
     document.querySelectorAll('[data-sp="tagline"]').forEach(el => { el.textContent = tagline; });
 
-    /* ── Nav links ──────────────────────────────────────────────── */
+    /* ── Nav links ───────────────────────────────────────────── */
     const navBooks = document.getElementById('sp-nav-link-books');
     if (navBooks) navBooks.textContent = settings.navLinkBooks || DEFAULTS.navLinkBooks;
     const navAbout = document.getElementById('sp-nav-link-about');
@@ -94,15 +98,15 @@
     const navCta = document.getElementById('sp-nav-cta');
     if (navCta) navCta.textContent = settings.navCta || DEFAULTS.navCta;
 
-    /* ── Footer bottom tagline ──────────────────────────────────── */
+    /* ── Footer bottom tagline ───────────────────────────────── */
     const ftEl = document.getElementById('sp-footer-bottom-tagline');
     if (ftEl) ftEl.textContent = settings.footerBottomTagline || DEFAULTS.footerBottomTagline;
 
-    /* ── Hero label ─────────────────────────────────────────────── */
+    /* ── Hero label ──────────────────────────────────────────── */
     const hlEl = document.getElementById('sp-hero-label-text');
     if (hlEl) hlEl.textContent = hp.heroLabel || DEFAULTS.heroLabel;
 
-    /* ── Hero title, subtitle, CTAs ─────────────────────────────── */
+    /* ── Hero title, subtitle, CTAs ──────────────────────────── */
     const htEl = document.getElementById('sp-hero-title');
     if (htEl && hp.heroTitle) htEl.textContent = hp.heroTitle;
     const hsEl = document.getElementById('sp-hero-sub');
@@ -112,32 +116,31 @@
     const hgEl = document.getElementById('sp-hero-cta-ghost');
     if (hgEl && hp.heroGhost) hgEl.textContent = hp.heroGhost;
 
-    /* ── Catalog heading + subtitle ─────────────────────────────── */
+    /* ── Catalog heading + subtitle ──────────────────────────── */
     const chEl = document.getElementById('sp-catalog-heading');
     if (chEl) chEl.textContent = hp.catalogHeading || DEFAULTS.catalogHeading;
 
-    /* ── Testimonials heading ───────────────────────────────────── */
+    /* ── Testimonials heading ────────────────────────────────── */
     const thEl = document.getElementById('sp-testimonials-heading');
     if (thEl) thEl.textContent = hp.testimonialsHeading || DEFAULTS.testimonialsHeading;
 
-    /* ── About heading + subtitle ───────────────────────────────── */
+    /* ── About heading + subtitle ────────────────────────────── */
     const ahEl = document.getElementById('sp-about-heading');
     const asEl = document.getElementById('sp-about-subtitle');
     if (ahEl) ahEl.textContent = hp.aboutHeading || DEFAULTS.aboutHeading;
     if (asEl) asEl.textContent = hp.aboutSubtitle || DEFAULTS.aboutSubtitle;
 
-    /* ── Marquee ────────────────────────────────────────────────── */
+    /* ── Marquee ─────────────────────────────────────────────── */
     const marqueeItems = (hp.marqueeItems && hp.marqueeItems.length) ? hp.marqueeItems : DEFAULTS.marqueeItems;
     const marqueeTrack = document.getElementById('sp-marquee-track');
     if (marqueeTrack) {
-      /* Duplicate the set once for a seamless CSS loop */
       const html = [...marqueeItems, ...marqueeItems]
         .map(text => `<div class="marquee-item">${esc(text)}</div>`)
         .join('');
       marqueeTrack.innerHTML = html;
     }
 
-    /* ── Trust items ────────────────────────────────────────────── */
+    /* ── Trust items ─────────────────────────────────────────── */
     const trustItems = (hp.trustItems && hp.trustItems.length) ? hp.trustItems : DEFAULTS.trustItems;
     const trustGrid = document.getElementById('sp-trust-grid');
     if (trustGrid) {
@@ -147,13 +150,12 @@
           <h3 class="trust-title">${esc(item.title)}</h3>
           <p class="trust-desc">${esc(item.body)}</p>
         </div>`).join('');
-      // Re-run reveal observer for new elements
       if (window._spRevealObserver) {
         trustGrid.querySelectorAll('.reveal').forEach(el => window._spRevealObserver.observe(el));
       }
     }
 
-    /* ── Testimonials ───────────────────────────────────────────── */
+    /* ── Testimonials ────────────────────────────────────────── */
     const testimonials = (hp.testimonials && hp.testimonials.length) ? hp.testimonials : DEFAULTS.testimonials;
     const testGrid = document.getElementById('sp-testimonials-grid');
     if (testGrid) {
@@ -177,11 +179,10 @@
       }
     }
 
-    /* ── Hero cover stack — last 3 books, cover-only, no text ──── */
+    /* ── Hero cover stack ────────────────────────────────────── */
     const heroStack = document.getElementById('sp-hero-cover-stack');
     if (heroStack) {
       const stackBooks = books.length ? books.slice(-3) : [];
-      // Fallback gradients for when no cover image is set
       const fallbackGrads = [
         'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)',
         'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)',
@@ -208,7 +209,7 @@
       });
     }
 
-    /* ── Catalog — bento for first 3, overflow grid for the rest ── */
+    /* ── Catalog grid ────────────────────────────────────────── */
     const catalogGrid = document.getElementById('sp-catalog-grid');
     const catalogSubtitle = document.getElementById('sp-catalog-subtitle');
     if (catalogGrid) {
@@ -220,13 +221,11 @@
         { solid: '#E05C8A', bg: 'rgba(224,92,138,0.12)',  text: '#A02050', grad: 'linear-gradient(135deg,#2A0A18 0%,#5A1535 50%,#200812 100%)' },
       ];
 
-      /* Normalise price — strip any existing currency symbol, always prefix ₹ */
       function fmtPrice(raw) {
         const stripped = String(raw || '').replace(/^[\s$£€₹₩¥]+/, '').trim();
         return stripped ? '₹' + stripped : '';
       }
 
-      /* Build a single card element — cover sized by aspect-ratio CSS */
       function makeCard(book, i) {
         const ac = accentPalette[i % accentPalette.length];
         const slug        = book.slug || book.id || '';
@@ -269,13 +268,10 @@
       }
 
       catalogGrid.innerHTML = '';
-      const displayBooks = books.length ? books : [];
-
-      /* ── Uniform grid — all books equal columns ─────────────── */
-      if (displayBooks.length) {
+      if (books.length) {
         const grid = document.createElement('div');
         grid.className = 'catalog-uniform-grid';
-        displayBooks.forEach((book, i) => {
+        books.forEach((book, i) => {
           const cell = document.createElement('div');
           cell.className = `reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}`;
           cell.appendChild(makeCard(book, i));
@@ -285,11 +281,10 @@
         catalogGrid.appendChild(grid);
       }
 
-      // Update subtitle with book count + editable tail
       if (catalogSubtitle) {
         const tail = hp.catalogSubtitle || DEFAULTS.catalogSubtitle;
-        if (displayBooks.length) {
-          const n = displayBooks.length;
+        if (books.length) {
+          const n = books.length;
           catalogSubtitle.textContent = `${n} book${n === 1 ? '' : 's'}. ${tail}`;
         } else {
           catalogSubtitle.textContent = tail;
@@ -297,7 +292,7 @@
       }
     }
 
-    /* ── Footer books nav ───────────────────────────────────────── */
+    /* ── Footer books nav ────────────────────────────────────── */
     const footerBooksNav = document.getElementById('sp-footer-books-nav');
     if (footerBooksNav && books.length) {
       footerBooksNav.innerHTML = books.map(b => {
@@ -307,27 +302,50 @@
       }).join('');
     }
 
-    /* ── Footer copyright year ──────────────────────────────────── */
+    /* ── Footer copyright year ───────────────────────────────── */
     document.querySelectorAll('[data-sp="year"]').forEach(el => {
       el.textContent = new Date().getFullYear();
     });
   }
 
-  function esc(s) {
-    return String(s || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+  /* ── Main: fetch from API, fall back to localStorage ─────────── */
+  async function init() {
+    // Try API first (production)
+    const [books, settings, homepage] = await Promise.all([
+      fetchJSON('/api/books'),
+      fetchJSON('/api/settings'),
+      fetchJSON('/api/homepage'),
+    ]);
+
+    // If API returned data, use it
+    if (books !== null || settings !== null || homepage !== null) {
+      applyAll(settings || {}, homepage || {}, books || []);
+      // Also keep localStorage in sync for admin preview
+      if (books)    localStorage.setItem('sp_books',    JSON.stringify(books));
+      if (settings) localStorage.setItem('sp_settings', JSON.stringify(settings));
+      if (homepage) localStorage.setItem('sp_homepage', JSON.stringify(homepage));
+    } else {
+      // Fallback: localStorage (local dev / offline)
+      applyAll(
+        loadLocal('sp_settings', {}),
+        loadLocal('sp_homepage', {}),
+        loadLocal('sp_books',    [])
+      );
+    }
   }
 
-  /* Run after DOM is ready */
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', applyAll);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    applyAll();
+    init();
   }
 
   /* Expose for admin preview */
-  window._spApplyAll = applyAll;
+  window._spApplyAll = function () {
+    applyAll(
+      loadLocal('sp_settings', {}),
+      loadLocal('sp_homepage', {}),
+      loadLocal('sp_books',    [])
+    );
+  };
 })();

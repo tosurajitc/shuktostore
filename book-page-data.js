@@ -25,10 +25,6 @@
 (function () {
   'use strict';
 
-  function load(key, fallback) {
-    try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch (e) { return fallback; }
-  }
-
   function esc(s) {
     return String(s || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -40,17 +36,28 @@
     if (window._spRevealObserver) window._spRevealObserver.observe(el);
   }
 
-  function applyBookData() {
-    /* Determine which book this page belongs to.
-       data-sp-slug-alias lets a page respond to an alternate slug stored
-       in localStorage (e.g. admin saved "ai-handbook-for-kids" but the
-       canonical folder is "ai-with-sayuj"). */
+  /* ── Fetch books from API, fall back to localStorage ─────────── */
+  async function fetchBooks() {
+    try {
+      const res = await fetch('/api/books');
+      if (!res.ok) throw new Error(res.status);
+      const books = await res.json();
+      // Keep localStorage in sync for admin preview
+      localStorage.setItem('sp_books', JSON.stringify(books));
+      return books;
+    } catch (e) {
+      // Fallback: localStorage (local dev / offline)
+      try { return JSON.parse(localStorage.getItem('sp_books') || '[]'); } catch { return []; }
+    }
+  }
+
+  function applyBookData(books) {
+    /* Determine which book this page belongs to. */
     const slug      = document.body.dataset.spSlug;
     const slugAlias = document.body.dataset.spSlugAlias || '';
     if (!slug) return;
 
-    const books = load('sp_books', []);
-    const book  = books.find(b =>
+    const book = books.find(b =>
       (b.slug === slug)      || (b.id === slug) ||
       (b.slug === slugAlias) || (b.id === slugAlias)
     );
@@ -368,8 +375,7 @@
 
     /* ── "You might also like" grid ────────────────────────────── */
     document.querySelectorAll('[data-sp-also-like]').forEach(container => {
-      const allBooks = load('sp_books', []);
-      const others = allBooks.filter(b => b.slug !== slug && b.title);
+      const others = books.filter(b => b.slug !== slug && b.title);
       if (!others.length) return;
       container.innerHTML = others.map((b, i) => {
         const delay = i > 0 ? ` reveal-delay-${i}` : '';
@@ -391,11 +397,21 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', applyBookData);
-  } else {
-    applyBookData();
+  async function init() {
+    const books = await fetchBooks();
+    applyBookData(books);
   }
 
-  window._spApplyBookData = applyBookData;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  window._spApplyBookData = function () {
+    try {
+      const books = JSON.parse(localStorage.getItem('sp_books') || '[]');
+      applyBookData(books);
+    } catch { applyBookData([]); }
+  };
 })();

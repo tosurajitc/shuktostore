@@ -12,17 +12,22 @@ const path        = require('path');
 const express     = require('express');
 const cookieParser = require('cookie-parser');
 const { migrate, seedAdmin, cleanSessions, pool } = require('./db');
+const { seedData } = require('./seed');
 const authRouter  = require('./auth');
+const dataRouter  = require('./data');
 
 const app  = express();
 const ROOT = path.join(__dirname, '..'); // project root (where index.html lives)
 
 /* ── Middleware ──────────────────────────────────────────────── */
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));   // large base64 images in book data
 app.use(cookieParser());
 
 /* ── Auth API ────────────────────────────────────────────────── */
 app.use('/api/auth', authRouter);
+
+/* ── Data API ────────────────────────────────────────────────── */
+app.use('/api', dataRouter);
 
 /* ── Session guard middleware ────────────────────────────────── */
 async function requireSession(req, res, next) {
@@ -77,6 +82,7 @@ async function boot() {
   try {
     await migrate();
     await seedAdmin();
+    await seedData();
     await cleanSessions();
   } catch (err) {
     console.error('[server] boot error:', err);

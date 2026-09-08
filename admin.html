@@ -842,43 +842,115 @@ select option{background:#1A2130;color:#F8F5EF}
 <script>
 /* ============================================================
    SHUKTO PRESS ADMIN — All JavaScript
-   Data stored in localStorage under key: "sp_books" and "sp_settings"
+   Data stored in PostgreSQL via API. localStorage used as cache.
    ============================================================ */
+
+/* ── API HELPERS ─────────────────────────────────────────────── */
+async function apiGet(path) {
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
+  return res.json();
+}
+async function apiPost(path, body) {
+  const res = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
+  return res.json();
+}
+async function apiDelete(path) {
+  const res = await fetch(path, { method: 'DELETE' });
+  if (!res.ok) throw new Error(`DELETE ${path} failed: ${res.status}`);
+  return res.json();
+}
 
 /* ── DATA LAYER ─────────────────────────────────────────────── */
 const DB = {
+  /* ── Local cache helpers (for instant UI, sync'd after API calls) */
+  _cache: null,
+  _cacheSettings: null,
+  _cacheHomepage: null,
+
   load() {
+    if (this._cache) return this._cache;
     try { return JSON.parse(localStorage.getItem('sp_books') || '[]'); } catch { return []; }
   },
-  save(books) {
+  _setCache(books) {
+    this._cache = books;
     localStorage.setItem('sp_books', JSON.stringify(books));
   },
+
   loadSettings() {
-    try {
-      return JSON.parse(localStorage.getItem('sp_settings') || '{}');
-    } catch { return {}; }
+    if (this._cacheSettings) return this._cacheSettings;
+    try { return JSON.parse(localStorage.getItem('sp_settings') || '{}'); } catch { return {}; }
   },
-  saveSettings(s) {
+  _setSettingsCache(s) {
+    this._cacheSettings = s;
     localStorage.setItem('sp_settings', JSON.stringify(s));
   },
+
   loadHomepage() {
+    if (this._cacheHomepage) return this._cacheHomepage;
     try { return JSON.parse(localStorage.getItem('sp_homepage') || '{}'); } catch { return {}; }
   },
-  saveHomepage(hp) {
+  _setHomepageCache(hp) {
+    this._cacheHomepage = hp;
     localStorage.setItem('sp_homepage', JSON.stringify(hp));
   },
+
+  /* ── Load all data from API on admin boot ─── */
+  async loadFromAPI() {
+    try {
+      const [books, settings, homepage] = await Promise.all([
+        apiGet('/api/books'),
+        apiGet('/api/settings'),
+        apiGet('/api/homepage'),
+      ]);
+      this._setCache(books || []);
+      this._setSettingsCache(settings || {});
+      this._setHomepageCache(homepage || {});
+      return true;
+    } catch (err) {
+      console.warn('[DB] Could not load from API, using local cache:', err.message);
+      return false;
+    }
+  },
+
   getById(id) {
     return this.load().find(b => b.id === id) || null;
   },
-  upsert(book) {
+
+  /* ── Upsert a book — API + cache ─── */
+  async upsert(book) {
+    await apiPost('/api/books', { book });
     const books = this.load();
     const idx = books.findIndex(b => b.id === book.id);
     if (idx >= 0) books[idx] = book; else books.push(book);
-    this.save(books);
+    this._setCache(books);
   },
-  delete(id) {
-    this.save(this.load().filter(b => b.id !== id));
-  }
+
+  /* ── Delete a book — API + cache ─── */
+  async delete(id) {
+    await apiDelete(`/api/books/${id}`);
+    this._setCache(this.load().filter(b => b.id !== id));
+  },
+
+  /* ── Save settings — API + cache ─── */
+  async saveSettings(s) {
+    await apiPost('/api/settings', { settings: s });
+    this._setSettingsCache(s);
+  },
+
+  /* ── Save homepage — API + cache ─── */
+  async saveHomepage(hp) {
+    await apiPost('/api/homepage', { homepage: hp });
+    this._setHomepageCache(hp);
+  },
+
+  /* ── Legacy sync stubs (keep for any inline callers) ─── */
+  save(books)         { this._setCache(books); },
 };
 
 /* ── STATE ──────────────────────────────────────────────────── */
@@ -1350,11 +1422,15 @@ function editBook(id) {
 }
 
 /* ── DELETE BOOK ────────────────────────────────────────────── */
-function deleteBook(id) {
+async function deleteBook(id) {
   if (!confirm('Delete this book? This cannot be undone.')) return;
-  DB.delete(id);
-  renderBookList();
-  toast('Book deleted', '🗑');
+  try {
+    await DB.delete(id);
+    renderBookList();
+    toast('Book deleted', '🗑');
+  } catch (err) {
+    toast('Delete failed: ' + err.message, '⚠️', 4000);
+  }
 }
 
 /* ── BUILD REVIEW ───────────────────────────────────────────── */
@@ -1391,25 +1467,32 @@ function setSaveEditsBtnsVisible(visible) {
 }
 
 /* ── SAVE BOOK EDITS (edit mode only) ───────────────────────── */
-function saveBookEdits() {
+async function saveBookEdits() {
   const d = collectFormData();
   if (!d.title || !d.slug) { toast('Title and slug are required', '⚠️'); return; }
-  DB.upsert(d);
-  editingId = d.id; // keep editing same record
-  markClean();
-  toast('Changes saved ✓ — book page will reflect updates on next load', '💾', 4000);
+  try {
+    await DB.upsert(d);
+    editingId = d.id;
+    markClean();
+    toast('Changes saved ✓ — book page will reflect updates on next load', '💾', 4000);
+  } catch (err) {
+    toast('Save failed: ' + err.message, '⚠️', 4000);
+  }
 }
 
 /* ── GENERATE FILES ─────────────────────────────────────────── */
-function generateFiles() {
+async function generateFiles() {
   const d = collectFormData();
   if (!d.title || !d.slug) { toast('Title and slug are required', '⚠️'); return; }
-  DB.upsert(d);
-  toast('Book saved & files ready to download!', '✓', 4000);
-  showView('generate');
-  // Use d.id — options use book.id as value, not slug
-  document.getElementById('gen-book-select').value = d.id;
-  onGenBookChange();
+  try {
+    await DB.upsert(d);
+    toast('Book saved & files ready to download!', '✓', 4000);
+    showView('generate');
+    document.getElementById('gen-book-select').value = d.id;
+    onGenBookChange();
+  } catch (err) {
+    toast('Save failed: ' + err.message, '⚠️', 4000);
+  }
 }
 
 /* ── RENDER BOOK LIST ───────────────────────────────────────── */
@@ -1462,17 +1545,21 @@ function loadSettings() {
   sv('s-tagline',      s.tagline);
   sv('s-footer-bottom',s.footerBottomTagline);
 }
-function saveSettings() {
-  DB.saveSettings({
-    publisher:           document.getElementById('s-publisher').value,
-    email:               document.getElementById('s-email').value,
-    navLinkBooks:        document.getElementById('s-nav-books').value,
-    navLinkAbout:        document.getElementById('s-nav-about').value,
-    navCta:              document.getElementById('s-nav-cta').value,
-    tagline:             document.getElementById('s-tagline').value,
-    footerBottomTagline: document.getElementById('s-footer-bottom').value
-  });
-  toast('Site settings saved — reload homepage to see changes', '💾', 4000);
+async function saveSettings() {
+  try {
+    await DB.saveSettings({
+      publisher:           document.getElementById('s-publisher').value,
+      email:               document.getElementById('s-email').value,
+      navLinkBooks:        document.getElementById('s-nav-books').value,
+      navLinkAbout:        document.getElementById('s-nav-about').value,
+      navCta:              document.getElementById('s-nav-cta').value,
+      tagline:             document.getElementById('s-tagline').value,
+      footerBottomTagline: document.getElementById('s-footer-bottom').value
+    });
+    toast('Site settings saved — reload homepage to see changes', '💾', 4000);
+  } catch (err) {
+    toast('Save failed: ' + err.message, '⚠️', 4000);
+  }
 }
 
 /* ── DATA IMPORT / EXPORT ───────────────────────────────────── */
@@ -1489,17 +1576,20 @@ function importDataClick() { document.getElementById('import-file').click(); }
 function importData(e) {
   const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = async ev => {
     try {
       const data = JSON.parse(ev.target.result);
-      if (data.books)    DB.save(data.books);
-      if (data.settings) DB.saveSettings(data.settings);
-      if (data.homepage) DB.saveHomepage(data.homepage);
+      if (data.books) {
+        for (const book of data.books) { await DB.upsert(book); }
+        DB._setCache(data.books);
+      }
+      if (data.settings) await DB.saveSettings(data.settings);
+      if (data.homepage) await DB.saveHomepage(data.homepage);
       renderBookList();
       loadSettings();
       loadHomepageEditor();
       toast('Data imported — books, settings & homepage restored ✓', '⬆', 4000);
-    } catch { toast('Invalid JSON file — import failed', '⚠️', 4000); }
+    } catch (err) { toast('Import failed: ' + err.message, '⚠️', 4000); }
   };
   reader.readAsText(file);
 }
@@ -2477,10 +2567,14 @@ function collectHomepageData() {
   };
 }
 
-function saveHomepage() {
-  const data = collectHomepageData();
-  DB.saveHomepage(data);
-  toast('Homepage saved — reload index.html to see changes', '💾', 4000);
+async function saveHomepage() {
+  try {
+    const data = collectHomepageData();
+    await DB.saveHomepage(data);
+    toast('Homepage saved — reload index.html to see changes', '💾', 4000);
+  } catch (err) {
+    toast('Save failed: ' + err.message, '⚠️', 4000);
+  }
 }
 
 function previewHomepage() {
@@ -2490,10 +2584,15 @@ function previewHomepage() {
 }
 
 /* ── INIT ───────────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+  // Load all data from API into cache first
+  await DB.loadFromAPI();
+
   initStatsGrid(null);
   renderBookList();
   loadSettings();
+  loadHomepageEditor();
+
   // Settings auto-save on input
   ['s-publisher','s-email','s-tagline'].forEach(id => {
     const el = document.getElementById(id);

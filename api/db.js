@@ -28,6 +28,27 @@ const MIGRATION = `
     expires_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ DEFAULT now()
   );
+
+  CREATE TABLE IF NOT EXISTS books (
+    id              TEXT PRIMARY KEY,
+    slug            TEXT UNIQUE NOT NULL,
+    data            JSONB NOT NULL DEFAULT '{}',
+    sort_order      INTEGER NOT NULL DEFAULT 0,
+    created_at      TIMESTAMPTZ DEFAULT now(),
+    updated_at      TIMESTAMPTZ DEFAULT now()
+  );
+
+  CREATE TABLE IF NOT EXISTS settings (
+    id              INTEGER PRIMARY KEY DEFAULT 1,
+    data            JSONB NOT NULL DEFAULT '{}',
+    updated_at      TIMESTAMPTZ DEFAULT now()
+  );
+
+  CREATE TABLE IF NOT EXISTS homepage (
+    id              INTEGER PRIMARY KEY DEFAULT 1,
+    data            JSONB NOT NULL DEFAULT '{}',
+    updated_at      TIMESTAMPTZ DEFAULT now()
+  );
 `;
 
 async function migrate() {
