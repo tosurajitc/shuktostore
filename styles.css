@@ -231,6 +231,15 @@ ul, ol { list-style: none; }
   font-weight: 800;
   font-size: var(--text-xl);
   letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .nav-links {
   display: flex;
