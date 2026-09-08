@@ -7,7 +7,7 @@
 <title>Shukto Press — Admin Panel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ── RESET & BASE ─────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -22,7 +22,7 @@ input,textarea,select{font-family:inherit}
 .main{padding:2.5rem 2.5rem 4rem;overflow-y:auto}
 /* ── SIDEBAR ──────────────────────────────────────────── */
 .sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:1.25rem}
-.sidebar-logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1.125rem;letter-spacing:-0.03em;color:#F8F5EF}
+.sidebar-logo-text{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.125rem;letter-spacing:0;color:#F8F5EF}
 .sidebar-logo-sub{font-size:0.6875rem;color:rgba(248,245,239,0.4);margin-top:2px;font-weight:500}
 .nav-section{padding:0 1rem;margin-bottom:0.5rem}
 .nav-section-label{font-size:0.625rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,245,239,0.3);padding:0 0.5rem;margin-bottom:0.5rem}
@@ -41,13 +41,13 @@ input,textarea,select{font-family:inherit}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal-box{background:#12181F;border:1px solid rgba(255,255,255,0.1);border-radius:1rem;width:100%;max-width:720px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 32px 64px rgba(0,0,0,0.5)}
 .modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0}
-.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.0625rem;color:#F8F5EF}
+.modal-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:1.0625rem;color:#F8F5EF}
 .modal-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:rgba(248,245,239,0.6);font-size:1.125rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 150ms,color 150ms}
 .modal-close:hover{background:rgba(255,255,255,0.12);color:#F8F5EF}
 .modal-body{padding:1.5rem;overflow-y:auto;flex:1;font-size:0.9rem;line-height:1.7;color:rgba(248,245,239,0.75)}
-.modal-body h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.125rem;color:#F8F5EF;margin:1.25rem 0 0.5rem;letter-spacing:-0.02em}
+.modal-body h2{font-family:'Outfit',sans-serif;font-weight:700;font-size:1.125rem;color:#F8F5EF;margin:1.25rem 0 0.5rem;letter-spacing:0}
 .modal-body h2:first-child{margin-top:0}
-.modal-body h3{font-family:'Syne',sans-serif;font-weight:600;font-size:0.9375rem;color:#D4A868;margin:1rem 0 0.375rem}
+.modal-body h3{font-family:'Outfit',sans-serif;font-weight:600;font-size:0.9375rem;color:#D4A868;margin:1rem 0 0.375rem}
 .modal-body p{margin-bottom:0.75rem}
 .modal-body ul,.modal-body ol{padding-left:1.25rem;margin-bottom:0.75rem}
 .modal-body li{margin-bottom:0.25rem}
@@ -58,12 +58,12 @@ input,textarea,select{font-family:inherit}
 .modal-body .warn{background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.2);border-radius:0.5rem;padding:0.75rem 1rem;margin-bottom:0.75rem;color:rgba(234,179,8,0.85)}
 /* ── PAGE HEADER ──────────────────────────────────────── */
 .page-header{margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.page-title{font-family:'Syne',sans-serif;font-size:1.625rem;font-weight:800;letter-spacing:-0.03em;color:#F8F5EF}
+.page-title{font-family:'Outfit',sans-serif;font-size:1.625rem;font-weight:800;letter-spacing:0;color:#F8F5EF}
 .page-subtitle{font-size:0.875rem;color:rgba(248,245,239,0.45);margin-top:0.25rem}
 /* ── CARDS ────────────────────────────────────────────── */
 .card{background:#12181F;border:1px solid rgba(255,255,255,0.07);border-radius:0.875rem;padding:1.75rem}
 .card+.card{margin-top:1.25rem}
-.card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:#F8F5EF;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
+.card-title{font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0;color:#F8F5EF;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
 /* ── FORM ─────────────────────────────────────────────── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
 .form-grid-3{grid-template-columns:1fr 1fr 1fr}
@@ -125,7 +125,7 @@ select option{background:#1A2130;color:#F8F5EF}
 .book-list-cover{width:42px;height:56px;border-radius:0.375rem;object-fit:cover;flex-shrink:0}
 .book-list-cover-ph{width:42px;height:56px;border-radius:0.375rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
 .book-list-info{flex:1;min-width:0}
-.book-list-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9375rem;color:#F8F5EF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.book-list-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:0.9375rem;color:#F8F5EF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .book-list-meta{font-size:0.75rem;color:rgba(248,245,239,0.4);margin-top:2px}
 .book-list-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:600;margin-left:0.5rem}
 .book-list-actions{display:flex;gap:0.5rem;flex-shrink:0}
@@ -917,23 +917,23 @@ select option{background:#1A2130;color:#F8F5EF}
     </div>
     <div style="display:grid;gap:0.75rem;font-size:0.875rem;">
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Syne',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">1</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">1</span>
         <div>Go to <strong>Razorpay Dashboard → Webhooks → Create Webhook</strong></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Syne',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">2</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">2</span>
         <div>Set the URL to <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">https://www.shukto.in/api/webhook/razorpay</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Syne',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">3</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">3</span>
         <div>Select event: <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">payment_link.paid</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Syne',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">4</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">4</span>
         <div>Copy the <strong>webhook secret</strong> and add it to Railway as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">RAZORPAY_WEBHOOK_SECRET</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Syne',sans-serif;font-weight:800;color:#2FAE9D;flex-shrink:0;font-size:1.0625rem;">✓</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#2FAE9D;flex-shrink:0;font-size:1.0625rem;">✓</span>
         <div style="color:rgba(248,245,239,0.6);"><strong style="color:#F8F5EF">Optional:</strong> For confirmation emails, add <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">RESEND_API_KEY</code> from resend.com and <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">RESEND_FROM</code> (e.g. <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">hello@shukto.in</code>) to Railway env vars.</div>
       </div>
     </div>
@@ -1668,9 +1668,9 @@ function buildReview() {
       ${d.cover ? `<img src="${d.cover}" style="width:80px;height:107px;border-radius:0.5rem;object-fit:cover;flex-shrink:0"/>` : `<div style="width:80px;height:107px;border-radius:0.5rem;background:${d.heroBg};display:flex;align-items:center;justify-content:center;font-size:0.625rem;color:rgba(255,255,255,0.4);text-align:center;padding:0.5rem;flex-shrink:0">No cover</div>`}
       <div style="flex:1">
         <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem">
-          <span style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:#F8F5EF">${d.title || '(untitled)'}</span>
+          <span style="font-family:'Outfit',sans-serif;font-size:1.25rem;font-weight:800;color:#F8F5EF">${d.title || '(untitled)'}</span>
           <span style="display:inline-flex;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:700;background:rgba(255,255,255,0.08);color:rgba(248,245,239,0.6)">${d.category}</span>
-          <span style="font-family:'Syne',sans-serif;font-weight:700;color:${d.accent}">${d.price}</span>
+          <span style="font-family:'Outfit',sans-serif;font-weight:700;color:${d.accent}">${d.price}</span>
         </div>
         <div style="font-size:0.875rem;color:rgba(248,245,239,0.5);margin-bottom:0.5rem">${d.subtitle}</div>
         <div style="font-size:0.75rem;color:rgba(248,245,239,0.35)">by ${d.author} · /books/${d.slug}/ · accent ${d.accent}</div>
@@ -2941,7 +2941,7 @@ async function loadBuyers() {
       strip.insertAdjacentHTML('beforeend', `
         <div style="background:#12181F;border:1px solid rgba(255,255,255,0.07);border-radius:0.875rem;padding:1.25rem;">
           <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(248,245,239,0.35);margin-bottom:0.375rem;">${esc(sc.label)}</div>
-          <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:${sc.color};">${esc(String(sc.value))}</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:800;color:${sc.color};">${esc(String(sc.value))}</div>
         </div>`);
     });
 
