@@ -13,8 +13,9 @@ const express     = require('express');
 const cookieParser = require('cookie-parser');
 const { migrate, seedAdmin, cleanSessions, pool } = require('./db');
 const { seedData } = require('./seed');
-const authRouter  = require('./auth');
-const dataRouter  = require('./data');
+const authRouter     = require('./auth');
+const dataRouter     = require('./data');
+const downloadRouter = require('./download');
 
 const app  = express();
 const ROOT = path.join(__dirname, '..'); // project root (where index.html lives)
@@ -28,6 +29,9 @@ app.use('/api/auth', authRouter);
 
 /* ── Data API ────────────────────────────────────────────────── */
 app.use('/api', dataRouter);
+
+/* ── Download API (R2 signed URLs) ──────────────────────────── */
+app.use('/api/download', downloadRouter);
 
 /* ── Session guard middleware ────────────────────────────────── */
 async function requireSession(req, res, next) {
