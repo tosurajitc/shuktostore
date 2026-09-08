@@ -184,6 +184,9 @@
         if (el.tagName === 'IMG') {
           el.src   = book.cover;
           el.style.display = 'block';
+          /* Hide sibling placeholder if present */
+          const placeholder = el.parentElement && el.parentElement.querySelector('[data-sp-cover-placeholder]');
+          if (placeholder) placeholder.style.display = 'none';
         } else {
           /* Replace gradient placeholder div with a real <img> */
           const img = document.createElement('img');
