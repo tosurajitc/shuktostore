@@ -19,6 +19,7 @@
 
 const path   = require('path');
 const fs     = require('fs');
+const https  = require('https');
 const router   = require('express').Router();
 const { pool } = require('./db');
 
@@ -43,6 +44,42 @@ async function requireSession(req, res, next) {
 /* ════════════════════════════════════════════════════════════════
    PUBLIC READ ROUTES
 ════════════════════════════════════════════════════════════════ */
+
+/* GET /api/geo — returns { country: 'IN' } (ISO 3166-1 alpha-2).
+   Checks Cloudflare CF-IPCountry header first (available on Railway +
+   Cloudflare proxy), then falls back to ip-api.com.                 */
+router.get('/geo', (req, res) => {
+  // Cloudflare sets this header automatically when proxied
+  const cfCountry = req.headers['cf-ipcountry'];
+  if (cfCountry && cfCountry !== 'XX') {
+    return res.json({ country: cfCountry.toUpperCase() });
+  }
+
+  // Fallback: free ip-api.com (no key required, 45 req/min)
+  const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '')
+    .split(',')[0].trim();
+
+  // For local dev (loopback IPs) just return IN so prices look normal
+  if (!ip || ip === '127.0.0.1' || ip === '::1' || ip.startsWith('::ffff:127.')) {
+    return res.json({ country: 'IN' });
+  }
+
+  const url = `https://ip-api.com/json/${ip}?fields=countryCode`;
+  https.get(url, apiRes => {
+    let body = '';
+    apiRes.on('data', chunk => { body += chunk; });
+    apiRes.on('end', () => {
+      try {
+        const parsed = JSON.parse(body);
+        res.json({ country: (parsed.countryCode || 'IN').toUpperCase() });
+      } catch {
+        res.json({ country: 'IN' });
+      }
+    });
+  }).on('error', () => {
+    res.json({ country: 'IN' });
+  });
+});
 
 /* GET /api/books */
 router.get('/books', async (req, res) => {

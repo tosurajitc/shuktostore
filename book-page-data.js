@@ -36,6 +36,33 @@
     if (window._spRevealObserver) window._spRevealObserver.observe(el);
   }
 
+  /* ── Geo: detect visitor country, cache in sessionStorage ───── */
+  async function fetchCountry() {
+    const cached = sessionStorage.getItem('sp_country');
+    if (cached) return cached;
+    try {
+      const res = await fetch('/api/geo');
+      if (!res.ok) throw new Error(res.status);
+      const { country } = await res.json();
+      const code = (country || 'IN').toUpperCase();
+      sessionStorage.setItem('sp_country', code);
+      return code;
+    } catch {
+      return 'IN';
+    }
+  }
+
+  /* ── Convert INR price string to USD if outside India ─────────
+     book.price is stored as a plain number string, e.g. "99".
+     USD = INR × 0.1, rounded to 2 decimal places.               */
+  function localisePrice(rawPrice, country) {
+    if (country === 'IN') return { text: '₹' + rawPrice, isUsd: false };
+    const inr = parseFloat(rawPrice);
+    if (isNaN(inr)) return { text: rawPrice, isUsd: false };
+    const usd = (inr * 0.1).toFixed(2);
+    return { text: '$' + usd, isUsd: true };
+  }
+
   /* ── Fetch books from API, fall back to localStorage ─────────── */
   async function fetchBooks() {
     try {
@@ -64,7 +91,7 @@
     }
   }
 
-  function applyBookData(books) {
+  function applyBookData(books, country) {
     /* Determine which book this page belongs to. */
     const slug      = document.body.dataset.spSlug;
     const slugAlias = document.body.dataset.spSlugAlias || '';
@@ -167,13 +194,14 @@
 
     /* ── Price ─────────────────────────────────────────────────── */
     if (book.price) {
+      const priceStr = localisePrice(book.price, country);
       document.querySelectorAll('[data-sp-price]').forEach(el => {
-        el.textContent = book.price;
+        el.textContent = priceStr.text;
       });
       /* Also patch the CTA button text that contains the price inline */
       document.querySelectorAll('[data-sp-price-btn]').forEach(el => {
         const label = el.dataset.spPriceBtn || 'Get this eBook';
-        el.textContent = label + ' — ' + book.price + ' →';
+        el.textContent = label + ' — ' + priceStr.text + ' →';
       });
     }
 
@@ -468,8 +496,8 @@
   }
 
   async function init() {
-    const [books, bundles] = await Promise.all([fetchBooks(), fetchBundles()]);
-    applyBookData(books);
+    const [books, bundles, country] = await Promise.all([fetchBooks(), fetchBundles(), fetchCountry()]);
+    applyBookData(books, country);
     applyBundleData(books, bundles);
   }
 
@@ -483,10 +511,11 @@
     try {
       const books   = JSON.parse(localStorage.getItem('sp_books')   || '[]');
       const bundles = JSON.parse(localStorage.getItem('sp_bundles') || '[]');
-      applyBookData(books);
+      const country = sessionStorage.getItem('sp_country') || 'IN';
+      applyBookData(books, country);
       applyBundleData(books, bundles);
     } catch {
-      applyBookData([]);
+      applyBookData([], 'IN');
     }
   };
 })();
