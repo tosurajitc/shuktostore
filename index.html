@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shukto Press — Practical eBooks Worth Re-Reading</title>
-  <meta name="description" content="Practical, non-hyped eBooks on AI, personal finance, and the future of work. Written by Shukto." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <title id="sp-page-title">Shukto Press — Practical eBooks Worth Re-Reading</title>
+  <meta name="description" id="sp-page-desc" content="Practical, non-hyped eBooks on AI, personal finance, and the future of work. Written by Shukto." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="styles.css" />
@@ -611,7 +612,7 @@
           how you work.
         </h1>
         <p class="home-hero-sub" id="sp-hero-sub">
-          No hype. No filler. Practical, framework-driven guides on AI, money, and the future of solo work — written to be re-read.
+          Every book here shows you how AI can make one part of your life meaningfully better — your work, your money, or your thinking. No hype. No filler. Written to be re-read.
         </p>
         <div class="hero-cta-row">
           <a href="#catalog" class="btn-hero-primary" id="sp-hero-cta-primary">Browse the catalog →</a>
@@ -636,23 +637,8 @@
 <!-- ── STAT STRIP ────────────────────────────────────────────── -->
 <section class="stat-strip">
   <div class="container">
-    <div class="stat-grid">
-      <div class="stat-item reveal">
-        <span class="stat-number" style="color:#B8874B;">3</span>
-        <span class="stat-label">Books & counting</span>
-      </div>
-      <div class="stat-item reveal reveal-delay-1">
-        <span class="stat-number">600<span style="font-size:0.55em;vertical-align:middle;opacity:0.6;">+</span></span>
-        <span class="stat-label">Pages of frameworks, not filler</span>
-      </div>
-      <div class="stat-item reveal reveal-delay-2">
-        <span class="stat-number">0</span>
-        <span class="stat-label">Get-rich promises</span>
-      </div>
-      <div class="stat-item reveal reveal-delay-3">
-        <span class="stat-number">100<span style="font-size:0.45em;vertical-align:middle;opacity:0.5;">%</span></span>
-        <span class="stat-label">Written to be re-read</span>
-      </div>
+    <div class="stat-grid" id="sp-stat-grid">
+      <!-- Populated dynamically by site-data.js -->
     </div>
   </div>
 </section>
@@ -661,25 +647,7 @@
 <div style="background:var(--paper-warm);padding:1.5rem 0;border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);">
   <div class="marquee-wrap">
     <div class="marquee-track" id="sp-marquee-track" aria-hidden="true">
-      <!-- Items duplicated for seamless loop -->
-      <div class="marquee-item">📚 Practical frameworks, not fluff</div>
-      <div class="marquee-item">💡 Built for non-technical readers</div>
-      <div class="marquee-item">🔄 Written to be re-read</div>
-      <div class="marquee-item">📊 Real worksheets inside</div>
-      <div class="marquee-item">🚫 No get-rich promises</div>
-      <div class="marquee-item">✅ Written by practitioners</div>
-      <div class="marquee-item">🤖 Honest about AI limits</div>
-      <div class="marquee-item">💰 Built for irregular income</div>
-      <div class="marquee-item">🧒 Kid-to-kid writing, not adult-to-kid</div>
-      <div class="marquee-item">📚 Practical frameworks, not fluff</div>
-      <div class="marquee-item">💡 Built for non-technical readers</div>
-      <div class="marquee-item">🔄 Written to be re-read</div>
-      <div class="marquee-item">📊 Real worksheets inside</div>
-      <div class="marquee-item">🚫 No get-rich promises</div>
-      <div class="marquee-item">✅ Written by practitioners</div>
-      <div class="marquee-item">🤖 Honest about AI limits</div>
-      <div class="marquee-item">💰 Built for irregular income</div>
-      <div class="marquee-item">🧒 Kid-to-kid writing, not adult-to-kid</div>
+      <!-- Populated dynamically by site-data.js -->
     </div>
   </div>
 </div>
@@ -689,7 +657,7 @@
   <div class="container">
     <div class="section-header reveal">
       <h2 class="heading-2" id="sp-catalog-heading">The full catalog</h2>
-      <p class="section-subtitle" id="sp-catalog-subtitle">Each book tackles a topic that deserved a better treatment than it was getting.</p>
+      <p class="section-subtitle" id="sp-catalog-subtitle">Each book picks a real-world domain — money, solo work, kids — and shows exactly where AI fits in and how to use it.</p>
     </div>
     <!-- Populated dynamically by site-data.js -->
     <div id="sp-catalog-grid"></div>
@@ -704,21 +672,7 @@
       <p class="section-subtitle" id="sp-about-subtitle">Every book we publish passes the same test: could this have been a blog post? If yes, we don't publish it.</p>
     </div>
     <div class="trust-grid" id="sp-trust-grid">
-      <div class="trust-item reveal">
-        <span class="trust-icon">🎯</span>
-        <h3 class="trust-title">Frameworks, not vibes</h3>
-        <p class="trust-desc">Every idea is turned into something you can apply — a matrix, a checklist, a blueprint, a step-by-step plan. No vague encouragement.</p>
-      </div>
-      <div class="trust-item reveal reveal-delay-1">
-        <span class="trust-icon">🔍</span>
-        <h3 class="trust-title">Honest about limits</h3>
-        <p class="trust-desc">We tell you what AI can't do yet. We tell you what financial advice doesn't apply to irregular earners. We don't oversell.</p>
-      </div>
-      <div class="trust-item reveal reveal-delay-2">
-        <span class="trust-icon">📖</span>
-        <h3 class="trust-title">Written to be re-read</h3>
-        <p class="trust-desc">Dense in the right ways. Reference-grade appendices. Chapters you'll return to when you hit a new problem six months later.</p>
-      </div>
+      <!-- Populated dynamically by site-data.js -->
     </div>
   </div>
 </section>
@@ -729,42 +683,8 @@
     <div class="section-header centered reveal">
       <h2 class="heading-2" id="sp-testimonials-heading">What readers say</h2>
     </div>
-    <!-- id="sp-testimonials-grid" — content replaced at runtime by site-data.js -->
-    <div id="sp-testimonials-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--grid-gap);">
-      <div class="quote-card reveal">
-        <span class="quote-mark">"</span>
-        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
-        <div class="quote-author">
-          <div class="quote-avatar" style="background:#B8874B;">A</div>
-          <div>
-            <div class="quote-meta-name">Reader Name</div>
-            <div class="quote-meta-role">Role / Context — The One-Person Company</div>
-          </div>
-        </div>
-      </div>
-      <div class="quote-card reveal reveal-delay-1">
-        <span class="quote-mark">"</span>
-        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
-        <div class="quote-author">
-          <div class="quote-avatar" style="background:#DD7C3F;">B</div>
-          <div>
-            <div class="quote-meta-name">Reader Name</div>
-            <div class="quote-meta-role">Role / Context — Money, Sorted</div>
-          </div>
-        </div>
-      </div>
-      <div class="quote-card reveal reveal-delay-2">
-        <span class="quote-mark">"</span>
-        <p class="quote-text">[TESTIMONIAL PLACEHOLDER — replace with real quote]</p>
-        <div class="quote-author">
-          <div class="quote-avatar" style="background:#2FAE9D;">C</div>
-          <div>
-            <div class="quote-meta-name">Reader Name</div>
-            <div class="quote-meta-role">Role / Context — AI with Sayuj</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Populated dynamically by site-data.js -->
+    <div id="sp-testimonials-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--grid-gap);"></div>
   </div>
 </section>
 
@@ -779,9 +699,7 @@
       <div>
         <div class="footer-col-title">Books</div>
         <nav class="footer-links" id="sp-footer-books-nav">
-          <a href="books/one-person-company/index.html">The One-Person Company</a>
-          <a href="books/money-sorted/index.html">Money, Sorted</a>
-          <a href="books/ai-with-sayuj/index.html">AI with Sayuj</a>
+          <!-- Populated dynamically by site-data.js -->
         </nav>
       </div>
       <div>
@@ -891,7 +809,7 @@
       desc:      'Standard personal-finance advice assumes a salary. This guide is built for freelancers, gig workers, and side-hustlers whose income swings — covering the big month and the lean month equally.',
       price:     '₹XX',
       salesPage: 'books/money-sorted/index.html',
-      buyLink:   'RAZORPAY_PAYMENT_LINK_MONEY_SORTED'
+      buyLink:   'books/money-sorted/index.html'
     },
     'ai-with-sayuj': {
       id:        'ai-with-sayuj',
@@ -907,7 +825,7 @@
       desc:      'Written by a real 12-year-old who got curious about AI, taught himself, then wrote the explanation he wished someone had given him. No textbook language, no hype — just honest, accurate answers.',
       price:     '₹XX',
       salesPage: 'books/ai-with-sayuj/index.html',
-      buyLink:   'RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ'
+      buyLink:   'books/ai-with-sayuj/index.html'
     }
   };
 
