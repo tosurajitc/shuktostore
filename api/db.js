@@ -76,6 +76,33 @@ async function migrate() {
   }
 }
 
+/* ── One-time data patches ───────────────────────────────────── */
+async function patchData() {
+  const client = await pool.connect();
+  try {
+    // Patch razorpay URLs that are still placeholders — only overwrite if
+    // the stored value starts with the sentinel prefix.
+    const patches = [
+      { id: 'one-person-company', razorpay: 'https://rzp.io/rzp/rzpzqaSc' },
+    ];
+    for (const p of patches) {
+      await client.query(
+        `UPDATE books
+         SET data = jsonb_set(data, '{razorpay}', $1::jsonb, true),
+             updated_at = now()
+         WHERE id = $2
+           AND (data->>'razorpay') LIKE 'RAZORPAY_%'`,
+        [JSON.stringify(p.razorpay), p.id]
+      );
+    }
+    console.log('[db] Data patches applied.');
+  } catch (err) {
+    console.error('[db] patchData error:', err.message);
+  } finally {
+    client.release();
+  }
+}
+
 /* ── Seed admin from env ─────────────────────────────────────── */
 async function seedAdmin() {
   const username = process.env.ADMIN_USERNAME || 'admin';
@@ -110,4 +137,4 @@ async function cleanSessions() {
   await pool.query('DELETE FROM sessions WHERE expires_at < now()');
 }
 
-module.exports = { pool, migrate, seedAdmin, cleanSessions };
+module.exports = { pool, migrate, seedAdmin, cleanSessions, patchData };

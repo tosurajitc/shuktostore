@@ -11,7 +11,7 @@
 const path        = require('path');
 const express     = require('express');
 const cookieParser = require('cookie-parser');
-const { migrate, seedAdmin, cleanSessions, pool } = require('./db');
+const { migrate, seedAdmin, cleanSessions, patchData, pool } = require('./db');
 const { seedData } = require('./seed');
 const authRouter     = require('./auth');
 const dataRouter     = require('./data');
@@ -91,6 +91,7 @@ async function boot() {
     await migrate();
     await seedAdmin();
     await seedData();
+    await patchData();
     await cleanSessions();
   } catch (err) {
     console.error('[server] boot error:', err);
