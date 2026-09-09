@@ -31,7 +31,7 @@
     navLinkAbout: 'About',
     navCta: 'Browse Books →',
     heroLabel:    'Shukto Press — Practical Books',
-    heroTitle:    'Books that actually change how you work.',
+    heroTitle:    'Books that actually <em>change</em> how you think.',
     heroSub:      'No hype. No filler. Practical, framework-driven guides on AI, money, and the future of solo work — written to be re-read.',
     heroPrimary:  'Browse the catalog →',
     heroGhost:    'About Shukto Press',
