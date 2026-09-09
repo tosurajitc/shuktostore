@@ -211,16 +211,19 @@
       stackBooks.forEach((book, i) => {
         const div = document.createElement('div');
         div.className = 'stack-book ' + posClass[i];
-        div.style.borderRadius = 'var(--radius-lg)';
-        div.style.boxShadow = 'var(--shadow-float)';
-        div.style.overflow = 'hidden';
         if (book.cover) {
           const img = document.createElement('img');
           img.src = book.cover;
           img.alt = book.title || '';
-          img.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+          img.style.cssText = 'width:100%;height:auto;display:block;';
           div.appendChild(img);
         } else {
+          div.className += ' cover-placeholder-ph';
+          div.style.borderRadius = 'var(--radius-lg)';
+          div.style.boxShadow = 'var(--shadow-float)';
+          div.style.overflow = 'hidden';
+          div.style.width = i === 1 ? '200px' : (i === 0 ? '190px' : '180px');
+          div.style.aspectRatio = '3/4';
           div.style.background = fallbackGrads[i] || fallbackGrads[0];
         }
         heroStack.appendChild(div);
