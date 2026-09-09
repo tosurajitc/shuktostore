@@ -153,6 +153,13 @@
       });
     }
 
+    /* ── Promise eyebrow label ──────────────────────────────────── */
+    if (book.promiseEyebrow) {
+      document.querySelectorAll('[data-sp-promise-eyebrow]').forEach(el => {
+        el.textContent = book.promiseEyebrow;
+      });
+    }
+
     /* ── Promise heading + body ─────────────────────────────────── */
     if (book.promiseHeading) {
       document.querySelectorAll('[data-sp-promise-heading]').forEach(el => {
@@ -162,6 +169,45 @@
     if (book.promiseBody) {
       document.querySelectorAll('[data-sp-promise-body]').forEach(el => {
         el.textContent = book.promiseBody;
+      });
+    }
+
+    /* ── Promise framework cards (3 cards: icon, title, body) ───── */
+    if (book.promiseCards && Array.isArray(book.promiseCards)) {
+      book.promiseCards.forEach((card, i) => {
+        const n = i + 1;
+        if (card.icon) {
+          document.querySelectorAll(`[data-sp-promise-card-icon-${n}]`).forEach(el => {
+            el.textContent = card.icon;
+          });
+        }
+        if (card.title) {
+          document.querySelectorAll(`[data-sp-promise-card-title-${n}]`).forEach(el => {
+            el.textContent = card.title;
+          });
+        }
+        if (card.body) {
+          document.querySelectorAll(`[data-sp-promise-card-body-${n}]`).forEach(el => {
+            el.textContent = card.body;
+          });
+        }
+      });
+    }
+
+    /* ── Gap section (heading + two body paragraphs) ────────────── */
+    if (book.gapHeading) {
+      document.querySelectorAll('[data-sp-gap-heading]').forEach(el => {
+        el.textContent = book.gapHeading;
+      });
+    }
+    if (book.gapBody1) {
+      document.querySelectorAll('[data-sp-gap-body-1]').forEach(el => {
+        el.textContent = book.gapBody1;
+      });
+    }
+    if (book.gapBody2) {
+      document.querySelectorAll('[data-sp-gap-body-2]').forEach(el => {
+        el.textContent = book.gapBody2;
       });
     }
 

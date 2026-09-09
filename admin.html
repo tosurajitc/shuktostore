@@ -418,12 +418,92 @@ select option{background:#1A2130;color:#F8F5EF}
           <textarea id="f-pull-quote" rows="2" placeholder="A vivid sentence from the reader's frustration POV, shown as a large blockquote."></textarea>
         </div>
         <div class="form-col">
+          <label>Promise Eyebrow Label <span style="font-size:0.75rem;color:rgba(248,245,239,0.4)">(small uppercase label above heading)</span></label>
+          <input type="text" id="f-promise-eyebrow" placeholder="e.g. The promise"/>
+        </div>
+        <div class="form-col">
           <label>Promise Heading</label>
           <input type="text" id="f-promise-heading" placeholder="e.g. By the last chapter, you'll have a plan — not just a perspective."/>
         </div>
         <div class="form-col span-2">
           <label>Promise Body</label>
           <textarea id="f-promise-body" rows="2" placeholder="1–2 sentences expanding on the promise."></textarea>
+        </div>
+      </div>
+      <div style="margin-top:1.25rem;">
+        <div style="font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.5);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.875rem;">Framework Cards (right column)</div>
+        <div style="display:grid;gap:1rem;">
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.625rem;padding:1rem;">
+            <div style="font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.6);margin-bottom:0.75rem;">Card 1</div>
+            <div class="form-grid">
+              <div class="form-col">
+                <label>Icon (emoji)</label>
+                <input type="text" id="f-promise-card-icon-1" placeholder="🗺️" maxlength="4"/>
+              </div>
+              <div class="form-col">
+                <label>Title</label>
+                <input type="text" id="f-promise-card-title-1" placeholder="e.g. The ROLES Framework"/>
+              </div>
+              <div class="form-col span-2">
+                <label>Description</label>
+                <input type="text" id="f-promise-card-body-1" placeholder="e.g. Design any AI agent for any function in 5 structured steps"/>
+              </div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.625rem;padding:1rem;">
+            <div style="font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.6);margin-bottom:0.75rem;">Card 2</div>
+            <div class="form-grid">
+              <div class="form-col">
+                <label>Icon (emoji)</label>
+                <input type="text" id="f-promise-card-icon-2" placeholder="📊" maxlength="4"/>
+              </div>
+              <div class="form-col">
+                <label>Title</label>
+                <input type="text" id="f-promise-card-title-2" placeholder="e.g. Automation Readiness Matrix"/>
+              </div>
+              <div class="form-col span-2">
+                <label>Description</label>
+                <input type="text" id="f-promise-card-body-2" placeholder="e.g. Know exactly which tasks in your business to automate first"/>
+              </div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.625rem;padding:1rem;">
+            <div style="font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.6);margin-bottom:0.75rem;">Card 3</div>
+            <div class="form-grid">
+              <div class="form-col">
+                <label>Icon (emoji)</label>
+                <input type="text" id="f-promise-card-icon-3" placeholder="📋" maxlength="4"/>
+              </div>
+              <div class="form-col">
+                <label>Title</label>
+                <input type="text" id="f-promise-card-title-3" placeholder="e.g. 12-Step Blueprint"/>
+              </div>
+              <div class="form-col span-2">
+                <label>Description</label>
+                <input type="text" id="f-promise-card-body-3" placeholder="e.g. Design an AI-augmented company from zero, step by step"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 "The Gap This Book Fills" Section</div>
+      <div class="form-grid">
+        <div class="form-col span-2">
+          <label>Section Heading</label>
+          <input type="text" id="f-gap-heading" placeholder="e.g. The gap this book fills"/>
+          <span class="field-hint">The bold heading shown above the two paragraphs.</span>
+        </div>
+        <div class="form-col span-2">
+          <label>First Paragraph</label>
+          <textarea id="f-gap-body-1" rows="3" placeholder="e.g. There's no shortage of AI news. What's missing is a clear, honest framework…"></textarea>
+          <span class="field-hint">Explains the gap in the market — what's missing that this book provides.</span>
+        </div>
+        <div class="form-col span-2">
+          <label>Second Paragraph</label>
+          <textarea id="f-gap-body-2" rows="3" placeholder="e.g. This book follows Maya, a fictional consultant, building an AI-augmented business…"></textarea>
+          <span class="field-hint">Follows up with the book's approach or story hook.</span>
         </div>
       </div>
     </div>
@@ -1543,8 +1623,17 @@ function collectFormData() {
     faqItems: faqItems.filter(i => i.q),
     stats,
     pullQuote: document.getElementById('f-pull-quote').value.trim(),
+    promiseEyebrow: document.getElementById('f-promise-eyebrow').value.trim(),
     promiseHeading: document.getElementById('f-promise-heading').value.trim(),
     promiseBody: document.getElementById('f-promise-body').value.trim(),
+    promiseCards: [1,2,3].map(n => ({
+      icon:  document.getElementById(`f-promise-card-icon-${n}`).value.trim(),
+      title: document.getElementById(`f-promise-card-title-${n}`).value.trim(),
+      body:  document.getElementById(`f-promise-card-body-${n}`).value.trim(),
+    })),
+    gapHeading: document.getElementById('f-gap-heading').value.trim(),
+    gapBody1: document.getElementById('f-gap-body-1').value.trim(),
+    gapBody2: document.getElementById('f-gap-body-2').value.trim(),
     authorBioName: document.getElementById('f-author-bio-name').value.trim(),
     authorInitial: document.getElementById('f-author-initial').value.trim(),
     authorBio: document.getElementById('f-author-bio').value.trim(),
@@ -1611,8 +1700,18 @@ function populateForm(book) {
   initStatsGrid(book.stats);
 
   document.getElementById('f-pull-quote').value = book.pullQuote || '';
+  document.getElementById('f-promise-eyebrow').value = book.promiseEyebrow || '';
   document.getElementById('f-promise-heading').value = book.promiseHeading || '';
   document.getElementById('f-promise-body').value = book.promiseBody || '';
+  [1,2,3].forEach(n => {
+    const card = (book.promiseCards || [])[n - 1] || {};
+    document.getElementById(`f-promise-card-icon-${n}`).value  = card.icon  || '';
+    document.getElementById(`f-promise-card-title-${n}`).value = card.title || '';
+    document.getElementById(`f-promise-card-body-${n}`).value  = card.body  || '';
+  });
+  document.getElementById('f-gap-heading').value = book.gapHeading || '';
+  document.getElementById('f-gap-body-1').value = book.gapBody1 || '';
+  document.getElementById('f-gap-body-2').value = book.gapBody2 || '';
   document.getElementById('f-author-bio-name').value = book.authorBioName || book.author || '';
   document.getElementById('f-author-initial').value = book.authorInitial || (book.author||'A')[0].toUpperCase();
   document.getElementById('f-author-bio').value = book.authorBio || '';
@@ -1657,7 +1756,12 @@ function startNewBook() {
   document.getElementById('form-view-title').textContent = 'Add New Book';
   // Reset form
   ['f-title','f-subtitle','f-author','f-category','f-audience-line','f-slug','f-positioning',
-   'f-pull-quote','f-promise-heading','f-promise-body','f-author-bio-name','f-author-initial',
+   'f-pull-quote','f-promise-eyebrow','f-promise-heading','f-promise-body',
+   'f-promise-card-icon-1','f-promise-card-title-1','f-promise-card-body-1',
+   'f-promise-card-icon-2','f-promise-card-title-2','f-promise-card-body-2',
+   'f-promise-card-icon-3','f-promise-card-title-3','f-promise-card-body-3',
+   'f-gap-heading','f-gap-body-1','f-gap-body-2',
+   'f-author-bio-name','f-author-initial',
    'f-author-bio','f-cta-heading','f-cta-body','f-price','f-pricing-features','f-razorpay','f-intl-payment','f-download']
     .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('f-slug').dataset.manuallyEdited = '';
