@@ -3093,7 +3093,7 @@ async function loadNewsletterSignups() {
       return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
         <td style="padding:0.75rem 1.25rem;color:rgba(248,245,239,0.45);white-space:nowrap">${esc(date)}</td>
         <td style="padding:0.75rem 1.25rem;color:#F8F5EF">${esc(item.email)}</td>
-        <td style="padding:0.75rem 1.25rem;text-align:right;white-space:nowrap"><a class="btn btn-secondary" href="${pdfUrl}" target="_blank" rel="noopener">↗ Open PDF</a> <a class="btn btn-primary" href="mailto:${encodeURIComponent(item.email)}?subject=${subject}&body=${body}">✉ Email PDF</a></td>
+        <td style="padding:0.75rem 1.25rem;text-align:right;white-space:nowrap"><a class="btn btn-secondary" href="${pdfUrl}" target="_blank" rel="noopener">↗ Open PDF</a> <a class="btn btn-primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=${encodeURIComponent(item.email)}&amp;su=${subject}&amp;body=${body}" target="_blank" rel="noopener">✉ Email PDF</a></td>
       </tr>`;
     }).join('');
     wrap.style.display = '';
