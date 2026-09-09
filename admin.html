@@ -887,6 +887,13 @@ select option{background:#1A2130;color:#F8F5EF}
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)"/>
       </div>
     </div>
+    <div style="background:rgba(234,179,8,0.05);border:1px solid rgba(234,179,8,0.2);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;">
+      <div>
+        <div style="font-weight:700;font-size:0.875rem;color:#fbbf24;margin-bottom:0.25rem;">🖼️ Fix cover backgrounds</div>
+        <p style="font-size:0.78rem;color:rgba(248,245,239,0.45);margin:0;">Re-processes all stored cover images to remove black backgrounds caused by transparent PNG→JPEG conversion. Run this once if covers appear with black borders.</p>
+      </div>
+      <button class="btn btn-secondary" style="flex-shrink:0;" onclick="fixCoverBackgrounds()">Fix covers</button>
+    </div>
     <div style="background:rgba(220,38,38,0.05);border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
       <div>
         <div style="font-weight:700;font-size:0.875rem;color:#f87171;margin-bottom:0.25rem;">🗑 Clear all data</div>
@@ -2048,6 +2055,52 @@ function clearAllData() {
   loadSettings();
   loadHomepageEditor();
   toast('All data cleared', '🗑', 4000);
+}
+
+/* ── FIX COVER BACKGROUNDS ──────────────────────────────────── */
+async function fixCoverBackgrounds() {
+  const books = DB.load();
+  const toFix = books.filter(b => b.cover || b.authorPhoto);
+  if (!toFix.length) { toast('No cover images found to fix', 'ℹ️'); return; }
+
+  toast(`Fixing ${toFix.length} book image(s)…`, '🖼️', 3000);
+
+  function reprocess(dataURL, maxPx, quality) {
+    return new Promise(resolve => {
+      if (!dataURL) return resolve(null);
+      /* If already a JPEG with white baked in (starts with /9j/) skip re-process
+         only if it came from the new pipeline — we can't tell, so always fix. */
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => resolve(dataURL); // leave unchanged if it fails
+      img.src = dataURL;
+    });
+  }
+
+  let fixed = 0;
+  for (const book of toFix) {
+    const [newCover, newPhoto] = await Promise.all([
+      reprocess(book.cover,       800, 0.75),
+      reprocess(book.authorPhoto, 400, 0.80),
+    ]);
+    if (newCover)  book.cover       = newCover;
+    if (newPhoto)  book.authorPhoto = newPhoto;
+    await DB.upsert(book);
+    fixed++;
+    toast(`Fixed ${fixed} / ${toFix.length}…`, '🖼️', 1500);
+  }
+  toast(`✓ Done — ${fixed} book image(s) re-processed. Reload the homepage to see the fix.`, '✓', 6000);
 }
 
 /* ── GENERATE VIEW ──────────────────────────────────────────── */
