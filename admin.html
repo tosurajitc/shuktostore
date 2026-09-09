@@ -1449,7 +1449,12 @@ function compressImage(dataURL, maxPx, quality, callback) {
     const h = Math.round(img.height * scale);
     const canvas = document.createElement('canvas');
     canvas.width = w; canvas.height = h;
-    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    const ctx = canvas.getContext('2d');
+    /* Fill white before drawing so transparent PNGs don't get a black
+       background when converted to JPEG (JPEG has no alpha channel). */
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
     callback(canvas.toDataURL('image/jpeg', quality));
   };
   img.src = dataURL;
