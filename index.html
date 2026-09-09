@@ -394,74 +394,58 @@
       min-height: 460px;
       overflow: hidden;
     }
-    /* Blob gradient behind the mockup */
-    .bm-visual::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 60%, var(--bm-accent, rgba(184,135,75,0.25)) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    /* ── 2-D book display ─────────────────────────────────────── */
+    /* No decorative gradient — plain dark background so cover stands alone */
+    .bm-visual::before { display: none; }
+    /* ── Book cover display ───────────────────────────────────── */
     .bm-mockup-wrap {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 1.25rem;
       width: 100%;
     }
-    /* Outer wrapper: provides the spine strip as a visible left border
-       and the drop shadows. Spine border is offset from the cover so it
-       is always visible regardless of cover colour. */
     .bm-book-scene {
       display: flex;
       align-items: stretch;
-      /* Spine side: sharp. Page side: no radius — concave corners handled by clip-path on ::after */
-      border-radius: 0;
-      overflow: visible;
+      border-radius: 6px;
+      overflow: hidden;
       box-shadow:
-        -2px 8px 32px rgba(0,0,0,0.7),
-         6px 8px 24px rgba(0,0,0,0.4);
+        0 20px 60px rgba(0,0,0,0.7),
+        0  8px 24px rgba(0,0,0,0.4);
     }
-    /* Spine strip — sharp left corners, flush with binding */
-    .bm-book-scene::before {
-      content: '';
-      flex: 0 0 8px;
-      background: var(--bm-spine-color, #2a2a3a);
-      /* Gradient to give depth: lighter on the outer left edge */
-      background: linear-gradient(
-        to right,
-        rgba(255,255,255,0.18) 0%,
-        var(--bm-spine-color, #2a2a3a) 40%,
-        rgba(0,0,0,0.35) 100%
-      );
-      border-radius: 0;
+    /* Spine and page-stack strips removed — clean flat cover only */
+    .bm-book-scene::before,
+    .bm-book-scene::after { display: none; }
+    /* Preview button sits below the cover inside bm-visual */
+    .bm-visual-preview-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      color: rgba(248,245,239,0.85);
+      background: rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: background 180ms, border-color 180ms, color 180ms;
+      white-space: nowrap;
     }
-    /* Page-stack strip — concave top-right & bottom-right corners via SVG clip-path */
-    .bm-book-scene::after {
-      content: '';
-      flex: 0 0 6px;
-      background: repeating-linear-gradient(
-        to right,
-        #e8e4dc 0px,
-        #e8e4dc 1px,
-        #c8c4bc 1px,
-        #c8c4bc 2px
-      );
-      /* objectBoundingBox units (0–1). The path traces:
-         top-left (0,0) → straight across to top-right minus arc radius →
-         concave quarter-circle biting inward at top-right →
-         straight down to bottom-right minus arc radius →
-         concave quarter-circle biting inward at bottom-right →
-         straight back to bottom-left → close.
-         Arc radius = 0.15 in normalised height (≈ 15% of strip height). */
-      clip-path: url(#page-concave-clip);
+    .bm-visual-preview-btn:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.4);
+      color: #F8F5EF;
     }
+    .bm-visual-preview-btn.hidden { display: none; }
     /* Cover card: width-driven, aspect-ratio enforces full portrait height */
     .bm-cover-card {
-      width: 150px;
-      aspect-ratio: 9 / 16;   /* exact cover image ratio */
+      width: 180px;
+      aspect-ratio: 3 / 4;
       overflow: hidden;
-      border-radius: 0;
+      border-radius: 4px;
       flex-shrink: 0;
     }
     .bm-cover-card img {
@@ -634,11 +618,11 @@
       .bm-overlay, .bm-panel { transition: none; }
     }
 
-    /* ── Preview flipper panel ─────────────────────────────────── */
+    /* ── Preview flipper panel — left pane only, right stays visible ── */
     .bm-flipper {
       position: absolute;
       inset: 0;
-      border-radius: 20px;
+      border-radius: 20px 0 0 20px;  /* matches .bm-visual shape */
       background: #060B12;
       display: flex;
       flex-direction: column;
@@ -973,7 +957,7 @@
 <div id="book-modal" class="bm-overlay" role="dialog" aria-modal="true" aria-labelledby="bm-title-text">
   <div class="bm-panel">
     <button class="bm-close" id="bm-close-btn" aria-label="Close preview">✕</button>
-    <!-- Left: visual — 2-D book display -->
+    <!-- Left: visual — clean flat cover + Preview button + flipper (scoped here) -->
     <div class="bm-visual">
       <div class="bm-mockup-wrap">
         <div class="bm-book-scene" id="bm-book-scene">
@@ -981,6 +965,24 @@
             <!-- Filled by JS: either <img> or .bm-cover-ph gradient div -->
           </div>
         </div>
+        <!-- Preview button sits directly below the cover -->
+        <button id="bm-sample-btn" class="bm-visual-preview-btn hidden" aria-label="Preview pages">
+          📖 Preview
+        </button>
+      </div>
+      <!-- ── Preview image flipper (left pane only — right content stays) ── -->
+      <div class="bm-flipper" id="bm-flipper" role="region" aria-label="Book preview pages">
+        <div class="bm-flipper-header">
+          <button class="bm-flipper-back" id="bm-flipper-back">← Back</button>
+          <span class="bm-flipper-title" id="bm-flipper-book-title"></span>
+          <span class="bm-flipper-counter" id="bm-flipper-counter">1 of 6</span>
+        </div>
+        <div class="bm-flipper-stage">
+          <button class="bm-flipper-nav bm-flipper-prev" id="bm-flipper-prev" aria-label="Previous page">&#8592;</button>
+          <img class="bm-flipper-img" id="bm-flipper-img" src="" alt="Book preview page" draggable="false"/>
+          <button class="bm-flipper-nav bm-flipper-next" id="bm-flipper-next" aria-label="Next page">&#8594;</button>
+        </div>
+        <div class="bm-flipper-dots" id="bm-flipper-dots"></div>
       </div>
     </div>
     <!-- Right: content -->
@@ -997,28 +999,10 @@
         <a href="#" id="bm-buy-btn" class="bm-btn-primary" target="_blank" rel="noopener">
           Get this eBook →
         </a>
-        <button id="bm-sample-btn" class="bm-btn-sample hidden" aria-label="Read a sample">
-          📖 Read a sample
-        </button>
         <a href="#" id="bm-details-btn" class="bm-btn-secondary">
           See full details
         </a>
       </div>
-    </div>
-
-    <!-- ── Preview image flipper (overlays entire panel) ───────── -->
-    <div class="bm-flipper" id="bm-flipper" role="region" aria-label="Book preview pages">
-      <div class="bm-flipper-header">
-        <button class="bm-flipper-back" id="bm-flipper-back">← Back</button>
-        <span class="bm-flipper-title" id="bm-flipper-book-title"></span>
-        <span class="bm-flipper-counter" id="bm-flipper-counter">1 of 6</span>
-      </div>
-      <div class="bm-flipper-stage">
-        <button class="bm-flipper-nav bm-flipper-prev" id="bm-flipper-prev" aria-label="Previous page">&#8592;</button>
-        <img class="bm-flipper-img" id="bm-flipper-img" src="" alt="Book preview page" draggable="false"/>
-        <button class="bm-flipper-nav bm-flipper-next" id="bm-flipper-next" aria-label="Next page">&#8594;</button>
-      </div>
-      <div class="bm-flipper-dots" id="bm-flipper-dots"></div>
     </div>
   </div>
 </div>
@@ -1201,7 +1185,6 @@
     /* Apply accent glow + spine strip colour on the book scene */
     visual.style.setProperty('--bm-accent', book.accent);
     panel.style.setProperty('--bm-accent-solid', book.accentSolid);
-    if (bookSceneEl) bookSceneEl.style.setProperty('--bm-spine-color', book.accentSolid || '#111');
 
     /* Tag */
     tagEl.textContent        = book.tag;
