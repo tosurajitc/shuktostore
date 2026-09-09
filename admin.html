@@ -211,6 +211,13 @@ select option{background:#1A2130;color:#F8F5EF}
     </button>
   </div>
   <div class="nav-section" style="margin-top:1rem">
+    <div class="nav-section-label">Subscriptions</div>
+    <button class="nav-btn" onclick="showView('subscriptions')" id="nav-subscriptions">
+      <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm2 0v1.5l6 3.75 6-3.75V5H4zm12 3.85l-5.47 3.42a1 1 0 01-1.06 0L4 8.85V15h12V8.85z"/></svg>
+      Newsletter signups
+    </button>
+  </div>
+  <div class="nav-section" style="margin-top:1rem">
     <div class="nav-section-label">Promotions</div>
     <button class="nav-btn" onclick="showView('bundles')" id="nav-bundles">
       <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"/></svg>
@@ -947,6 +954,52 @@ select option{background:#1A2130;color:#F8F5EF}
 <!-- ════════════════════════════════════════════════════════
      VIEW: BUNDLES
 ═════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════
+     VIEW: NEWSLETTER SIGNUPS
+════════════════════════════════════════════════════════ -->
+<div class="view" id="view-subscriptions">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Newsletter signups</div>
+      <div class="page-subtitle">People who requested the free prompt-template PDF.</div>
+    </div>
+    <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-success" onclick="exportNewsletterCSV()">⬇ Export CSV</button>
+      <button class="btn btn-secondary" onclick="loadNewsletterSignups()">↺ Refresh</button>
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div id="newsletter-loading" style="text-align:center;padding:3rem;color:rgba(248,245,239,0.35);">
+      <div style="font-size:2rem;margin-bottom:0.75rem">⏳</div>
+      <div>Loading signups…</div>
+    </div>
+    <div id="newsletter-empty" style="text-align:center;padding:3rem;color:rgba(248,245,239,0.35);display:none;">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem">✉️</div>
+      <div>No newsletter signups yet.</div>
+    </div>
+    <div id="newsletter-table-wrap" style="overflow-x:auto;display:none;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+        <thead>
+          <tr style="background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.08);">
+            <th style="padding:0.75rem 1.25rem;text-align:left;font-size:0.75rem;font-weight:700;color:rgba(248,245,239,0.4);letter-spacing:0.05em">SIGNED UP</th>
+            <th style="padding:0.75rem 1.25rem;text-align:left;font-size:0.75rem;font-weight:700;color:rgba(248,245,239,0.4);letter-spacing:0.05em">EMAIL</th>
+            <th style="padding:0.75rem 1.25rem;text-align:right;font-size:0.75rem;font-weight:700;color:rgba(248,245,239,0.4);letter-spacing:0.05em">ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="newsletter-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1.25rem;background:rgba(184,135,75,0.04);border-color:rgba(184,135,75,0.18);">
+    <div class="card-title" style="color:#D4A868;">How to send the PDF</div>
+    <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);line-height:1.7;">
+      Use the <strong style="color:#F8F5EF">Email PDF</strong> action to open your email client, attach the prompt-template PDF, and send it manually. Automated delivery can be added later.
+    </div>
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════════════
+     VIEW: BUNDLES
+════════════════════════════════════════════════════════ -->
 <div class="view" id="view-bundles">
   <div class="page-header">
     <div>
@@ -1208,8 +1261,9 @@ function showView(name) {
   if (name === 'books')    renderBookList();
   if (name === 'generate') populateGenSelect();
   if (name === 'settings') { loadSettings(); loadHomepageEditor(); }
-  if (name === 'buyers')   loadBuyers();
-  if (name === 'bundles')  { renderBundleList(); }
+  if (name === 'buyers')        loadBuyers();
+  if (name === 'subscriptions') loadNewsletterSignups();
+  if (name === 'bundles')       { renderBundleList(); }
 }
 
 async function saveAll() {
@@ -3010,6 +3064,52 @@ function exportBuyersCSV() {
   const now = new Date().toISOString().slice(0, 10);
   dlText(csvContent, `shukto-buyers-${now}.csv`, 'text/csv');
   toast(`Exported ${_buyersData.length} buyers to CSV`, '⬇', 3000);
+}
+
+/* ── NEWSLETTER SIGNUPS VIEW ─────────────────────────────────── */
+let _newsletterData = [];
+
+async function loadNewsletterSignups() {
+  const loading = document.getElementById('newsletter-loading');
+  const empty   = document.getElementById('newsletter-empty');
+  const wrap    = document.getElementById('newsletter-table-wrap');
+  loading.style.display = '';
+  empty.style.display = 'none';
+  wrap.style.display = 'none';
+  try {
+    _newsletterData = await apiGet('/api/newsletter') || [];
+    loading.style.display = 'none';
+    if (!_newsletterData.length) {
+      empty.style.display = '';
+      return;
+    }
+    document.getElementById('newsletter-tbody').innerHTML = _newsletterData.map(item => {
+      const date = item.signed_up_at
+        ? new Date(item.signed_up_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+        : '—';
+      const subject = encodeURIComponent('Your free AI prompt templates');
+      const body = encodeURIComponent('Hi,\n\nHere is your free PDF: 50 Custom Prompt Templates to Automate Your Weekly Workflow.\n\nBest,\nShukto Press');
+      return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <td style="padding:0.75rem 1.25rem;color:rgba(248,245,239,0.45);white-space:nowrap">${esc(date)}</td>
+        <td style="padding:0.75rem 1.25rem;color:#F8F5EF">${esc(item.email)}</td>
+        <td style="padding:0.75rem 1.25rem;text-align:right"><a class="btn btn-primary" href="mailto:${encodeURIComponent(item.email)}?subject=${subject}&body=${body}">✉ Email PDF</a></td>
+      </tr>`;
+    }).join('');
+    wrap.style.display = '';
+  } catch (err) {
+    loading.style.display = 'none';
+    toast('Failed to load newsletter signups: ' + err.message, '⚠️', 5000);
+  }
+}
+
+function exportNewsletterCSV() {
+  if (!_newsletterData.length) { toast('No newsletter signups to export', '⚠️'); return; }
+  const rows = _newsletterData.map(item => [item.signed_up_at || '', item.email]);
+  const csvContent = [['Signed up', 'Email'], ...rows]
+    .map(row => row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))
+    .join('\\n');
+  dlText(csvContent, `shukto-newsletter-signups-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv');
+  toast(`Exported ${_newsletterData.length} newsletter signups`, '⬇', 3000);
 }
 
 /* ══════════════════════════════════════════════════════════════

@@ -240,6 +240,21 @@ router.post('/newsletter', async (req, res) => {
   }
 });
 
+/* GET /api/newsletter — list signups for admins */
+router.get('/newsletter', requireSession, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, email, signed_up_at
+       FROM newsletter_signups
+       ORDER BY signed_up_at DESC`
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('[data] GET /newsletter error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 /* ════════════════════════════════════════════════════════════════
    BUYERS ROUTES  (all require valid session cookie)
 ════════════════════════════════════════════════════════════════ */
