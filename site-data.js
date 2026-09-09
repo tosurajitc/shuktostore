@@ -120,7 +120,7 @@
 
     /* ── Hero title, subtitle, CTAs ──────────────────────────── */
     const htEl = document.getElementById('sp-hero-title');
-    if (htEl && hp.heroTitle) htEl.textContent = hp.heroTitle;
+    if (htEl && hp.heroTitle) htEl.innerHTML = hp.heroTitle;
     const hsEl = document.getElementById('sp-hero-sub');
     if (hsEl && hp.heroSub) hsEl.textContent = hp.heroSub;
     const hpEl = document.getElementById('sp-hero-cta-primary');
