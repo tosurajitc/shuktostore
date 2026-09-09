@@ -158,9 +158,9 @@
     /* Trust section */
     /* ── WHY SHUKTO EXISTS — redesigned asymmetric layout ── */
     .trust-section {
-      background: #F5F0E8;
-      border-top: 1px solid rgba(14,17,23,0.1);
-      border-bottom: 1px solid rgba(14,17,23,0.1);
+      background: #FDF6EE;
+      border-top: 1px solid rgba(184,135,75,0.15);
+      border-bottom: 1px solid rgba(184,135,75,0.15);
       padding-block: var(--space-20);
     }
     .why-grid {
@@ -168,13 +168,16 @@
       grid-template-columns: 2fr 3fr;
       gap: clamp(2rem, 4vw, 4rem);
       align-items: center;
+      box-sizing: border-box;
+      width: 100%;
     }
     /* LEFT feature card */
     .why-feature-card {
-      background: #FDFAF5;
-      border: 1px solid rgba(14,17,23,0.1);
+      background: #FFFCF7;
+      border: 1px solid rgba(184,135,75,0.2);
       border-radius: var(--radius-xl);
       padding: clamp(var(--space-8), 5vw, var(--space-12));
+      box-sizing: border-box;
       position: sticky;
       top: 6rem;
     }
@@ -212,35 +215,37 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-6);
-      min-width: 0; /* prevent grid blowout */
+      min-width: 0;
+      box-sizing: border-box;
+      width: 100%;
     }
     .trust-item {
-      padding: var(--space-7) var(--space-8);
-      background: #FDFAF5;
-      border: 1px solid rgba(14,17,23,0.09);
+      box-sizing: border-box;
+      width: 100%;
+      padding: 1.75rem 2rem;
+      background: #FFFCF7;
+      border: 1px solid rgba(184,135,75,0.18);
       border-radius: var(--radius-xl);
       transition: box-shadow 0.22s ease, transform 0.22s ease;
-      overflow: hidden; /* contain text within card bounds */
     }
     .trust-item:hover {
-      box-shadow: 0 6px 28px rgba(14,17,23,0.08);
+      box-shadow: 0 6px 28px rgba(184,135,75,0.12);
       transform: translateY(-2px);
     }
-    .trust-body { width: 100%; min-width: 0; }
+    .trust-body { display: block; }
     .trust-title {
       font-family: var(--font-display);
       font-size: var(--text-lg);
       font-weight: 700;
       letter-spacing: -0.02em;
       color: #161616;
-      margin-bottom: var(--space-2);
-      overflow-wrap: break-word;
+      margin: 0 0 var(--space-2) 0;
     }
     .trust-desc {
       font-size: var(--text-sm);
       color: #555555;
       line-height: 1.7;
-      overflow-wrap: break-word;
+      margin: 0;
     }
     /* Responsive stacking */
     @media (max-width: 768px) {
