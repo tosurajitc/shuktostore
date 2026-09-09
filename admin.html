@@ -1230,7 +1230,20 @@ const DB = {
   },
   _setCache(books) {
     this._cache = books;
-    localStorage.setItem('sp_books', JSON.stringify(books));
+    /* Strip large base64 blobs before writing to localStorage to avoid
+       quota errors. The API already persists the full data server-side;
+       localStorage is only a local fallback cache for text fields. */
+    try {
+      const slim = books.map(b => {
+        const { cover, authorPhoto, ...rest } = b;
+        return rest;
+      });
+      localStorage.setItem('sp_books', JSON.stringify(slim));
+    } catch (e) {
+      /* If it still fails (other keys are large), silently skip the cache —
+         the in-memory this._cache is still populated for this session. */
+      console.warn('[DB] localStorage write skipped:', e.message);
+    }
   },
 
   loadSettings() {
@@ -1428,16 +1441,32 @@ function handleDrop(e) {
   const file = e.dataTransfer.files[0];
   if (file && file.type.startsWith('image/')) readCover(file);
 }
+function compressImage(dataURL, maxPx, quality, callback) {
+  const img = new Image();
+  img.onload = () => {
+    const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+    const w = Math.round(img.width  * scale);
+    const h = Math.round(img.height * scale);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', quality));
+  };
+  img.src = dataURL;
+}
+
 function readCover(file) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    coverDataURL = ev.target.result;
-    const img = document.getElementById('cover-img-preview');
-    img.src = coverDataURL;
-    img.style.display = 'block';
-    document.getElementById('cover-ph').style.display = 'none';
-    toast('Cover image loaded ✓', '🖼️');
+    compressImage(ev.target.result, 800, 0.75, compressed => {
+      coverDataURL = compressed;
+      const img = document.getElementById('cover-img-preview');
+      img.src = coverDataURL;
+      img.style.display = 'block';
+      document.getElementById('cover-ph').style.display = 'none';
+      toast('Cover image loaded ✓', '🖼️');
+    });
   };
   reader.readAsDataURL(file);
 }
@@ -1448,13 +1477,15 @@ function readAuthorPhoto(file) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    authorPhotoURL = ev.target.result;
-    const img = document.getElementById('author-photo-preview');
-    img.src = authorPhotoURL;
-    img.style.display = 'block';
-    document.getElementById('author-photo-icon').style.display = 'none';
-    document.getElementById('author-photo-clear-btn').style.display = '';
-    toast('Author photo loaded ✓', '👤');
+    compressImage(ev.target.result, 400, 0.80, compressed => {
+      authorPhotoURL = compressed;
+      const img = document.getElementById('author-photo-preview');
+      img.src = authorPhotoURL;
+      img.style.display = 'block';
+      document.getElementById('author-photo-icon').style.display = 'none';
+      document.getElementById('author-photo-clear-btn').style.display = '';
+      toast('Author photo loaded ✓', '👤');
+    });
   };
   reader.readAsDataURL(file);
 }
