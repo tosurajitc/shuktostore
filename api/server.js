@@ -16,6 +16,7 @@ const { seedData } = require('./seed');
 const authRouter     = require('./auth');
 const dataRouter     = require('./data');
 const downloadRouter = require('./download');
+const previewRouter  = require('./preview');
 const webhookRouter  = require('./webhook');
 
 const app  = express();
@@ -36,6 +37,9 @@ app.use('/api', dataRouter);
 
 /* ── Download API (R2 signed URLs) ──────────────────────────── */
 app.use('/api/download', downloadRouter);
+
+/* ── Preview image upload/delete API ────────────────────────── */
+app.use('/api/books', previewRouter);
 
 /* ── Session guard middleware ────────────────────────────────── */
 async function requireSession(req, res, next) {

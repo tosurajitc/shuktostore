@@ -606,6 +606,34 @@ select option{background:#1A2130;color:#F8F5EF}
         </div>
       </div>
     </div>
+
+    <!-- ── Preview Images card ── -->
+    <div class="card" style="margin-top:1.25rem">
+      <div class="card-title">🖼 Preview Pages <span style="font-size:0.75rem;font-weight:400;color:rgba(248,245,239,0.4);margin-left:0.5rem">Up to 6 page screenshots — stored on Cloudflare R2</span></div>
+      <p style="font-size:0.8125rem;color:rgba(248,245,239,0.45);margin-bottom:1.25rem;line-height:1.6;">Screenshot 6 pages from your book, upload them here. They appear in the homepage modal so buyers can read a sample before purchasing. Images go directly to R2 — not localStorage.</p>
+
+      <!-- 6-slot grid -->
+      <div id="preview-slots" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem;margin-bottom:1.25rem;">
+      </div>
+
+      <!-- Upload button -->
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <label style="cursor:pointer">
+          <input type="file" id="preview-file-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="onPreviewFilesSelected(event)"/>
+          <span class="btn btn-secondary" style="pointer-events:none">+ Add page images</span>
+        </label>
+        <span style="font-size:0.78rem;color:rgba(248,245,239,0.35)">JPG, PNG or WebP · max 6 images · recommended 800×1100 px</span>
+      </div>
+
+      <!-- Upload status -->
+      <div id="preview-upload-status" style="display:none;margin-top:1rem;padding:0.75rem 1rem;border-radius:0.5rem;font-size:0.8125rem;"></div>
+
+      <!-- Delete all button — only shown when images exist -->
+      <div id="preview-delete-wrap" style="display:none;margin-top:1rem;border-top:1px solid rgba(255,255,255,0.07);padding-top:1rem">
+        <button class="btn btn-secondary" style="color:#f87171;border-color:rgba(248,113,113,0.35);font-size:0.8125rem" onclick="deleteAllPreviewImages()">🗑 Remove all preview images from R2</button>
+      </div>
+    </div>
+
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
       <button class="btn btn-success save-edits-inline" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
@@ -1786,6 +1814,9 @@ function populateForm(book) {
   document.getElementById('f-razorpay').value = book.razorpay && !book.razorpay.startsWith('RAZORPAY_') ? book.razorpay : '';
   document.getElementById('f-intl-payment').value = book.intlPayment || '';
   document.getElementById('f-download').value = book.download && !book.download.startsWith('EBOOK_') ? book.download : '';
+
+  // Preview images
+  loadPreviewImages(book.previewImages || []);
 }
 
 /* ── START NEW BOOK ─────────────────────────────────────────── */
@@ -1828,6 +1859,8 @@ function startNewBook() {
     document.getElementById(id).innerHTML = '';
   });
   initStatsGrid(null);
+  // Reset preview images
+  resetPreviewImages();
   goStep(1);
   showView('add-book');
 }
@@ -1908,6 +1941,8 @@ async function saveBookEdits() {
     editingId = d.id;
     markClean();
     toast('Changes saved ✓ — writing page files…', '💾', 2000);
+    // Upload any pending preview images to R2 (fire-and-forget alongside file write)
+    uploadPendingPreviews(d.slug);
     // Auto-write book page files to disk on the server
     try {
       const salesHtml  = buildSalesPageHTML(d);
@@ -3483,6 +3518,158 @@ async function adminLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });
   } catch (_) { /* ignore */ }
   window.location.replace('/login');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PREVIEW IMAGE MANAGER
+   State lives in _previewImages: array[0..5] of { url, data, ext }
+   url  = already-on-R2 URL (loaded when editing an existing book)
+   data = fresh base64 data-URL (chosen from disk this session)
+   Exactly one of url|data is set per occupied slot.
+══════════════════════════════════════════════════════════════ */
+let _previewImages = []; // length 0-6, each: { url?, data?, ext? }
+
+/* Called by populateForm() when editing a book that already has previews */
+function loadPreviewImages(urls) {
+  _previewImages = (urls || []).slice(0, 6).map(u => ({ url: u }));
+  renderPreviewSlots();
+}
+
+/* Called by startNewBook() */
+function resetPreviewImages() {
+  _previewImages = [];
+  renderPreviewSlots();
+}
+
+/* File input change handler */
+function onPreviewFilesSelected(event) {
+  const files = Array.from(event.target.files);
+  // Reset the input so the same file can be re-selected if needed
+  event.target.value = '';
+
+  const remaining = 6 - _previewImages.length;
+  if (remaining <= 0) {
+    toast('Already have 6 preview images. Remove one first.', '⚠️'); return;
+  }
+  const toAdd = files.slice(0, remaining);
+
+  let loaded = 0;
+  toAdd.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      _previewImages.push({ data: e.target.result, ext });
+      loaded++;
+      if (loaded === toAdd.length) renderPreviewSlots();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* Render the 6-slot grid */
+function renderPreviewSlots() {
+  const grid = document.getElementById('preview-slots');
+  const delWrap = document.getElementById('preview-delete-wrap');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  _previewImages.forEach((img, i) => {
+    const src = img.data || img.url || '';
+    const slot = document.createElement('div');
+    slot.style.cssText = 'position:relative;border-radius:0.5rem;overflow:hidden;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);aspect-ratio:9/13';
+    slot.innerHTML = `
+      <img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block" alt="Page ${i+1}"/>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:0.3rem 0.5rem;background:rgba(0,0,0,0.55);font-size:0.625rem;color:rgba(255,255,255,0.6);display:flex;justify-content:space-between;align-items:center">
+        <span>p${i+1}</span>
+        <button onclick="removePreviewSlot(${i})" style="background:none;border:none;color:rgba(248,113,113,0.9);cursor:pointer;font-size:0.8rem;padding:0;line-height:1" title="Remove">✕</button>
+      </div>`;
+    grid.appendChild(slot);
+  });
+
+  // Empty add-slot placeholders up to 6
+  for (let i = _previewImages.length; i < 6; i++) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'border-radius:0.5rem;background:rgba(255,255,255,0.02);border:1.5px dashed rgba(255,255,255,0.08);aspect-ratio:9/13;display:flex;align-items:center;justify-content:center';
+    empty.innerHTML = `<span style="font-size:0.65rem;color:rgba(255,255,255,0.2)">slot ${i+1}</span>`;
+    grid.appendChild(empty);
+  }
+
+  if (delWrap) delWrap.style.display = _previewImages.length > 0 ? '' : 'none';
+}
+
+/* Remove a single slot by index */
+function removePreviewSlot(index) {
+  _previewImages.splice(index, 1);
+  renderPreviewSlots();
+}
+
+/* Upload all pending (data-URL) images to R2, then save */
+async function uploadPendingPreviews(slug) {
+  const pending = _previewImages
+    .map((img, i) => img.data ? { index: i + 1, data: img.data, ext: img.ext || 'jpg' } : null)
+    .filter(Boolean);
+
+  if (!pending.length) return; // nothing new to upload
+
+  const statusEl = document.getElementById('preview-upload-status');
+  if (statusEl) {
+    statusEl.style.display = '';
+    statusEl.style.background = 'rgba(255,255,255,0.05)';
+    statusEl.style.color = 'rgba(248,245,239,0.7)';
+    statusEl.textContent = `Uploading ${pending.length} preview image${pending.length > 1 ? 's' : ''} to R2…`;
+  }
+
+  try {
+    const r = await fetch(`/api/books/${encodeURIComponent(slug)}/preview-images`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ images: pending })
+    });
+    const json = await r.json();
+    if (!r.ok) throw new Error(json.error || 'Upload failed');
+
+    // Replace data-URLs with the returned R2 URLs so the grid reflects final state
+    let urlIdx = 0;
+    _previewImages = _previewImages.map(img => {
+      if (img.data && json.urls[urlIdx] !== undefined) {
+        return { url: json.urls[urlIdx++] };
+      }
+      return img;
+    });
+    renderPreviewSlots();
+
+    if (statusEl) {
+      statusEl.style.background = 'rgba(47,174,157,0.12)';
+      statusEl.style.color = '#2FAE9D';
+      statusEl.textContent = `✓ ${pending.length} preview image${pending.length > 1 ? 's' : ''} uploaded to R2 successfully.`;
+      setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
+    }
+  } catch (err) {
+    if (statusEl) {
+      statusEl.style.background = 'rgba(248,113,113,0.1)';
+      statusEl.style.color = '#f87171';
+      statusEl.textContent = '⚠ Preview upload failed: ' + err.message;
+    }
+    toast('Preview image upload failed: ' + err.message, '⚠️', 6000);
+  }
+}
+
+/* Delete all preview images from R2 for the current book */
+async function deleteAllPreviewImages() {
+  const slug = document.getElementById('f-slug').value.trim();
+  if (!slug) { toast('Save the book first before deleting previews.', '⚠️'); return; }
+  if (!confirm('Remove all preview images for this book from R2? This cannot be undone.')) return;
+
+  try {
+    const r = await fetch(`/api/books/${encodeURIComponent(slug)}/preview-images`, { method: 'DELETE' });
+    const json = await r.json();
+    if (!r.ok) throw new Error(json.error || 'Delete failed');
+    _previewImages = [];
+    renderPreviewSlots();
+    toast('Preview images removed from R2 ✓', '🗑', 3000);
+  } catch (err) {
+    toast('Delete failed: ' + err.message, '⚠️', 5000);
+  }
 }
 </script>
 </body>
