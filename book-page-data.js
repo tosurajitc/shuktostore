@@ -419,6 +419,12 @@
         }
         container.querySelectorAll('.reveal').forEach(observe);
       });
+    } else {
+      /* No FAQ items — hide the entire section so it takes no space */
+      document.querySelectorAll('[data-sp-faq-list]').forEach(container => {
+        const section = container.closest('section');
+        if (section) section.style.display = 'none';
+      });
     }
 
     /* ── Pricing features list ─────────────────────────────────── */
