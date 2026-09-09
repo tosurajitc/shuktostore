@@ -2059,48 +2059,39 @@ function clearAllData() {
 
 /* ── FIX COVER BACKGROUNDS ──────────────────────────────────── */
 async function fixCoverBackgrounds() {
-  const books = DB.load();
-  const toFix = books.filter(b => b.cover || b.authorPhoto);
-  if (!toFix.length) { toast('No cover images found to fix', 'ℹ️'); return; }
+  toast('Fetching books from server…', '🖼️', 2000);
 
-  toast(`Fixing ${toFix.length} book image(s)…`, '🖼️', 3000);
-
-  function reprocess(dataURL, maxPx, quality) {
-    return new Promise(resolve => {
-      if (!dataURL) return resolve(null);
-      /* If already a JPEG with white baked in (starts with /9j/) skip re-process
-         only if it came from the new pipeline — we can't tell, so always fix. */
-      const img = new Image();
-      img.onload = () => {
-        const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
-        const w = Math.round(img.width * scale);
-        const h = Math.round(img.height * scale);
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, w, h);
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.onerror = () => resolve(dataURL); // leave unchanged if it fails
-      img.src = dataURL;
-    });
+  /* Always fetch fresh from the API — DB.load() may return the in-memory
+     cache which had covers stripped from localStorage by _setCache. */
+  let books;
+  try {
+    books = await apiGet('/api/books');
+  } catch (e) {
+    toast('Could not reach API: ' + e.message, '⚠️', 5000);
+    return;
   }
+
+  const toFix = books.filter(b => b.cover || b.authorPhoto);
+  if (!toFix.length) {
+    toast('No cover images found in the database', 'ℹ️');
+    return;
+  }
+
+  toast(`Found ${toFix.length} book(s) with images — re-processing…`, '🖼️', 3000);
 
   let fixed = 0;
   for (const book of toFix) {
     const [newCover, newPhoto] = await Promise.all([
-      reprocess(book.cover,       800, 0.75),
-      reprocess(book.authorPhoto, 400, 0.80),
+      book.cover       ? new Promise(r => compressImage(book.cover,       800, 0.75, r)) : Promise.resolve(null),
+      book.authorPhoto ? new Promise(r => compressImage(book.authorPhoto, 400, 0.80, r)) : Promise.resolve(null),
     ]);
     if (newCover)  book.cover       = newCover;
     if (newPhoto)  book.authorPhoto = newPhoto;
     await DB.upsert(book);
     fixed++;
-    toast(`Fixed ${fixed} / ${toFix.length}…`, '🖼️', 1500);
+    toast(`Re-processed ${fixed} / ${toFix.length}…`, '🖼️', 1500);
   }
-  toast(`✓ Done — ${fixed} book image(s) re-processed. Reload the homepage to see the fix.`, '✓', 6000);
+  toast(`✓ Done — ${fixed} book(s) fixed. Reload the homepage to confirm.`, '✓', 6000);
 }
 
 /* ── GENERATE VIEW ──────────────────────────────────────────── */
@@ -3021,36 +3012,35 @@ function handleCoverUploadForBook(e, slug) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    const dataUrl = ev.target.result;
-    // Update or create the book record in DB with the cover
-    const books = DB.load();
-    const idx = books.findIndex(b => b.slug === slug);
-    if (idx >= 0) {
-      books[idx].cover = dataUrl;
-      DB.save(books);
-    } else {
-      // Book not in DB yet (it's a built-in book not yet entered via form)
-      // Store a minimal record just for the cover
-      const knownTitles = { 'one-person-company': 'The One-Person Company', 'money-sorted': 'Money, Sorted', 'ai-with-sayuj': 'AI with Sayuj' };
-      books.push({ id: slug, slug, title: knownTitles[slug] || slug, cover: dataUrl });
-      DB.save(books);
-    }
-    // Update preview image in DOM
-    const preview = document.getElementById('cover-preview-' + slug);
-    if (preview) {
-      if (preview.tagName === 'IMG') {
-        preview.src = dataUrl;
+    compressImage(ev.target.result, 800, 0.75, async dataUrl => {
+      // Update or create the book record in DB with the cover
+      const books = DB.load();
+      const idx = books.findIndex(b => b.slug === slug);
+      if (idx >= 0) {
+        books[idx].cover = dataUrl;
+        await DB.upsert(books[idx]);
       } else {
-        const img = document.createElement('img');
-        img.src = dataUrl;
-        img.style.cssText = 'width:100%;height:140px;object-fit:cover;border-radius:0.5rem;display:block;';
-        img.id = 'cover-preview-' + slug;
-        preview.replaceWith(img);
+        // Book not in DB yet — store a minimal record just for the cover
+        const knownTitles = { 'one-person-company': 'The One-Person Company', 'money-sorted': 'Money, Sorted', 'ai-handbook-for-kids': 'AI Handbook for Kids' };
+        const newBook = { id: slug, slug, title: knownTitles[slug] || slug, cover: dataUrl };
+        await DB.upsert(newBook);
       }
-    }
-    // Re-render to show remove button
-    renderCoverUploadList();
-    toast('Cover uploaded for ' + slug, '🖼️');
+      // Update preview image in DOM
+      const preview = document.getElementById('cover-preview-' + slug);
+      if (preview) {
+        if (preview.tagName === 'IMG') {
+          preview.src = dataUrl;
+        } else {
+          const img = document.createElement('img');
+          img.src = dataUrl;
+          img.style.cssText = 'width:100%;height:140px;object-fit:cover;border-radius:0.5rem;display:block;';
+          img.id = 'cover-preview-' + slug;
+          preview.replaceWith(img);
+        }
+      }
+      renderCoverUploadList();
+      toast('Cover uploaded for ' + slug, '🖼️');
+    });
   };
   reader.readAsDataURL(file);
 }
