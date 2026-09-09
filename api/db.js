@@ -50,6 +50,12 @@ const MIGRATION = `
     updated_at      TIMESTAMPTZ DEFAULT now()
   );
 
+  CREATE TABLE IF NOT EXISTS newsletter_signups (
+    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email        TEXT UNIQUE NOT NULL,
+    signed_up_at TIMESTAMPTZ DEFAULT now()
+  );
+
   CREATE TABLE IF NOT EXISTS buyers (
     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email                TEXT NOT NULL,

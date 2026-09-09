@@ -220,6 +220,26 @@ router.post('/books/reorder', requireSession, async (req, res) => {
   }
 });
 
+/* POST /api/newsletter — public email signup */
+router.post('/newsletter', async (req, res) => {
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email required' });
+  }
+  try {
+    await pool.query(
+      `INSERT INTO newsletter_signups (email)
+       VALUES ($1)
+       ON CONFLICT (email) DO NOTHING`,
+      [email]
+    );
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[data] POST /newsletter error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 /* ════════════════════════════════════════════════════════════════
    BUYERS ROUTES  (all require valid session cookie)
 ════════════════════════════════════════════════════════════════ */
