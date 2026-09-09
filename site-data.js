@@ -37,8 +37,8 @@
     heroGhost:    'About Shukto Press',
     catalogHeading:  'The full catalog',
     catalogSubtitle: 'Each tackles a topic that deserved a better treatment than it was getting.',
-    aboutHeading: 'The Shukto Press promise',
-    aboutSubtitle: 'Every book we publish passes the same test: could this have been a blog post? If yes, we don\'t publish it.',
+    aboutHeading: 'Why Shukto exists',
+    aboutSubtitle: 'Most \u201cknowledge\u201d online is either too shallow to use or too bloated to finish. Shukto sits right in between: short enough to read in a weekend, sharp enough to actually change something.',
     testimonialsHeading: 'What readers say',
     footerBottomTagline: 'Practical books for practical people.',
     marqueeItems: [
@@ -53,9 +53,21 @@
       '🧒 Kid-to-kid writing, not adult-to-kid'
     ],
     trustItems: [
-      { icon: '🎯', title: 'Frameworks, not vibes', body: 'Every idea is turned into something you can apply — a matrix, a checklist, a blueprint, a step-by-step plan. No vague encouragement.' },
-      { icon: '🔍', title: 'Honest about limits',   body: 'We tell you what AI can\'t do yet. We tell you what financial advice doesn\'t apply to irregular earners. We don\'t oversell.' },
-      { icon: '📖', title: 'Written to be re-read', body: 'Dense in the right ways. Reference-grade appendices. Chapters you\'ll return to when you hit a new problem six months later.' }
+      {
+        icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.84a.5.5 0 0 1-.62-.62l.84-2.87a2 2 0 0 1 .506-.856Z"/></svg>',
+        title: 'Built by practitioners, not content farms',
+        body: 'Every book is written, tested, and edited by an expert with real-world experience—never assembled by an agency chasing algorithmic volume.'
+      },
+      {
+        icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.343-4.343"/><circle cx="11" cy="11" r="8"/><path d="m8 11 2 2 4-4"/></svg>',
+        title: 'Rigorously verified data',
+        body: 'Nothing is published on a hunch. Every framework, statistic, and strategic insight is meticulously checked against credible sources before a book goes out.'
+      },
+      {
+        icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M9 12h6"/><path d="M12 9v6"/></svg>',
+        title: 'One problem, deeply solved',
+        body: 'Each book isolates a single, high-stakes operational problem and goes incredibly deep, rather than skimming the surface of twenty separate topics.'
+      }
     ],
     testimonials: [
       { quote: '', name: 'Reader Name', role: 'Role / Context — The One-Person Company', avatarInitial: 'A', avatarColor: '#B8874B' },
@@ -145,10 +157,12 @@
     const trustGrid = document.getElementById('sp-trust-grid');
     if (trustGrid) {
       trustGrid.innerHTML = trustItems.map((item, i) => `
-        <div class="trust-item reveal${i > 0 ? ' reveal-delay-' + i : ''}">
-          <span class="trust-icon">${esc(item.icon)}</span>
-          <h3 class="trust-title">${esc(item.title)}</h3>
-          <p class="trust-desc">${esc(item.body)}</p>
+        <div class="trust-item reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
+          <span class="trust-icon">${item.icon}</span>
+          <div class="trust-body">
+            <h3 class="trust-title">${esc(item.title)}</h3>
+            <p class="trust-desc">${esc(item.body)}</p>
+          </div>
         </div>`).join('');
       if (window._spRevealObserver) {
         trustGrid.querySelectorAll('.reveal').forEach(el => window._spRevealObserver.observe(el));

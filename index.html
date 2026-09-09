@@ -156,35 +156,113 @@
       margin-top: var(--grid-gap);
     }
     /* Trust section */
+    /* ── WHY SHUKTO EXISTS — redesigned asymmetric layout ── */
     .trust-section {
-      background: var(--paper-warm);
-      border-top: 1px solid var(--divider);
-      border-bottom: 1px solid var(--divider);
+      background: #F5F0E8;
+      border-top: 1px solid rgba(14,17,23,0.1);
+      border-bottom: 1px solid rgba(14,17,23,0.1);
       padding-block: var(--space-20);
     }
-    .trust-grid {
+    .why-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-8);
-      text-align: center;
+      grid-template-columns: 2fr 3fr;
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: start;
     }
-    .trust-item { padding: var(--space-8); }
+    /* LEFT feature card */
+    .why-feature-card {
+      background: #FDFAF5;
+      border: 1px solid rgba(14,17,23,0.1);
+      border-radius: var(--radius-xl);
+      padding: clamp(var(--space-8), 5vw, var(--space-12));
+      position: sticky;
+      top: 6rem;
+    }
+    .why-heading {
+      font-family: var(--font-display);
+      font-size: clamp(var(--text-3xl), 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #161616;
+      margin-top: var(--space-5);
+      margin-bottom: var(--space-5);
+    }
+    .why-mission {
+      font-size: clamp(var(--text-base), 1.8vw, var(--text-lg));
+      color: #4A4A4A;
+      line-height: 1.72;
+    }
+    .why-rule {
+      width: 3rem;
+      height: 2px;
+      background: var(--b1-accent);
+      margin-block: var(--space-6);
+      border-radius: 2px;
+    }
+    .why-tagline {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--b1-accent-lo);
+    }
+    /* RIGHT pillars */
+    .why-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    .trust-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-5);
+      padding: var(--space-7) var(--space-7);
+      background: #FDFAF5;
+      border: 1px solid rgba(14,17,23,0.09);
+      border-radius: var(--radius-xl);
+      transition: box-shadow 0.22s ease, transform 0.22s ease;
+    }
+    .trust-item:hover {
+      box-shadow: 0 6px 28px rgba(14,17,23,0.08);
+      transform: translateY(-2px);
+    }
     .trust-icon {
-      font-size: 2.5rem;
-      display: block;
-      margin-bottom: var(--space-4);
+      flex-shrink: 0;
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(184,135,75,0.1);
+      border-radius: var(--radius-lg);
+      color: var(--b1-accent-lo);
     }
+    .trust-icon svg {
+      width: 1.375rem;
+      height: 1.375rem;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      fill: none;
+    }
+    .trust-body { flex: 1; }
     .trust-title {
       font-family: var(--font-display);
-      font-size: var(--text-xl);
+      font-size: var(--text-lg);
       font-weight: 700;
       letter-spacing: -0.02em;
+      color: #161616;
       margin-bottom: var(--space-2);
     }
     .trust-desc {
       font-size: var(--text-sm);
-      color: var(--text-secondary);
-      line-height: 1.65;
+      color: #555555;
+      line-height: 1.7;
+    }
+    /* Responsive stacking */
+    @media (max-width: 768px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .why-feature-card { position: static; }
     }
 
     /* Cover placeholder styles */
@@ -275,10 +353,6 @@
     .book-tag-b1 { background: rgba(184,135,75,0.12); color: #8A6030; }
     .book-tag-b2 { background: rgba(221,124,63,0.12); color: #9A4B15; }
     .book-tag-b3 { background: rgba(47,174,157,0.12); color: #1a7a6e; }
-
-    @media (max-width: 768px) {
-      .trust-grid { grid-template-columns: 1fr; }
-    }
 
     /* ── BOOK PREVIEW MODAL ──────────────────────────────────── */
     .bm-overlay {
@@ -686,17 +760,24 @@
 </section>
 
 <!-- ── TRUST / ABOUT SECTION ────────────────────────────────── -->
-<section class="trust-section" id="about">
+<section class="trust-section why-section" id="about">
   <div class="container">
-    <div class="promise-card reveal">
-      <span class="promise-badge">The Shukto Press standard</span>
-      <div class="section-header centered">
-        <h2 class="heading-2" id="sp-about-heading">The Shukto Press promise</h2>
-        <p class="section-subtitle" id="sp-about-subtitle">Every book we publish passes the same test: could this have been a blog post? If yes, we don't publish it.</p>
+    <div class="why-grid reveal">
+
+      <!-- LEFT: main feature card (~40%) -->
+      <div class="why-feature-card">
+        <span class="promise-badge">The Shukto Press Standard</span>
+        <h2 class="why-heading" id="sp-about-heading">Why Shukto exists</h2>
+        <p class="why-mission" id="sp-about-subtitle">Most &ldquo;knowledge&rdquo; online is either too shallow to use or too bloated to finish. Shukto sits right in between: short enough to read in a weekend, sharp enough to actually change something.</p>
+        <div class="why-rule"></div>
+        <p class="why-tagline">Practical depth. No filler.</p>
       </div>
-    </div>
-    <div class="trust-grid" id="sp-trust-grid">
-      <!-- Populated dynamically by site-data.js -->
+
+      <!-- RIGHT: three value pillars (~60%) -->
+      <div class="why-pillars" id="sp-trust-grid">
+        <!-- Populated dynamically by site-data.js -->
+      </div>
+
     </div>
   </div>
 </section>
