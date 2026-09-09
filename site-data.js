@@ -70,7 +70,7 @@
       }
     ],
     testimonials: [
-      { quote: '', name: 'Reader Name', role: 'Role / Context — The One-Person Company', avatarInitial: 'A', avatarColor: '#B8874B' },
+      { quote: '', name: 'Reader Name', role: 'Role / Context — The One-Person Company', avatarInitial: 'A', avatarColor: '#E8541A' },
       { quote: '', name: 'Reader Name', role: 'Role / Context — Money, Sorted',          avatarInitial: 'B', avatarColor: '#DD7C3F' },
       { quote: '', name: 'Reader Name', role: 'Role / Context — AI with Sayuj',           avatarInitial: 'C', avatarColor: '#2FAE9D' }
     ]
@@ -176,10 +176,10 @@
         const isEmpty = !t.quote || t.quote.trim() === '';
         return `
           <div class="quote-card reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
-            <span class="quote-mark" style="color:${esc(t.avatarColor || '#B8874B')};">"</span>
+            <span class="quote-mark" style="color:${esc(t.avatarColor || '#E8541A')};">"</span>
             <p class="quote-text">${isEmpty ? '[TESTIMONIAL PLACEHOLDER — replace with real quote]' : esc(t.quote)}</p>
             <div class="quote-author">
-              <div class="quote-avatar" style="background:${esc(t.avatarColor || '#B8874B')};">${esc(t.avatarInitial || '?')}</div>
+              <div class="quote-avatar" style="background:${esc(t.avatarColor || '#E8541A')};">${esc(t.avatarInitial || '?')}</div>
               <div>
                 <div class="quote-meta-name">${esc(t.name || 'Reader Name')}</div>
                 <div class="quote-meta-role">${esc(t.role || '')}</div>
@@ -227,7 +227,7 @@
     const catalogSubtitle = document.getElementById('sp-catalog-subtitle');
     if (catalogGrid) {
       const accentPalette = [
-        { solid: '#B8874B', bg: 'rgba(184,135,75,0.12)', text: '#8A6030', grad: 'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
+        { solid: '#E8541A', bg: 'rgba(232,84,26,0.12)', text: '#B83E10', grad: 'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
         { solid: '#DD7C3F', bg: 'rgba(221,124,63,0.12)',  text: '#9A4B15', grad: 'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)' },
         { solid: '#2FAE9D', bg: 'rgba(47,174,157,0.12)',  text: '#1a7a6e', grad: 'linear-gradient(135deg,#0A2A28 0%,#1B5E57 50%,#0E3A35 100%)' },
         { solid: '#7C6AF5', bg: 'rgba(124,106,245,0.12)', text: '#4B3CBF', grad: 'linear-gradient(135deg,#1A1240 0%,#2E2470 50%,#110E30 100%)' },

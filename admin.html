@@ -28,7 +28,7 @@ input,textarea,select{font-family:inherit}
 .nav-section-label{font-size:0.625rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,245,239,0.3);padding:0 0.5rem;margin-bottom:0.5rem}
 .nav-btn{display:flex;align-items:center;gap:0.75rem;width:100%;padding:0.625rem 0.75rem;border-radius:0.5rem;border:none;background:none;color:rgba(248,245,239,0.6);font-size:0.875rem;font-weight:500;transition:background 150ms,color 150ms;text-align:left}
 .nav-btn:hover{background:rgba(255,255,255,0.06);color:rgba(248,245,239,0.9)}
-.nav-btn.active{background:rgba(184,135,75,0.15);color:#D4A868}
+.nav-btn.active{background:rgba(232,84,26,0.15);color:#F07040}
 .nav-btn .icon{width:18px;height:18px;opacity:0.7;flex-shrink:0}
 .nav-btn.active .icon{opacity:1}
 .sidebar-footer{margin-top:auto;padding:1.25rem 1.5rem 0;border-top:1px solid rgba(255,255,255,0.07)}
@@ -47,7 +47,7 @@ input,textarea,select{font-family:inherit}
 .modal-body{padding:1.5rem;overflow-y:auto;flex:1;font-size:0.9rem;line-height:1.7;color:rgba(248,245,239,0.75)}
 .modal-body h2{font-family:'Outfit',sans-serif;font-weight:700;font-size:1.125rem;color:#F8F5EF;margin:1.25rem 0 0.5rem;letter-spacing:0}
 .modal-body h2:first-child{margin-top:0}
-.modal-body h3{font-family:'Outfit',sans-serif;font-weight:600;font-size:0.9375rem;color:#D4A868;margin:1rem 0 0.375rem}
+.modal-body h3{font-family:'Outfit',sans-serif;font-weight:600;font-size:0.9375rem;color:#F07040;margin:1rem 0 0.375rem}
 .modal-body p{margin-bottom:0.75rem}
 .modal-body ul,.modal-body ol{padding-left:1.25rem;margin-bottom:0.75rem}
 .modal-body li{margin-bottom:0.25rem}
@@ -70,13 +70,13 @@ input,textarea,select{font-family:inherit}
 .form-col{display:flex;flex-direction:column;gap:0.375rem}
 .form-col.span-2{grid-column:span 2}
 label{font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.6);letter-spacing:0.01em}
-.required::after{content:' *';color:#B8874B}
+.required::after{content:' *';color:#E8541A}
 input[type=text],input[type=url],input[type=number],input[type=color],textarea,select{
   width:100%;padding:0.625rem 0.875rem;background:rgba(255,255,255,0.05);
   border:1px solid rgba(255,255,255,0.1);border-radius:0.5rem;color:#F8F5EF;
   font-size:0.9375rem;transition:border-color 150ms,box-shadow 150ms;outline:none}
 input[type=text]:focus,input[type=url]:focus,input[type=number]:focus,textarea:focus,select:focus{
-  border-color:rgba(184,135,75,0.6);box-shadow:0 0 0 3px rgba(184,135,75,0.12)}
+  border-color:rgba(232,84,26,0.6);box-shadow:0 0 0 3px rgba(232,84,26,0.12)}
 input[type=color]{padding:0.25rem;height:40px;cursor:pointer}
 textarea{resize:vertical;min-height:80px}
 select option{background:#1A2130;color:#F8F5EF}
@@ -88,16 +88,16 @@ select option{background:#1A2130;color:#F8F5EF}
 .btn-icon{width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(248,245,239,0.5);font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 150ms,color 150ms}
 .btn-icon:hover{background:rgba(255,255,255,0.1);color:#F8F5EF}
 .btn-icon.danger:hover{background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);color:#f87171}
-.add-item-btn{display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:rgba(184,135,75,0.8);background:none;border:1px dashed rgba(184,135,75,0.3);border-radius:0.5rem;padding:0.5rem 0.875rem;width:100%;justify-content:center;transition:background 150ms,color 150ms,border-color 150ms;margin-top:0.375rem}
-.add-item-btn:hover{background:rgba(184,135,75,0.08);color:#D4A868;border-color:rgba(184,135,75,0.5)}
+.add-item-btn{display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:rgba(232,84,26,0.8);background:none;border:1px dashed rgba(232,84,26,0.3);border-radius:0.5rem;padding:0.5rem 0.875rem;width:100%;justify-content:center;transition:background 150ms,color 150ms,border-color 150ms;margin-top:0.375rem}
+.add-item-btn:hover{background:rgba(232,84,26,0.08);color:#F07040;border-color:rgba(232,84,26,0.5)}
 /* ── COVER UPLOAD ─────────────────────────────────────── */
 .cover-upload-wrap{display:flex;gap:1.25rem;align-items:flex-start}
 .cover-drop{flex:1;border:2px dashed rgba(255,255,255,0.12);border-radius:0.75rem;padding:2rem 1rem;text-align:center;cursor:pointer;transition:border-color 150ms,background 150ms;position:relative}
-.cover-drop:hover,.cover-drop.drag-over{border-color:rgba(184,135,75,0.5);background:rgba(184,135,75,0.05)}
+.cover-drop:hover,.cover-drop.drag-over{border-color:rgba(232,84,26,0.5);background:rgba(232,84,26,0.05)}
 .cover-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .cover-drop-icon{font-size:2rem;margin-bottom:0.5rem}
 .cover-drop-text{font-size:0.875rem;color:rgba(248,245,239,0.45)}
-.cover-drop-text strong{color:rgba(184,135,75,0.9)}
+.cover-drop-text strong{color:rgba(232,84,26,0.9)}
 .cover-preview{width:120px;flex-shrink:0}
 .cover-preview-img{width:120px;height:160px;border-radius:0.625rem;object-fit:cover;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
 .cover-preview-placeholder{width:120px;height:160px;border-radius:0.625rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:rgba(248,245,239,0.3);text-align:center;padding:0.75rem}
@@ -108,8 +108,8 @@ select option{background:#1A2130;color:#F8F5EF}
 /* ── BUTTONS ──────────────────────────────────────────── */
 .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;border-radius:9999px;font-size:0.875rem;font-weight:600;border:none;transition:transform 150ms,box-shadow 150ms,filter 150ms}
 .btn:hover{transform:translateY(-1px)}
-.btn-primary{background:#B8874B;color:white}
-.btn-primary:hover{box-shadow:0 8px 24px rgba(184,135,75,0.35);filter:brightness(1.08)}
+.btn-primary{background:#E8541A;color:white}
+.btn-primary:hover{box-shadow:0 8px 24px rgba(232,84,26,0.35);filter:brightness(1.08)}
 .btn-secondary{background:rgba(255,255,255,0.08);color:rgba(248,245,239,0.85);border:1px solid rgba(255,255,255,0.12)}
 .btn-secondary:hover{background:rgba(255,255,255,0.13)}
 .btn-success{background:#2FAE9D;color:white}
@@ -152,10 +152,10 @@ select option{background:#1A2130;color:#F8F5EF}
 /* ── PROGRESS STEPS ───────────────────────────────────── */
 .steps{display:flex;gap:0;margin-bottom:2rem;background:rgba(255,255,255,0.04);border-radius:0.625rem;padding:0.25rem;overflow-x:auto}
 .step-btn{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:0.4rem;font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.4);background:none;border:none;white-space:nowrap;cursor:pointer;transition:background 150ms,color 150ms}
-.step-btn.active{background:rgba(184,135,75,0.15);color:#D4A868}
+.step-btn.active{background:rgba(232,84,26,0.15);color:#F07040}
 .step-btn.done{color:rgba(47,174,157,0.9)}
 .step-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.08);font-size:0.6875rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.step-btn.active .step-num{background:#B8874B;color:white}
+.step-btn.active .step-num{background:#E8541A;color:white}
 .step-btn.done .step-num{background:#2FAE9D;color:white}
 /* ── INLINE ALERT ─────────────────────────────────────── */
 .alert{border-radius:0.625rem;padding:0.875rem 1rem;font-size:0.875rem;display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:1.25rem}
@@ -250,7 +250,7 @@ select option{background:#1A2130;color:#F8F5EF}
     </div>
     <div id="no-books" style="text-align:center;padding:3rem 1rem;color:rgba(248,245,239,0.35);display:none">
       <div style="font-size:3rem;margin-bottom:1rem">📚</div>
-      <div style="font-size:0.9375rem">No books yet. Click <strong style="color:#D4A868">+ Add New Book</strong> to get started.</div>
+      <div style="font-size:0.9375rem">No books yet. Click <strong style="color:#F07040">+ Add New Book</strong> to get started.</div>
     </div>
   </div>
 </div>
@@ -362,8 +362,8 @@ select option{background:#1A2130;color:#F8F5EF}
         <div class="form-col">
           <label>Light Accent Variant</label>
           <div class="color-row">
-            <input type="color" id="f-accent-hi" value="#D4A868" oninput="syncColorText('f-accent-hi','f-accent-hi-hex')"/>
-            <input type="text" id="f-accent-hi-hex" value="#D4A868" maxlength="7" placeholder="#D4A868" oninput="syncHexToColor('f-accent-hi-hex','f-accent-hi')" style="max-width:100px"/>
+            <input type="color" id="f-accent-hi" value="#F07040" oninput="syncColorText('f-accent-hi','f-accent-hi-hex')"/>
+            <input type="text" id="f-accent-hi-hex" value="#F07040" maxlength="7" placeholder="#F07040" oninput="syncHexToColor('f-accent-hi-hex','f-accent-hi')" style="max-width:100px"/>
             <span style="font-size:0.75rem;color:rgba(248,245,239,0.35)">Lighter tint</span>
           </div>
         </div>
@@ -612,8 +612,8 @@ select option{background:#1A2130;color:#F8F5EF}
 
   <!-- ══════════ SECTION B: HERO ══════════ -->
   <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
-    <div style="width:3px;height:20px;background:#B8874B;border-radius:2px;flex-shrink:0;"></div>
-    <span style="font-size:0.8125rem;font-weight:700;color:#D4A868;letter-spacing:0.03em;">B — Hero Section</span>
+    <div style="width:3px;height:20px;background:#E8541A;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#F07040;letter-spacing:0.03em;">B — Hero Section</span>
     <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
     <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">The large banner at the top of the homepage</span>
   </div>
@@ -649,8 +649,8 @@ select option{background:#1A2130;color:#F8F5EF}
 
   <!-- ══════════ SECTION B.5: STAT STRIP ══════════ -->
   <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
-    <div style="width:3px;height:20px;background:#B8874B;border-radius:2px;flex-shrink:0;"></div>
-    <span style="font-size:0.8125rem;font-weight:700;color:#D4A868;letter-spacing:0.03em;">B.5 — Stat Strip</span>
+    <div style="width:3px;height:20px;background:#E8541A;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#F07040;letter-spacing:0.03em;">B.5 — Stat Strip</span>
     <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
     <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">4 numbers shown between the hero and catalog</span>
   </div>
@@ -761,8 +761,8 @@ select option{background:#1A2130;color:#F8F5EF}
 
   <!-- ══════════ SECTION G: FOOTER ══════════ -->
   <div style="display:flex;align-items:center;gap:0.75rem;margin:2rem 0 1rem;">
-    <div style="width:3px;height:20px;background:#B8874B;border-radius:2px;flex-shrink:0;"></div>
-    <span style="font-size:0.8125rem;font-weight:700;color:#D4A868;letter-spacing:0.03em;">G — Footer</span>
+    <div style="width:3px;height:20px;background:#E8541A;border-radius:2px;flex-shrink:0;"></div>
+    <span style="font-size:0.8125rem;font-weight:700;color:#F07040;letter-spacing:0.03em;">G — Footer</span>
     <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
     <span style="font-size:0.72rem;color:rgba(248,245,239,0.3);">Bottom of every page</span>
   </div>
@@ -929,19 +929,19 @@ select option{background:#1A2130;color:#F8F5EF}
     </div>
     <div style="display:grid;gap:0.75rem;font-size:0.875rem;">
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">1</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#E8541A;flex-shrink:0;font-size:1.0625rem;">1</span>
         <div>Go to <strong>Razorpay Dashboard → Webhooks → Create Webhook</strong></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">2</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#E8541A;flex-shrink:0;font-size:1.0625rem;">2</span>
         <div>Set the URL to <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">https://www.shukto.in/api/webhook/razorpay</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">3</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#E8541A;flex-shrink:0;font-size:1.0625rem;">3</span>
         <div>Select event: <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">payment_link.paid</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
-        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#B8874B;flex-shrink:0;font-size:1.0625rem;">4</span>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;color:#E8541A;flex-shrink:0;font-size:1.0625rem;">4</span>
         <div>Copy the <strong>webhook secret</strong> and add it to Railway as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">RAZORPAY_WEBHOOK_SECRET</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.875rem;background:rgba(255,255,255,0.04);border-radius:0.5rem;">
@@ -991,7 +991,7 @@ select option{background:#1A2130;color:#F8F5EF}
     </div>
   </div>
   <div class="card" style="margin-top:1.25rem;background:rgba(184,135,75,0.04);border-color:rgba(184,135,75,0.18);">
-    <div class="card-title" style="color:#D4A868;">How to send the PDF</div>
+    <div class="card-title" style="color:#F07040;">How to send the PDF</div>
     <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);line-height:1.7;">
       Use the <strong style="color:#F8F5EF">Email PDF</strong> action to open your email client, attach the prompt-template PDF, and send it manually. Automated delivery can be added later.
     </div>
@@ -1016,7 +1016,7 @@ select option{background:#1A2130;color:#F8F5EF}
     </div>
     <div id="no-bundles" style="text-align:center;padding:3rem 1rem;color:rgba(248,245,239,0.35);display:none">
       <div style="font-size:3rem;margin-bottom:1rem">🎁</div>
-      <div style="font-size:0.9375rem">No bundles yet. Click <strong style="color:#D4A868">+ Create Bundle</strong> to offer a discounted pair.</div>
+      <div style="font-size:0.9375rem">No bundles yet. Click <strong style="color:#F07040">+ Create Bundle</strong> to offer a discounted pair.</div>
     </div>
   </div>
 
@@ -1078,7 +1078,7 @@ select option{background:#1A2130;color:#F8F5EF}
   </div>
 
   <div class="card" style="margin-top:1.25rem;background:rgba(184,135,75,0.04);border-color:rgba(184,135,75,0.18);">
-    <div class="card-title" style="color:#D4A868;">💡 How bundles work</div>
+    <div class="card-title" style="color:#F07040;">💡 How bundles work</div>
     <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);line-height:1.7;display:grid;gap:0.625rem;">
       <div>1. Create a bundle here — pick the books, set the discounted price, and add a Razorpay payment link for the bundle amount.</div>
       <div>2. Each individual book's sales page will automatically show a <strong style="color:#F8F5EF">"Bundle offer"</strong> section (via <code style="background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:3px;">data-sp-bundle</code>) whenever a bundle that contains that book is active.</div>
@@ -1576,8 +1576,8 @@ function populateForm(book) {
 
   document.getElementById('f-accent').value = book.accent || '#B8874B';
   document.getElementById('f-accent-hex').value = book.accent || '#B8874B';
-  document.getElementById('f-accent-hi').value = book.accentHi || '#D4A868';
-  document.getElementById('f-accent-hi-hex').value = book.accentHi || '#D4A868';
+  document.getElementById('f-accent-hi').value = book.accentHi || '#F07040';
+  document.getElementById('f-accent-hi-hex').value = book.accentHi || '#F07040';
   document.getElementById('f-hero-bg').value = book.heroBg || '#0A0E13';
   document.getElementById('f-hero-bg-hex').value = book.heroBg || '#0A0E13';
   document.getElementById('f-rotation').value = book.rotation || '-3';
@@ -1664,8 +1664,8 @@ function startNewBook() {
   document.getElementById('slug-preview').textContent = 'your-slug';
   document.getElementById('f-accent').value = '#B8874B';
   document.getElementById('f-accent-hex').value = '#B8874B';
-  document.getElementById('f-accent-hi').value = '#D4A868';
-  document.getElementById('f-accent-hi-hex').value = '#D4A868';
+  document.getElementById('f-accent-hi').value = '#F07040';
+  document.getElementById('f-accent-hi-hex').value = '#F07040';
   document.getElementById('f-hero-bg').value = '#0A0E13';
   document.getElementById('f-hero-bg-hex').value = '#0A0E13';
   document.getElementById('f-rotation').value = '-3';
@@ -2084,7 +2084,7 @@ function buildSalesPageHTML(b) {
   const pub = settings.publisher || 'Shukto Press';
   const email = settings.email || 'hello@shuktopress.com';
   const a = b.accent || '#B8874B';
-  const aHi = b.accentHi || '#D4A868';
+  const aHi = b.accentHi || '#F07040';
   const bg = b.heroBg || '#0A0E13';
   const rot = b.rotation || '-3';
   const slug = b.slug;
@@ -3030,7 +3030,7 @@ async function loadBuyers() {
           <td style="padding:0.75rem 1.25rem;color:#F8F5EF;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.name || '—')}</td>
           <td style="padding:0.75rem 1.25rem;color:rgba(248,245,239,0.7);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.email)}</td>
           <td style="padding:0.75rem 1.25rem;white-space:nowrap">
-            <span style="display:inline-flex;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:600;background:rgba(184,135,75,0.12);color:#D4A868">${esc(b.book_slug)}</span>
+            <span style="display:inline-flex;padding:2px 8px;border-radius:9999px;font-size:0.6875rem;font-weight:600;background:rgba(184,135,75,0.12);color:#F07040">${esc(b.book_slug)}</span>
           </td>
           <td style="padding:0.75rem 1.25rem;text-align:right;font-weight:600;color:#2FAE9D;white-space:nowrap">${esc(amount)}</td>
           <td style="padding:0.75rem 1.25rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:0.75rem;color:rgba(248,245,239,0.4);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.razorpay_payment_id || '—')}</td>
@@ -3188,7 +3188,7 @@ function renderBundleList() {
         <div class="book-list-title">${esc(bundle.title)}
           ${bundle.badge ? `<span class="book-list-tag" style="background:rgba(47,174,157,0.15);color:#2FAE9D">${esc(bundle.badge)}</span>` : ''}
         </div>
-        <div class="book-list-meta">${esc(bookTitles)} · Bundle price: <strong style="color:#D4A868">${esc(bundle.bundlePrice)}</strong>${bundle.originalPrice ? ` <span style="text-decoration:line-through;color:rgba(248,245,239,0.3);">${esc(bundle.originalPrice)}</span>` : ''}</div>
+        <div class="book-list-meta">${esc(bookTitles)} · Bundle price: <strong style="color:#F07040">${esc(bundle.bundlePrice)}</strong>${bundle.originalPrice ? ` <span style="text-decoration:line-through;color:rgba(248,245,239,0.3);">${esc(bundle.originalPrice)}</span>` : ''}</div>
       </div>
       <div class="book-list-actions">
         <button class="btn btn-secondary" style="padding:0.375rem 0.875rem;font-size:0.8125rem" onclick="editBundle('${bundle.id}')">Edit</button>

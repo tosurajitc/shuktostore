@@ -21,10 +21,10 @@
   --divider:       rgba(14,17,23,0.08);
   --divider-dark:  rgba(248,245,239,0.12);
 
-  /* Book 1 — One Person Company — Brass/Gold on Navy */
-  --b1-accent:     #B8874B;
-  --b1-accent-hi:  #D4A868;
-  --b1-accent-lo:  #8A6030;
+  /* Book 1 — One Person Company — Orange on Navy */
+  --b1-accent:     #E8541A;
+  --b1-accent-hi:  #F07040;
+  --b1-accent-lo:  #B83E10;
   --b1-bg:         #0A0E13;
   --b1-bg-soft:    #12181F;
 
@@ -333,19 +333,19 @@ ul, ol { list-style: none; }
 .blob-1 {
   width: 600px; height: 600px;
   top: -100px; left: -100px;
-  background: var(--blob-1-color, radial-gradient(circle, #B8874B55, transparent 70%));
+  background: var(--blob-1-color, radial-gradient(circle, #E8541A55, transparent 70%));
   animation: blob-drift-1 22s ease-in-out infinite alternate;
 }
 .blob-2 {
   width: 800px; height: 800px;
   top: 20%; right: -200px;
-  background: var(--blob-2-color, radial-gradient(circle, #D4A86833, transparent 70%));
+  background: var(--blob-2-color, radial-gradient(circle, #F0704033, transparent 70%));
   animation: blob-drift-2 28s ease-in-out infinite alternate;
 }
 .blob-3 {
   width: 500px; height: 500px;
   bottom: -80px; left: 30%;
-  background: var(--blob-3-color, radial-gradient(circle, #B8874B22, transparent 70%));
+  background: var(--blob-3-color, radial-gradient(circle, #E8541A22, transparent 70%));
   animation: blob-drift-3 18s ease-in-out infinite alternate;
 }
 @keyframes blob-drift-1 {

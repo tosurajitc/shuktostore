@@ -104,7 +104,7 @@
     if (!book) return;
 
     /* Resolve accent color for dynamic renders */
-    const accent = book.accent || '#B8874B';
+    const accent = book.accent || '#E8541A';
 
     /* ── Page <title> ──────────────────────────────────────────── */
     if (book.title) {
@@ -431,7 +431,7 @@
       container.innerHTML = others.map((b, i) => {
         const delay = i > 0 ? ` reveal-delay-${i}` : '';
         const cardBg = b.heroBg || '#0A0E13';
-        const cardAccent = b.accent || '#B8874B';
+        const cardAccent = b.accent || '#E8541A';
         /* Pages live at books/<slug>/index.html — relative from any book page */
         const href = `../${b.slug}/index.html`;
         const coverInner = b.cover
