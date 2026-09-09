@@ -212,6 +212,7 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-6);
+      min-width: 0; /* prevent grid blowout */
     }
     .trust-item {
       padding: var(--space-7) var(--space-8);
@@ -219,12 +220,13 @@
       border: 1px solid rgba(14,17,23,0.09);
       border-radius: var(--radius-xl);
       transition: box-shadow 0.22s ease, transform 0.22s ease;
+      overflow: hidden; /* contain text within card bounds */
     }
     .trust-item:hover {
       box-shadow: 0 6px 28px rgba(14,17,23,0.08);
       transform: translateY(-2px);
     }
-    .trust-body { width: 100%; }
+    .trust-body { width: 100%; min-width: 0; }
     .trust-title {
       font-family: var(--font-display);
       font-size: var(--text-lg);
@@ -232,11 +234,13 @@
       letter-spacing: -0.02em;
       color: #161616;
       margin-bottom: var(--space-2);
+      overflow-wrap: break-word;
     }
     .trust-desc {
       font-size: var(--text-sm);
       color: #555555;
       line-height: 1.7;
+      overflow-wrap: break-word;
     }
     /* Responsive stacking */
     @media (max-width: 768px) {
