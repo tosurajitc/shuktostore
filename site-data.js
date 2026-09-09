@@ -119,8 +119,13 @@
     if (hlEl) hlEl.textContent = hp.heroLabel || DEFAULTS.heroLabel;
 
     /* ── Hero title, subtitle, CTAs ──────────────────────────── */
+    /* Hero title — only patch if the stored value contains markup (an <em> or
+       other tag). Plain-text values from the API/localStorage would strip the
+       <em> that colours the accent word, so we leave the static HTML in place. */
     const htEl = document.getElementById('sp-hero-title');
-    if (htEl && hp.heroTitle) htEl.innerHTML = hp.heroTitle;
+    if (htEl && hp.heroTitle && /<[a-z]/i.test(hp.heroTitle)) {
+      htEl.innerHTML = hp.heroTitle;
+    }
     const hsEl = document.getElementById('sp-hero-sub');
     if (hsEl && hp.heroSub) hsEl.textContent = hp.heroSub;
     const hpEl = document.getElementById('sp-hero-cta-primary');
