@@ -97,7 +97,20 @@
 
     /* ── Publisher name ──────────────────────────────────────── */
     const pub = settings.publisher || 'Shukto Press';
-    document.querySelectorAll('[data-sp="publisher"]').forEach(el => { el.textContent = pub; });
+    document.querySelectorAll('[data-sp="publisher"]').forEach(el => {
+      /* If the element contains a child <img> (e.g. the nav logo), preserve it
+         and only update the trailing text node so the logo icon is not wiped. */
+      const img = el.querySelector('img');
+      if (img) {
+        /* Remove all text nodes, keep child elements */
+        Array.from(el.childNodes)
+          .filter(n => n.nodeType === Node.TEXT_NODE)
+          .forEach(n => n.remove());
+        el.appendChild(document.createTextNode(pub));
+      } else {
+        el.textContent = pub;
+      }
+    });
 
     /* ── Tagline ─────────────────────────────────────────────── */
     const tagline = settings.tagline || 'Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.';
