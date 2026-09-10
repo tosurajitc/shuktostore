@@ -367,7 +367,7 @@
       const links = templatesOnly.map(b => {
         const slug  = b.slug || b.id || '';
         const title = esc(b.title || slug);
-        return `<a href="books/${slug}/index.html">${title}</a>`;
+        return `<a href="templates/${slug}/index.html">${title}</a>`;
       });
       links.push('<a href="/templates">All templates →</a>');
       footerTemplatesNav.innerHTML = links.join('');

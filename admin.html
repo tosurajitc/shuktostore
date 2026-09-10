@@ -721,7 +721,7 @@ select option{background:#1A2130;color:#F8F5EF}
       <div class="form-col">
         <label>"Templates" Link Text</label>
         <input type="text" id="s-nav-templates" value="Templates" placeholder="Templates"/>
-        <span class="field-hint">Second link — jumps to the catalog section on the homepage</span>
+        <span class="field-hint">Second link — goes to the /templates page</span>
       </div>
       <div class="form-col">
         <label>"About" Link Text</label>
@@ -1934,7 +1934,7 @@ function buildReview() {
           <span style="font-family:'Outfit',sans-serif;font-weight:700;color:${d.accent}">${d.price}</span>
         </div>
         <div style="font-size:0.875rem;color:rgba(248,245,239,0.5);margin-bottom:0.5rem">${d.subtitle}</div>
-        <div style="font-size:0.75rem;color:rgba(248,245,239,0.35)">by ${d.author} · /books/${d.slug}/ · accent ${d.accent}</div>
+        <div style="font-size:0.75rem;color:rgba(248,245,239,0.35)">by ${d.author} · /${d.productType === 'template' ? 'templates' : 'books'}/${d.slug}/ · accent ${d.accent}</div>
       </div>
     </div>
     <hr style="border-color:rgba(255,255,255,0.07);margin:1.25rem 0"/>

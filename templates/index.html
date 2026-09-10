@@ -380,7 +380,7 @@
     const tagBg       = tpl.tagBg  || ac.bg;
     const tagText     = tpl.tagColor || ac.text;
     const grad        = tpl.coverPh || ac.grad;
-    const salesPage   = tpl.salesPage || ('books/' + slug + '/index.html');
+    const salesPage   = tpl.salesPage || ('templates/' + slug + '/index.html');
 
     const coverInner = tpl.cover
       ? `<img src="${tpl.cover}" alt="${title} cover">`
@@ -465,7 +465,7 @@
       if (templates.length) {
         footerTpls.innerHTML = templates.map(b => {
           const s = b.slug || b.id || '';
-          return `<a href="/books/${s}/index.html">${esc(b.title || s)}</a>`;
+          return `<a href="/templates/${s}/index.html">${esc(b.title || s)}</a>`;
         }).join('');
       } else {
         footerTpls.innerHTML = '<a href="/templates">All templates</a>';
