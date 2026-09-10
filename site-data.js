@@ -322,23 +322,13 @@
         catalogGrid.appendChild(booksSection);
       }
 
-      /* Templates sub-section */
-      if (templatesOnly.length) {
-        const tmplSection = document.createElement('div');
-        tmplSection.className = 'catalog-subsection';
-        tmplSection.innerHTML = `<h3 class="catalog-subsection-heading">Templates</h3>`;
-        tmplSection.appendChild(buildGrid(templatesOnly, booksOnly.length));
-        catalogGrid.appendChild(tmplSection);
-      }
+      /* Templates are shown on /templates — not on the homepage catalog */
 
       if (catalogSubtitle) {
         const tail = hp.catalogSubtitle || DEFAULTS.catalogSubtitle;
-        if (books.length) {
+        if (booksOnly.length) {
           const nb = booksOnly.length;
-          const nt = templatesOnly.length;
-          const bookPart = nb ? `${nb} book${nb === 1 ? '' : 's'}` : '';
-          const tmplPart = nt ? `${nt} template${nt === 1 ? '' : 's'}` : '';
-          const countStr = [bookPart, tmplPart].filter(Boolean).join(' · ');
+          const countStr = `${nb} book${nb === 1 ? '' : 's'}`;
           catalogSubtitle.textContent = `${countStr}. ${tail}`;
         } else {
           catalogSubtitle.textContent = tail;
@@ -359,13 +349,15 @@
 
     /* ── Footer nav — Templates column ──────────────────────── */
     const footerTemplatesNav = document.getElementById('sp-footer-templates-nav');
-    if (footerTemplatesNav && books.length) {
+    if (footerTemplatesNav) {
       const templatesOnly = books.filter(b => b.productType === 'template');
-      footerTemplatesNav.innerHTML = templatesOnly.map(b => {
+      const links = templatesOnly.map(b => {
         const slug  = b.slug || b.id || '';
         const title = esc(b.title || slug);
         return `<a href="books/${slug}/index.html">${title}</a>`;
-      }).join('');
+      });
+      links.push('<a href="/templates">All templates →</a>');
+      footerTemplatesNav.innerHTML = links.join('');
     }
 
     /* ── Footer copyright year ───────────────────────────────── */

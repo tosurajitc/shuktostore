@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <title>Templates — Shukto Press</title>
+  <meta name="description" content="Ready-to-use, editable templates from Shukto Press. Professionally designed tools for AI agencies, freelancers, and solo operators." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* ── Page accent ── */
+    :root {
+      --tpl-accent:    #7C3AED;
+      --tpl-accent-hi: #8B5CF6;
+      --tpl-accent-lo: #5B21B6;
+    }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .tpl-hero {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 55%, #0A0620 100%);
+      color: var(--text-on-dark);
+    }
+    .tpl-hero .blob-1 { background: radial-gradient(circle, rgba(124,58,237,0.45) 0%, transparent 65%); }
+    .tpl-hero .blob-2 { background: radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 65%); }
+    .tpl-hero .blob-3 { background: radial-gradient(circle, rgba(30,10,70,0.4) 0%, transparent 65%); }
+
+    .tpl-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      border: 1px solid rgba(167,139,250,0.3);
+      background: rgba(124,58,237,0.12);
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #A78BFA;
+      margin-bottom: 1.5rem;
+    }
+    .tpl-hero-eyebrow .dot {
+      width: 6px; height: 6px;
+      background: #A78BFA;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse-dot 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.7); }
+    }
+
+    .tpl-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      line-height: 1.02;
+      color: var(--text-on-dark);
+      margin-bottom: 1.25rem;
+    }
+    .tpl-hero-title em {
+      font-style: normal;
+      color: #A78BFA;
+    }
+    .tpl-hero-sub {
+      font-size: clamp(1rem, 2vw, 1.1875rem);
+      color: rgba(248,245,239,0.65);
+      max-width: 500px;
+      line-height: 1.65;
+      margin-bottom: 2.25rem;
+    }
+
+    /* ── TEMPLATE CATALOG ─────────────────────────────────── */
+    .tpl-catalog-section {
+      background: var(--paper);
+      padding-block: var(--section-gap);
+    }
+
+    /* Catalog grid: 3 cols desktop, 2 tablet, 1 mobile */
+    .tpl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .tpl-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .tpl-grid { grid-template-columns: 1fr; } }
+
+    /* Template card — reuse home-book-card pattern */
+    .tpl-card {
+      background: var(--paper);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid var(--divider);
+      display: flex;
+      flex-direction: column;
+      transition: transform 300ms cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 300ms cubic-bezier(0.22,1,0.36,1),
+                  border-color 300ms ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .tpl-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
+      border-color: transparent;
+    }
+    .tpl-card-cover {
+      position: relative;
+      overflow: hidden;
+      padding: 1.25rem;
+      background: var(--paper);
+    }
+    .tpl-card-cover > div {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 0.625rem;
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .tpl-card-cover img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: contain;
+      border-radius: 0.625rem;
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .tpl-card:hover .tpl-card-cover > div,
+    .tpl-card:hover .tpl-card-cover img { transform: scale(1.04) translateY(-4px); }
+    .tpl-card-body {
+      padding: 1.375rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 0;
+    }
+
+    /* ── EMPTY STATE ───────────────────────────────────────── */
+    .tpl-empty {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--text-muted);
+    }
+    .tpl-empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    .tpl-empty h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .tpl-empty p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      max-width: 360px;
+      margin-inline: auto;
+    }
+
+    /* ── WHY TEMPLATES BAND ───────────────────────────────── */
+    .tpl-why-band {
+      background: #F7F4FF;
+      border-top: 1px solid rgba(124,58,237,0.1);
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+      padding-block: var(--section-gap-sm);
+    }
+    .tpl-why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 768px) { .tpl-why-grid { grid-template-columns: 1fr; } }
+    .tpl-why-item {
+      background: white;
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem 2rem;
+      transition: box-shadow 0.22s ease, transform 0.22s ease;
+    }
+    .tpl-why-item:hover {
+      box-shadow: 0 6px 28px rgba(124,58,237,0.12);
+      transform: translateY(-2px);
+    }
+    .tpl-why-item h3 {
+      font-family: var(--font-display);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #161616;
+      margin-bottom: 0.5rem;
+    }
+    .tpl-why-item p {
+      font-size: 0.875rem;
+      color: #555;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" style="color:var(--text-on-dark);"><img src="/favicon.png" alt="Shukto Press" />Shukto Press</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="/#catalog" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="/templates" style="color:#A78BFA;font-weight:600;">Templates</a>
+      <a href="/#about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="#tpl-catalog" class="nav-cta" style="background:rgba(124,58,237,0.25);border:1px solid rgba(167,139,250,0.3);color:var(--text-on-dark);">Browse Templates →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero tpl-hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);background-size:32px 32px;pointer-events:none;"></div>
+
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="tpl-hero-eyebrow">
+          <span class="dot"></span>
+          <span>Shukto Press — Templates</span>
+        </div>
+        <h1 class="tpl-hero-title">
+          Skip the blank<br/>
+          page. Start <em>working.</em>
+        </h1>
+        <p class="tpl-hero-sub">
+          Professionally designed, ready-to-use templates for AI agencies, freelancers, and solo operators. Download, open in your browser, and customise in minutes.
+        </p>
+        <div class="hero-cta-row">
+          <a href="#tpl-catalog" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 2rem;background:#7C3AED;color:white;border-radius:9999px;font-size:1rem;font-weight:700;transition:transform 200ms,box-shadow 200ms,filter 200ms;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 40px rgba(124,58,237,0.4)';" onmouseout="this.style.transform='';this.style.boxShadow='';">Browse templates →</a>
+          <a href="/" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 2rem;border:1.5px solid rgba(255,255,255,0.2);color:rgba(248,245,239,0.85);border-radius:9999px;font-size:1rem;font-weight:600;transition:border-color 200ms,background 200ms;">← Back to Books</a>
+        </div>
+      </div>
+      <div class="hero-visual" style="padding-block:2rem;">
+        <!-- Visual placeholder — replaced dynamically -->
+        <div id="tpl-hero-visual" style="display:flex;gap:1.25rem;align-items:flex-end;justify-content:center;">
+          <div style="width:160px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#0D0826 0%,#2D1B69 100%);box-shadow:0 20px 60px rgba(0,0,0,0.5);"></div>
+          <div style="width:180px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#160F35 0%,#4C1D95 100%);box-shadow:0 24px 80px rgba(0,0,0,0.55);transform:translateY(-12px);"></div>
+          <div style="width:155px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#0D0826 0%,#1E1060 100%);box-shadow:0 16px 48px rgba(0,0,0,0.45);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator">
+    <span>Scroll</span>
+    <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><rect x="1" y="1" width="10" height="18" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="5" r="2" fill="currentColor"><animate attributeName="cy" values="5;12;5" dur="2s" repeatCount="indefinite"/></circle></svg>
+  </div>
+</section>
+
+<!-- ── TEMPLATE CATALOG ───────────────────────────────────────── -->
+<section class="tpl-catalog-section" id="tpl-catalog">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">All templates</h2>
+      <p class="section-subtitle" id="tpl-catalog-subtitle">Ready-to-use, browser-editable templates — download once, customise forever.</p>
+    </div>
+    <div id="tpl-grid-container" style="margin-top:3rem;"></div>
+  </div>
+</section>
+
+<!-- ── WHY TEMPLATES ─────────────────────────────────────────── -->
+<section class="tpl-why-band">
+  <div class="container">
+    <div class="section-header centered reveal" style="margin-bottom:3rem;">
+      <h2 class="heading-2">Built to be used, not filed away</h2>
+    </div>
+    <div class="tpl-why-grid">
+      <div class="tpl-why-item reveal">
+        <h3>Open in any browser</h3>
+        <p>No special software required. Every template is a standalone HTML or PDF file — open it, edit the text, print or export.</p>
+      </div>
+      <div class="tpl-why-item reveal reveal-delay-1">
+        <h3>Professional by default</h3>
+        <p>Designed to look polished from the first page. Use them with clients on day one — no cleanup needed.</p>
+      </div>
+      <div class="tpl-why-item reveal reveal-delay-2">
+        <h3>Built for solo operators</h3>
+        <p>Each template solves a real operational problem for people running lean — not bloated team workflows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand" data-sp="publisher">Shukto Press</div>
+        <p class="footer-tagline" data-sp="tagline">Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links" id="tpl-footer-books-nav">
+          <!-- Populated dynamically -->
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Templates</div>
+        <nav class="footer-links" id="tpl-footer-templates-nav">
+          <!-- Populated dynamically -->
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <nav class="footer-links">
+          <a href="/#about">About</a>
+          <a href="mailto:shuktoai@gmail.com" data-sp="contact-email">shuktoai@gmail.com</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-sp="year">2025</span> <span data-sp="publisher">Shukto Press</span>. All rights reserved.</span>
+      <span>Practical tools for practical people.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../main.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── Fetch helpers ── */
+  async function fetchJSON(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+      return await res.json();
+    } catch (e) { return null; }
+  }
+  function loadLocal(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch { return fallback; }
+  }
+
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function fmtPrice(raw) {
+    const stripped = String(raw || '').replace(/^[\s$£€₹₩¥]+/, '').trim();
+    return stripped ? '₹' + stripped : '';
+  }
+
+  const accentPalette = [
+    { solid: '#7C3AED', bg: 'rgba(124,58,237,0.12)',  text: '#5B21B6', grad: 'linear-gradient(135deg,#0D0826 0%,#160F35 50%,#2D1B69 100%)' },
+    { solid: '#E8541A', bg: 'rgba(232,84,26,0.12)',   text: '#B83E10', grad: 'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
+    { solid: '#2FAE9D', bg: 'rgba(47,174,157,0.12)',  text: '#1a7a6e', grad: 'linear-gradient(135deg,#0A2A28 0%,#1B5E57 50%,#0E3A35 100%)' },
+    { solid: '#E05C8A', bg: 'rgba(224,92,138,0.12)',  text: '#A02050', grad: 'linear-gradient(135deg,#2A0A18 0%,#5A1535 50%,#200812 100%)' },
+    { solid: '#DD7C3F', bg: 'rgba(221,124,63,0.12)',  text: '#9A4B15', grad: 'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)' },
+  ];
+
+  function makeCard(tpl, i) {
+    const ac          = accentPalette[i % accentPalette.length];
+    const slug        = tpl.slug || tpl.id || '';
+    const title       = esc(tpl.title || 'Untitled');
+    const tag         = esc(tpl.tag || tpl.genre || 'Template');
+    const desc        = esc(tpl.desc || tpl.description || '');
+    const price       = fmtPrice(tpl.price);
+    const accentSolid = tpl.accentSolid || ac.solid;
+    const tagBg       = tpl.tagBg  || ac.bg;
+    const tagText     = tpl.tagColor || ac.text;
+    const grad        = tpl.coverPh || ac.grad;
+    const salesPage   = tpl.salesPage || ('books/' + slug + '/index.html');
+
+    const coverInner = tpl.cover
+      ? `<img src="${tpl.cover}" alt="${title} cover">`
+      : `<div style="background:${grad};"></div>`;
+
+    const card = document.createElement('div');
+    card.className = 'tpl-card';
+    card.innerHTML = `
+      <div class="tpl-card-cover">${coverInner}</div>
+      <div class="tpl-card-body">
+        ${tag ? `<span class="book-card-tag" style="background:${tagBg};color:${tagText};margin-bottom:0.75rem;">${tag}</span>` : ''}
+        <h3 class="book-card-title">${title}</h3>
+        ${desc ? `<p class="book-card-desc">${desc}</p>` : ''}
+        <div class="book-card-footer">
+          <span class="book-card-price" style="color:${accentSolid};">${price}</span>
+          <a href="${salesPage}" class="book-card-cta" style="background:${accentSolid};">View →</a>
+        </div>
+      </div>`;
+    return card;
+  }
+
+  function renderTemplates(books, settings) {
+    /* Publisher / tagline / year */
+    const pub     = (settings && settings.publisher) || 'Shukto Press';
+    const tagline = (settings && settings.tagline)   || 'Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.';
+    const email   = (settings && settings.email)     || 'shuktoai@gmail.com';
+    document.querySelectorAll('[data-sp="publisher"]').forEach(el => { el.textContent = pub; });
+    document.querySelectorAll('[data-sp="tagline"]').forEach(el => { el.textContent = tagline; });
+    document.querySelectorAll('[data-sp="contact-email"]').forEach(el => {
+      el.textContent = email;
+      if (el.tagName === 'A') el.href = 'mailto:' + email;
+    });
+    document.querySelectorAll('[data-sp="year"]').forEach(el => { el.textContent = new Date().getFullYear(); });
+
+    const templates = books.filter(b => b.productType === 'template');
+    const booksOnly = books.filter(b => b.productType !== 'template');
+
+    /* Subtitle */
+    const subtitleEl = document.getElementById('tpl-catalog-subtitle');
+    if (subtitleEl) {
+      subtitleEl.textContent = templates.length
+        ? templates.length + ' template' + (templates.length === 1 ? '' : 's') + ' — ready to download and use.'
+        : 'Ready-to-use, browser-editable templates — download once, customise forever.';
+    }
+
+    /* Template grid */
+    const container = document.getElementById('tpl-grid-container');
+    if (container) {
+      if (templates.length === 0) {
+        container.innerHTML = `
+          <div class="tpl-empty">
+            <div class="tpl-empty-icon">🗂️</div>
+            <h3>Templates coming soon</h3>
+            <p>We're building more templates right now. Check back soon or <a href="/" style="color:var(--tpl-accent);">browse the books</a>.</p>
+          </div>`;
+      } else {
+        const grid = document.createElement('div');
+        grid.className = 'tpl-grid';
+        templates.forEach((tpl, i) => {
+          const cell = document.createElement('div');
+          cell.className = 'reveal' + (i > 0 ? ' reveal-delay-' + Math.min(i, 4) : '');
+          cell.appendChild(makeCard(tpl, i));
+          grid.appendChild(cell);
+          if (window._spRevealObserver) window._spRevealObserver.observe(cell);
+        });
+        container.appendChild(grid);
+      }
+    }
+
+    /* Footer — books */
+    const footerBooks = document.getElementById('tpl-footer-books-nav');
+    if (footerBooks && booksOnly.length) {
+      footerBooks.innerHTML = booksOnly.map(b => {
+        const s = b.slug || b.id || '';
+        return `<a href="/books/${s}/index.html">${esc(b.title || s)}</a>`;
+      }).join('');
+    }
+
+    /* Footer — templates */
+    const footerTpls = document.getElementById('tpl-footer-templates-nav');
+    if (footerTpls) {
+      if (templates.length) {
+        footerTpls.innerHTML = templates.map(b => {
+          const s = b.slug || b.id || '';
+          return `<a href="/books/${s}/index.html">${esc(b.title || s)}</a>`;
+        }).join('');
+      } else {
+        footerTpls.innerHTML = '<a href="/templates">All templates</a>';
+      }
+    }
+  }
+
+  async function init() {
+    const [books, settings] = await Promise.all([
+      fetchJSON('/api/books'),
+      fetchJSON('/api/settings'),
+    ]);
+
+    if (books !== null || settings !== null) {
+      renderTemplates(books || [], settings || {});
+      if (books)    localStorage.setItem('sp_books',    JSON.stringify(books));
+      if (settings) localStorage.setItem('sp_settings', JSON.stringify(settings));
+    } else {
+      renderTemplates(
+        loadLocal('sp_books',    []),
+        loadLocal('sp_settings', {})
+      );
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
