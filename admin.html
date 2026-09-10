@@ -285,10 +285,18 @@ select option{background:#1A2130;color:#F8F5EF}
   <!-- ── STEP 1: Identity ── -->
   <div id="step-1" class="step-panel">
     <div class="card">
-      <div class="card-title">📖 Book Identity</div>
+      <div class="card-title">📦 Product Identity</div>
       <div class="form-grid">
         <div class="form-col">
-          <label class="required">Book Title</label>
+          <label class="required">Product Type</label>
+          <select id="f-product-type">
+            <option value="book">Book</option>
+            <option value="template">Template</option>
+          </select>
+          <span class="field-hint">Templates are digital files such as Notion systems, spreadsheets, and Canva kits.</span>
+        </div>
+        <div class="form-col">
+          <label class="required">Product Title</label>
           <input type="text" id="f-title" placeholder="e.g. The One-Person Company" oninput="autoSlug()"/>
         </div>
         <div class="form-col">
@@ -306,7 +314,7 @@ select option{background:#1A2130;color:#F8F5EF}
         <div class="form-col">
           <label class="required">URL Slug</label>
           <input type="text" id="f-slug" placeholder="e.g. one-person-company"/>
-          <span class="field-hint">Used in URL: /books/<strong id="slug-preview">your-slug</strong>/</span>
+          <span class="field-hint">Used in URL: /<strong id="slug-type-preview">books</strong>/<strong id="slug-preview">your-slug</strong>/</span>
         </div>
         <div class="form-col">
           <label>Audience (one-liner)</label>
@@ -1433,6 +1441,7 @@ function autoSlug() {
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     slugField.value = slug;
     document.getElementById('slug-preview').textContent = slug || 'your-slug';
+    document.getElementById('slug-type-preview').textContent = document.getElementById('f-product-type').value === 'template' ? 'templates' : 'books';
     document.getElementById('cover-save-path').textContent = `assets/covers/${slug || 'your-slug'}.jpg`;
   }
 }
@@ -1440,6 +1449,9 @@ document.getElementById('f-slug').addEventListener('input', function() {
   this.dataset.manuallyEdited = 'true';
   document.getElementById('slug-preview').textContent = this.value || 'your-slug';
   document.getElementById('cover-save-path').textContent = `assets/covers/${this.value || 'your-slug'}.jpg`;
+});
+document.getElementById('f-product-type').addEventListener('change', function() {
+  document.getElementById('slug-type-preview').textContent = this.value === 'template' ? 'templates' : 'books';
 });
 
 /* ── COLOR HELPERS ──────────────────────────────────────────── */
@@ -1674,6 +1686,7 @@ function collectFormData() {
 
   return {
     id: editingId || (document.getElementById('f-slug').value || Date.now().toString()),
+    productType: document.getElementById('f-product-type').value || 'book',
     title: document.getElementById('f-title').value.trim(),
     subtitle: document.getElementById('f-subtitle').value.trim(),
     author: document.getElementById('f-author').value.trim(),
@@ -1715,12 +1728,14 @@ function collectFormData() {
     pricingFeatures: document.getElementById('f-pricing-features').value.split(',').map(s=>s.trim()).filter(Boolean),
     razorpay: document.getElementById('f-razorpay').value.trim() || `RAZORPAY_PAYMENT_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`,
     intlPayment: document.getElementById('f-intl-payment').value.trim() || '',
-    download: document.getElementById('f-download').value.trim() || `EBOOK_DOWNLOAD_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`
+    download: document.getElementById('f-download').value.trim() || `EBOOK_DOWNLOAD_LINK_${(document.getElementById('f-slug').value||'BOOK').toUpperCase().replace(/-/g,'_')}`,
+    previewImages: _previewImages.filter(img => img.url).map(img => img.url)
   };
 }
 
 /* ── POPULATE FORM FROM BOOK ────────────────────────────────── */
 function populateForm(book) {
+  document.getElementById('f-product-type').value = book.productType || 'book';
   document.getElementById('f-title').value = book.title || '';
   document.getElementById('f-subtitle').value = book.subtitle || '';
   document.getElementById('f-author').value = book.author || '';
@@ -1827,6 +1842,7 @@ function startNewBook() {
   setSaveEditsBtnsVisible(false);
   document.getElementById('form-view-title').textContent = 'Add New Book';
   // Reset form
+  document.getElementById('f-product-type').value = 'book';
   ['f-title','f-subtitle','f-author','f-category','f-audience-line','f-slug','f-positioning',
    'f-pull-quote','f-promise-eyebrow','f-promise-heading','f-promise-body',
    'f-promise-card-icon-1','f-promise-card-title-1','f-promise-card-body-1',
@@ -1838,6 +1854,7 @@ function startNewBook() {
     .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('f-slug').dataset.manuallyEdited = '';
   document.getElementById('slug-preview').textContent = 'your-slug';
+  document.getElementById('slug-type-preview').textContent = 'books';
   document.getElementById('f-accent').value = '#B8874B';
   document.getElementById('f-accent-hex').value = '#B8874B';
   document.getElementById('f-accent-hi').value = '#F07040';
@@ -1950,7 +1967,7 @@ async function saveBookEdits() {
       const r = await fetch('/api/books/write-files', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug: d.slug, salesHtml, thanksHtml })
+        body: JSON.stringify({ slug: d.slug, type: d.productType, salesHtml, thanksHtml })
       });
       if (r.ok) {
         toast(`✓ Saved & pages written to books/${d.slug}/`, '📄', 4000);
@@ -1999,7 +2016,7 @@ function renderBookList() {
         <div class="book-list-title">${esc(b.title)}
           <span class="book-list-tag" style="background:${b.accent}22;color:${b.accent}">${esc(b.category)}</span>
         </div>
-        <div class="book-list-meta">by ${esc(b.author)} · /books/${esc(b.slug)}/ · ${esc(b.price)}</div>
+        <div class="book-list-meta">${b.productType === 'template' ? 'Template' : 'Book'} · ${b.author ? 'by ' + esc(b.author) + ' · ' : ''}/${b.productType === 'template' ? 'templates' : 'books'}/${esc(b.slug)}/ · ${esc(b.price)}</div>
       </div>
       <div class="book-list-actions">
         <button class="btn btn-secondary" style="padding:0.375rem 0.875rem;font-size:0.8125rem" onclick="editBook('${b.id}')">Edit</button>
@@ -2162,11 +2179,11 @@ function onGenBookChange() {
     <div style="display:grid;gap:0.625rem;font-size:0.875rem">
       <div style="display:flex;gap:0.75rem;align-items:center;padding:0.75rem;background:rgba(255,255,255,0.04);border-radius:0.5rem">
         <span style="font-size:1.25rem">📄</span>
-        <div><strong style="color:#F8F5EF">Sales page</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">books/${_genBook.slug}/index.html</code></div>
+        <div><strong style="color:#F8F5EF">Sales page</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">${_genBook.productType === 'template' ? 'templates' : 'books'}/${_genBook.slug}/index.html</code></div>
       </div>
       <div style="display:flex;gap:0.75rem;align-items:center;padding:0.75rem;background:rgba(255,255,255,0.04);border-radius:0.5rem">
         <span style="font-size:1.25rem">✅</span>
-        <div><strong style="color:#F8F5EF">Thank-you page</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">books/${_genBook.slug}/thank-you.html</code></div>
+        <div><strong style="color:#F8F5EF">Thank-you page</strong> → save as <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px">${_genBook.productType === 'template' ? 'templates' : 'books'}/${_genBook.slug}/thank-you.html</code></div>
       </div>
       ${_genBook.cover ? `<div style="display:flex;gap:0.75rem;align-items:center;padding:0.75rem;background:rgba(255,255,255,0.04);border-radius:0.5rem">
         <span style="font-size:1.25rem">🖼️</span>
@@ -2198,12 +2215,12 @@ function copyTab(name) {
 function downloadSalesPage() {
   if (!_genBook) return;
   dlText(_genSalesHTML, 'index.html', 'text/html');
-  toast(`Saved: books/${_genBook.slug}/index.html`, '⬇');
+  toast(`Saved: ${_genBook.productType === 'template' ? 'templates' : 'books'}/${_genBook.slug}/index.html`, '⬇');
 }
 function downloadThanksPage() {
   if (!_genBook) return;
   dlText(_genThanksHTML, 'thank-you.html', 'text/html');
-  toast(`Saved: books/${_genBook.slug}/thank-you.html`, '⬇');
+  toast(`Saved: ${_genBook.productType === 'template' ? 'templates' : 'books'}/${_genBook.slug}/thank-you.html`, '⬇');
 }
 function downloadCover() {
   if (!_genBook || !_genBook.cover) return;
