@@ -35,6 +35,13 @@ const R2_FILE_MAP = {
   'money-sorted':         'Money_Sorted.pdf',
   'ai-with-sayuj':        'AI_Handbook_for_Kids.pdf',
   'ai-handbook-for-kids': 'AI_Handbook_for_Kids.pdf',
+  // AI Agency Ops Pack — delivered as a ZIP containing all 4 HTML templates
+  'ai-agency-ops-pack':               'AI_Agency_Ops_Pack.zip',
+  // Individual templates (sold separately)
+  'onboarding-template':              'AI_Agency_Ops_Pack.zip',
+  'prompt-library-template':          'AI_Agency_Ops_Pack.zip',
+  'automation-tracker-template':      'AI_Agency_Ops_Pack.zip',
+  'project-dashboard-template':       'AI_Agency_Ops_Pack.zip',
 };
 
 /* ── GET /api/download/:slug ─────────────────────────────────── */

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../../favicon.png" />
+  <title>AI Agency Operations Pack — Shukto Press</title>
+  <meta name="description" content="4 ready-to-use, editable PDF templates for AI agencies: Client Onboarding, Prompt Library, Automation Tracker, and Project Dashboard. Get the complete ops pack or buy individual templates." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    /* ── Book-specific accent overrides ── */
+    :root {
+      --accent: #7C3AED;
+      --accent-hi: #8B5CF6;
+    }
+
+    /* ── HERO ─────────────────────────── */
+    .b4-hero {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 50%, #0A0620 100%);
+      color: var(--text-on-dark);
+    }
+    .b4-hero .blob-1 { background: radial-gradient(circle, rgba(124,58,237,0.45) 0%, transparent 65%); }
+    .b4-hero .blob-2 { background: radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 65%); }
+    .b4-hero .blob-3 { background: radial-gradient(circle, rgba(30,10,70,0.4) 0%, transparent 65%); }
+
+    .hero-eyebrow-b4 {
+      background: rgba(124,58,237,0.15);
+      border-color: rgba(124,58,237,0.3);
+      color: #A78BFA;
+    }
+    .b4-btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      background: #7C3AED; color: white;
+      border-radius: 9999px; font-weight: 700; font-size: 1.0625rem;
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 200ms cubic-bezier(0.16,1,0.3,1),
+                  filter 200ms;
+    }
+    .b4-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(124,58,237,0.45);
+      filter: brightness(1.1);
+    }
+    .b4-btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      border: 1.5px solid rgba(255,255,255,0.2); color: rgba(248,245,239,0.85);
+      border-radius: 9999px; font-weight: 600; font-size: 1.0625rem;
+      transition: border-color 200ms, background 200ms;
+    }
+    .b4-btn-ghost:hover {
+      border-color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .accent-b4 { color: #7C3AED; }
+
+    /* ── PROBLEM ──────────────────────── */
+    .problem-section { background: var(--paper-warm); padding-block: var(--section-gap); }
+    .problem-pull-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      border-left: 4px solid #7C3AED;
+      padding-left: 2rem;
+      color: var(--ink);
+    }
+
+    /* ── PROMISE BAND ─────────────────── */
+    .promise-band-b4 {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 100%);
+      color: var(--text-on-dark);
+      padding-block: var(--section-gap);
+      position: relative;
+      overflow: hidden;
+    }
+    .promise-band-b4::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* ── TEMPLATE CARDS ───────────────── */
+    .template-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .template-card {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: transform var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out);
+    }
+    .template-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .template-card-thumb {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .template-card-body { padding: 1.5rem; }
+    .template-card-body h3 {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.375rem;
+    }
+    .template-card-body p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .template-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── WHAT'S INSIDE BENTO ──────────── */
+    .bento-b4 .bento-icon { background: rgba(124,58,237,0.1); }
+
+    /* ── PRICING ──────────────────────── */
+    .pricing-section { background: var(--paper); padding-block: var(--section-gap); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .pricing-card-sm {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out);
+    }
+    .pricing-card-sm:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .pricing-card-sm .template-num {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7C3AED;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-card-sm h3 {
+      font-family: var(--font-display);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-card-sm .price-sm {
+      font-family: var(--font-display);
+      font-size: 1.375rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #7C3AED;
+      margin-bottom: 0.75rem;
+    }
+    .pricing-card-sm p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+    .pricing-card-sm .mini-btn {
+      display: block;
+      text-align: center;
+      padding: 0.625rem 1rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.8125rem;
+      background: rgba(124,58,237,0.1);
+      color: #7C3AED;
+      transition: background 200ms;
+    }
+    .pricing-card-sm .mini-btn:hover { background: rgba(124,58,237,0.2); }
+
+    .pricing-card-pack {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 100%);
+      border: 2px solid rgba(124,58,237,0.5);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      color: var(--text-on-dark);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      grid-column: span 1;
+    }
+    .pack-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #7C3AED;
+      color: white;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 1rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .pack-price-display {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: white;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .pack-original-price {
+      font-size: 0.875rem;
+      color: rgba(248,245,239,0.45);
+      text-decoration: line-through;
+      margin-bottom: 1rem;
+    }
+
+    /* ── FINAL CTA ────────────────────── */
+    .final-cta-b4 {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 100%);
+      color: var(--text-on-dark);
+    }
+    .final-cta-b4 .blob-1 { background: radial-gradient(circle, rgba(124,58,237,0.35) 0%, transparent 65%); }
+    .final-cta-b4 .blob-2 { background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 65%); }
+    .final-cta-b4 .blob-3 { display: none; }
+
+    /* ── AUTHOR CARD ──────────────────── */
+    .author-card {
+      display: flex; gap: 2rem; align-items: flex-start;
+      background: white; border: 1px solid var(--divider);
+      border-radius: var(--radius-xl); padding: 2.5rem;
+    }
+    .author-avatar {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: linear-gradient(135deg, #7C3AED, #8B5CF6);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 2.25rem; color: white; flex-shrink: 0;
+    }
+
+    /* ── TWO-COL ──────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; }
+      .template-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-sp-slug="ai-agency-ops-pack">
+
+<!-- NAV -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);" data-sp="publisher"><img src="../../favicon.png" alt="Shukto Press" />Shukto Press</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="../../index.html#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="RAZORPAY_PAYMENT_LINK_AI_AGENCY_OPS_PACK" class="nav-cta" style="background:rgba(124,58,237,0.25);border:1px solid rgba(124,58,237,0.4);color:var(--text-on-dark);" data-sp-razorpay>Get the Pack →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────────────────── -->
+<section class="hero b4-hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid" style="gap:4rem;">
+      <div class="hero-text">
+        <div class="hero-eyebrow hero-eyebrow-b4">
+          <span>Templates &amp; Tools</span>
+          <span>·</span>
+          <span>AI Agency</span>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:clamp(2.25rem,5.5vw,4.5rem);font-weight:800;letter-spacing:-0.045em;line-height:1.02;color:white;margin-bottom:1.25rem;" data-sp-title>
+          AI Agency<br/>Operations Pack
+        </h1>
+        <p style="font-family:var(--font-display);font-size:clamp(1rem,2vw,1.375rem);font-weight:500;color:rgba(248,245,239,0.65);letter-spacing:-0.01em;margin-bottom:1.5rem;line-height:1.4;" data-sp-subtitle>
+          4 ready-to-use, print-to-PDF templates to run your AI agency like a pro from day one.
+        </p>
+        <p style="font-size:1.0625rem;color:rgba(248,245,239,0.6);max-width:500px;line-height:1.7;margin-bottom:2.25rem;" data-sp-positioning>
+          Stop rebuilding your operations from scratch every project. This pack gives you the exact templates used by productised AI agencies — covering client onboarding, prompt management, automation tracking, and project reporting — all editable and print-ready.
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="RAZORPAY_PAYMENT_LINK_AI_AGENCY_OPS_PACK" class="b4-btn-primary" data-sp-razorpay>Get the Full Pack — <span data-sp-price>₹XX</span> →</a>
+          <a href="#templates" class="b4-btn-ghost">See what's included</a>
+        </div>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">4 editable HTML templates · Print to PDF · Instant delivery</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-wrap" style="padding:2rem 2rem 3rem;">
+          <!-- Cover placeholder -->
+          <div class="mockup-cover" data-tilt data-base-rotation="-3" data-sp-cover
+               style="--cover-rotation:-3deg;width:280px;height:373px;background:linear-gradient(145deg,#0D0826,#160F35,#2D1B69);border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;box-shadow:var(--shadow-float);transform:rotate(-3deg);">
+            <div style="margin-bottom:auto;padding-top:1.5rem;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+                <div style="background:rgba(124,58,237,0.3);border:1px solid rgba(124,58,237,0.4);border-radius:6px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;">📋</div>
+                <div style="background:rgba(124,58,237,0.3);border:1px solid rgba(124,58,237,0.4);border-radius:6px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;">📚</div>
+                <div style="background:rgba(124,58,237,0.3);border:1px solid rgba(124,58,237,0.4);border-radius:6px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;">⚙️</div>
+                <div style="background:rgba(124,58,237,0.3);border:1px solid rgba(124,58,237,0.4);border-radius:6px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;">📊</div>
+              </div>
+            </div>
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;color:#A78BFA;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.375rem;">Shukto Press</div>
+            <div style="font-family:var(--font-display);font-size:1.125rem;font-weight:800;color:white;line-height:1.2;margin-bottom:0.25rem;">AI Agency Operations Pack</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);">4 Templates · Print-to-PDF</div>
+            <div style="margin-top:1rem;width:40px;height:2px;background:#7C3AED;border-radius:1px;"></div>
+          </div>
+          <!-- Floating badge -->
+          <div style="position:absolute;bottom:1.5rem;right:-1rem;background:white;border-radius:var(--radius-md);padding:0.75rem 1rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:var(--ink);white-space:nowrap;">
+            <span style="color:#7C3AED;font-size:1rem;">✓</span> Editable &amp; print-ready
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ─────────────────────────────────────────────────── -->
+<section class="problem-section">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <p class="problem-pull-quote">
+          "I spend half my onboarding time recreating the same documents from scratch — there has to be a better way to run client projects."
+        </p>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <h2 class="heading-3" style="margin-bottom:1.25rem;">The operational gap no one talks about</h2>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;">Most AI agency advice is about landing clients or building automations. Almost none of it covers the operational layer — the actual documents, trackers, and templates you need to run projects without chaos.</p>
+        <p class="body-base" style="color:var(--text-secondary);">The result: agencies reinvent the same forms and dashboards for every new client, wasting hours that should go into delivery. This pack eliminates that entirely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMISE BAND ────────────────────────────────────────────── -->
+<section class="promise-band-b4">
+  <div class="container">
+    <div class="two-col" style="align-items:center;">
+      <div class="reveal">
+        <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#A78BFA;margin-bottom:1rem;">The promise</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.875rem,4vw,3rem);font-weight:800;letter-spacing:-0.035em;line-height:1.1;margin-bottom:1.5rem;">
+          From first client call<br/>to polished delivery — <br/>in one pack.
+        </h2>
+        <p style="font-size:1.0625rem;color:var(--text-on-dark-muted);line-height:1.7;">
+          Every template is pre-structured, professionally designed, and editable directly in your browser. Open, fill in, print to PDF. No design tools needed.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-2" style="display:grid;gap:1rem;">
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">📋</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Client Onboarding Brief</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Capture every detail from day one — client info, goals, scope, checklist, sign-off</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">📚</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Prompt Library</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Centralise your best prompts — indexed, categorised, version-controlled</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">⚙️</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Automation Tracker</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Track every live automation — status, cost, ROI, and ownership in one landscape sheet</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">📊</span>
+          <div>
+            <div style="font-family:var(--font-display);font-weight:700;margin-bottom:0.25rem;color:white;">Project Dashboard</div>
+            <div style="font-size:0.875rem;color:rgba(248,245,239,0.6);">Client-facing weekly status report with KPIs, milestones, risks, and actions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEMPLATE PREVIEWS ───────────────────────────────────────── -->
+<section class="section" id="templates" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">What's inside each template</h2>
+      <p class="section-subtitle">Every template comes as a standalone, browser-editable HTML file. Fill, print, save as PDF.</p>
+    </div>
+
+    <div class="template-grid">
+      <!-- Template 1 -->
+      <div class="template-card reveal">
+        <div class="template-card-thumb" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:0.5rem;">📋</div>
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#6D28D9;">Template 01</div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <h3>Client Onboarding Brief</h3>
+          <p>A 2-page professional client brief covering company info, goals, scope of work, deliverables table, onboarding checklist, risk notes, and a signature sign-off block.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1rem;">
+            <span class="template-tag" style="background:#EDE9FE;color:#6D28D9;">2 pages</span>
+            <span class="template-tag" style="background:#F3F4F6;color:#374151;">Portrait A4</span>
+            <span class="template-tag" style="background:#EDE9FE;color:#6D28D9;">Editable</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">✓ Client info &amp; goals &nbsp;·&nbsp; ✓ Scope table &nbsp;·&nbsp; ✓ Onboarding checklist &nbsp;·&nbsp; ✓ Sign-off blocks</div>
+        </div>
+      </div>
+
+      <!-- Template 2 -->
+      <div class="template-card reveal reveal-delay-1">
+        <div class="template-card-thumb" style="background:linear-gradient(135deg,#CCFBF1,#99F6E4);">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:0.5rem;">📚</div>
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#0D9488;">Template 02</div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <h3>Prompt Library</h3>
+          <p>A 2-page prompt master reference with an index table, category tags, usage guidelines, and detailed prompt cards — each with prompt text, variables, model recommendation, and quality rating.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1rem;">
+            <span class="template-tag" style="background:#CCFBF1;color:#0D9488;">2 pages</span>
+            <span class="template-tag" style="background:#F3F4F6;color:#374151;">Portrait A4</span>
+            <span class="template-tag" style="background:#CCFBF1;color:#0D9488;">Expandable</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">✓ Prompt index &nbsp;·&nbsp; ✓ Category tags &nbsp;·&nbsp; ✓ Prompt detail cards &nbsp;·&nbsp; ✓ Usage guidelines</div>
+        </div>
+      </div>
+
+      <!-- Template 3 -->
+      <div class="template-card reveal reveal-delay-2">
+        <div class="template-card-thumb" style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:0.5rem;">⚙️</div>
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#1D4ED8;">Template 03</div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <h3>Automation Tracker</h3>
+          <p>A landscape A4 master tracker for all your automations — with status pills, complexity ratings, tool stack, hours saved, monthly cost, and a full ROI summary section at the bottom.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1rem;">
+            <span class="template-tag" style="background:#DBEAFE;color:#1D4ED8;">1 page</span>
+            <span class="template-tag" style="background:#F3F4F6;color:#374151;">Landscape A4</span>
+            <span class="template-tag" style="background:#DBEAFE;color:#1D4ED8;">ROI Built-in</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">✓ Status tracking &nbsp;·&nbsp; ✓ ROI summary &nbsp;·&nbsp; ✓ Tool &amp; cost log &nbsp;·&nbsp; ✓ Complexity ratings</div>
+        </div>
+      </div>
+
+      <!-- Template 4 -->
+      <div class="template-card reveal reveal-delay-3">
+        <div class="template-card-thumb" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:0.5rem;">📊</div>
+            <div style="font-family:var(--font-display);font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#B45309;">Template 04</div>
+          </div>
+        </div>
+        <div class="template-card-body">
+          <h3>Project Dashboard</h3>
+          <p>A 2-page client-facing weekly project status report with KPI cards, deliverables table, milestones timeline, risk register, and this-week action items split between agency and client.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:1rem;">
+            <span class="template-tag" style="background:#FEF3C7;color:#B45309;">2 pages</span>
+            <span class="template-tag" style="background:#F3F4F6;color:#374151;">Portrait A4</span>
+            <span class="template-tag" style="background:#FEF3C7;color:#B45309;">Client-facing</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">✓ KPI strip &nbsp;·&nbsp; ✓ Milestone timeline &nbsp;·&nbsp; ✓ Risk register &nbsp;·&nbsp; ✓ Action splits</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S INSIDE — BENTO ──────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Everything you need, nothing you don't</h2>
+    </div>
+
+    <div class="bento bento-b4">
+      <div class="bento-cell span-3 reveal">
+        <div class="bento-icon">📋</div>
+        <div class="bento-title">Complete client intake system</div>
+        <div class="bento-body">From first contact to signed brief — the onboarding template captures every detail, scope item, and checklist task in one professional document.</div>
+      </div>
+      <div class="bento-cell span-3 reveal reveal-delay-1">
+        <div class="bento-icon">📚</div>
+        <div class="bento-title">Reusable prompt asset library</div>
+        <div class="bento-body">Stop re-writing the same prompts. The prompt library template keeps your best-performing prompts indexed, versioned, and ready to deploy across every client engagement.</div>
+      </div>
+      <div class="bento-cell span-2 reveal">
+        <div class="bento-icon">📈</div>
+        <div class="bento-title">ROI visibility out of the box</div>
+        <div class="bento-body">The automation tracker calculates hours saved and ROI automatically. Show clients and stakeholders the real value of every workflow you build.</div>
+      </div>
+      <div class="bento-cell span-2 reveal reveal-delay-1">
+        <div class="bento-icon">🎯</div>
+        <div class="bento-title">Client-safe reporting</div>
+        <div class="bento-body">The project dashboard is designed to share directly with clients — professional, clear, and focused on what they care about: progress, blockers, and next actions.</div>
+      </div>
+      <div class="bento-cell span-2 reveal reveal-delay-2">
+        <div class="bento-icon">⚡</div>
+        <div class="bento-title">Browser-editable, no tools needed</div>
+        <div class="bento-body">Every template opens in any modern browser. Click a field, type your content, and print to PDF. No Canva, no Figma, no subscriptions.</div>
+      </div>
+      <div class="bento-cell span-3 reveal">
+        <div class="bento-icon">🔄</div>
+        <div class="bento-title">Use across every client, every project</div>
+        <div class="bento-body">Templates are designed to be re-used. Set up a new onboarding brief in minutes, not hours. Keep your prompt library growing sprint over sprint.</div>
+      </div>
+      <div class="bento-cell span-3 reveal reveal-delay-1">
+        <div class="bento-icon">🖨️</div>
+        <div class="bento-title">Print-to-PDF in one click</div>
+        <div class="bento-body">Each template has a built-in "Save as PDF" button at the top. Print-optimised layouts ensure everything looks sharp whether you're emailing or presenting.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STAT STRIP ─────────────────────────────────────────────── -->
+<section class="stat-strip">
+  <div class="container">
+    <div class="stat-grid">
+      <div class="stat-item reveal">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Professional templates</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Pages of structured content</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Tools or subscriptions needed</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Times you can reuse them</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO IS IT FOR ──────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Is this pack for you?</h2>
+    </div>
+    <div class="for-grid">
+      <div class="for-card for-card-yes reveal">
+        <div class="for-card-title">
+          <span>✅</span> This is for you if…
+        </div>
+        <ul class="for-list">
+          <li>You run an AI agency (solo or small team) and manage client projects</li>
+          <li>You're tired of recreating onboarding docs and trackers for every new client</li>
+          <li>You want professional-looking deliverables without hiring a designer</li>
+          <li>You're building an AI productised service and want to systematise your ops</li>
+          <li>You want a single place to manage prompts across all your client work</li>
+          <li>You're just starting your AI agency and want a solid operational foundation</li>
+        </ul>
+      </div>
+      <div class="for-card for-card-no reveal reveal-delay-2">
+        <div class="for-card-title">
+          <span style="color:#DC2626;">✕</span> This is not for you if…
+        </div>
+        <ul class="for-list">
+          <li>You need a full project management software (this is print-first, not a live PM tool)</li>
+          <li>You want templates pre-filled with your specific niche data (all content is editable placeholders)</li>
+          <li>You're looking for a business strategy course or AI training material</li>
+          <li>You already have a mature, established ops system that works well</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AUTHOR ─────────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container" style="max-width:860px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Built by someone who runs an AI agency</h2>
+    </div>
+    <div class="author-card reveal">
+      <div class="author-avatar" data-sp-author-avatar>SC</div>
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.5rem;" data-sp-author-name>Surajit Chatterjee</h3>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;" data-sp-author-bio>AI architect, IIM alumnus, and founder who has built workflow automation, multi-agent systems, and AI-powered productised services for clients across industries. These templates came directly out of his own agency ops — iterated over dozens of real client engagements until every field earned its place on the page.</p>
+        <p class="body-sm" style="color:var(--text-muted);">Publisher of Shukto Press · Author of The One-Person Company</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ────────────────────────────────────────────────── -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <h2 class="heading-2">Get the pack or buy individually</h2>
+      <p class="section-subtitle">All templates are delivered instantly as downloadable HTML files. Open in browser, edit, print to PDF.</p>
+    </div>
+
+    <div class="pricing-grid reveal">
+
+      <!-- Individual Template 1 -->
+      <div class="pricing-card-sm">
+        <div class="template-num">Template 01</div>
+        <h3>Client Onboarding Brief</h3>
+        <div class="price-sm">₹149</div>
+        <p>2-page editable onboarding document covering all key client details, scope, checklist, and sign-off.</p>
+        <a href="RAZORPAY_PAYMENT_LINK_ONBOARDING_TEMPLATE" class="mini-btn">Get this template →</a>
+      </div>
+
+      <!-- Individual Template 2 -->
+      <div class="pricing-card-sm">
+        <div class="template-num">Template 02</div>
+        <h3>Prompt Library</h3>
+        <div class="price-sm">₹149</div>
+        <p>2-page prompt master reference with index, category tags, detail cards, and usage guidelines.</p>
+        <a href="RAZORPAY_PAYMENT_LINK_PROMPT_LIBRARY_TEMPLATE" class="mini-btn">Get this template →</a>
+      </div>
+
+      <!-- Individual Template 3 -->
+      <div class="pricing-card-sm">
+        <div class="template-num">Template 03</div>
+        <h3>Automation Tracker</h3>
+        <div class="price-sm">₹149</div>
+        <p>Landscape A4 tracker for all your automations — status, cost, ROI, and ownership in one view.</p>
+        <a href="RAZORPAY_PAYMENT_LINK_AUTOMATION_TRACKER_TEMPLATE" class="mini-btn">Get this template →</a>
+      </div>
+
+      <!-- Individual Template 4 -->
+      <div class="pricing-card-sm">
+        <div class="template-num">Template 04</div>
+        <h3>Project Dashboard</h3>
+        <div class="price-sm">₹149</div>
+        <p>2-page client-facing status report with KPIs, milestones, risk register, and weekly actions.</p>
+        <a href="RAZORPAY_PAYMENT_LINK_PROJECT_DASHBOARD_TEMPLATE" class="mini-btn">Get this template →</a>
+      </div>
+
+      <!-- THE PACK -->
+      <div class="pricing-card-pack reveal reveal-delay-2">
+        <div class="pack-badge">Best Value</div>
+        <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A78BFA;margin-bottom:0.5rem;">Complete Pack</div>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:700;letter-spacing:-0.02em;line-height:1.3;margin-bottom:0.75rem;color:white;">AI Agency Operations Pack</h3>
+        <div class="pack-price-display" data-sp-price>₹399</div>
+        <div class="pack-original-price">All 4 individually: ₹596</div>
+        <ul style="list-style:none;display:grid;gap:0.375rem;margin-bottom:1.5rem;flex:1;">
+          <li style="font-size:0.8125rem;color:rgba(248,245,239,0.75);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">✓</span> Client Onboarding Brief</li>
+          <li style="font-size:0.8125rem;color:rgba(248,245,239,0.75);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">✓</span> Prompt Library</li>
+          <li style="font-size:0.8125rem;color:rgba(248,245,239,0.75);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">✓</span> Automation Tracker</li>
+          <li style="font-size:0.8125rem;color:rgba(248,245,239,0.75);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">✓</span> Project Dashboard</li>
+          <li style="font-size:0.8125rem;color:rgba(248,245,239,0.75);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:#A78BFA;flex-shrink:0;">✓</span> All future updates</li>
+        </ul>
+        <a href="RAZORPAY_PAYMENT_LINK_AI_AGENCY_OPS_PACK" class="b4-btn-primary" style="font-size:0.9375rem;padding:0.875rem 1.5rem;justify-content:center;" data-sp-razorpay>
+          Get the Full Pack →
+        </a>
+        <p style="margin-top:0.75rem;font-size:0.6875rem;color:rgba(248,245,239,0.4);text-align:center;">Secure checkout · Instant delivery · 30-day refund guarantee</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);padding-top:var(--section-gap-sm);">
+  <div class="container" style="max-width:760px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">FAQ</h2>
+    </div>
+    <div class="faq-list" style="--accent:#7C3AED;">
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">What format are the templates?</button>
+        <div class="faq-a" hidden>
+          Each template is a standalone HTML file. You open it in any modern web browser (Chrome, Firefox, Safari, Edge), click any field to edit directly, and use the built-in "Save as PDF" button to print it. No additional software, design tools, or subscriptions required.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can I edit the templates after printing?</button>
+        <div class="faq-a" hidden>
+          Yes — the HTML files are yours to keep. You can re-open the same file in your browser and edit it again any time. We recommend saving a master blank copy before filling in your first project so you always have a clean version ready.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Do the templates work on Mac and Windows?</button>
+        <div class="faq-a" hidden>
+          Yes. HTML files work identically on any operating system. Open with Chrome or Edge for the most consistent print-to-PDF output. Safari on Mac also works well.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can I white-label these templates with my own branding?</button>
+        <div class="faq-a" hidden>
+          Yes — the agency name fields are editable, and the HTML is fully open. You can customise colours, fonts, and logos if you have basic HTML/CSS knowledge. For non-technical users, editing the text fields and agency name is all you need for a professional result.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">What's the difference between buying individual templates vs. the pack?</button>
+        <div class="faq-a" hidden>
+          Individual templates let you buy only what you need at ₹149 each. The full pack (₹399) gives you all 4 templates together at a 33% discount compared to buying them separately (₹596 total). The pack also includes all future template updates.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Is there a refund policy?</button>
+        <div class="faq-a" hidden>
+          Yes. We offer a 30-day no-questions-asked refund. Email <a href="mailto:shuktoai@gmail.com" style="color:#7C3AED;font-weight:600;">shuktoai@gmail.com</a> and we'll process your refund within 2 business days.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ──────────────────────────────────────────────── -->
+<section class="final-cta final-cta-b4" style="position:relative;overflow:hidden;padding-block:var(--section-gap);text-align:center;">
+  <div class="hero-bg">
+    <div class="blob blob-1" style="background:radial-gradient(circle,rgba(124,58,237,0.35) 0%,transparent 65%);"></div>
+    <div class="blob blob-2" style="background:radial-gradient(circle,rgba(139,92,246,0.2) 0%,transparent 65%);"></div>
+  </div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="reveal">
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.75rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;">
+        Run your AI agency<br/>without the operational chaos.
+      </h2>
+      <p style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:480px;margin:0 auto 2.5rem;line-height:1.65;">
+        Get all 4 templates for <span data-sp-price>₹399</span>. Open, edit, print — in minutes.
+      </p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <a href="RAZORPAY_PAYMENT_LINK_AI_AGENCY_OPS_PACK" class="b4-btn-primary" style="font-size:1.125rem;padding:1.25rem 2.75rem;" data-sp-razorpay>
+          Get the Full Pack — <span data-sp-price>₹399</span> →
+        </a>
+        <a href="#pricing" class="b4-btn-ghost" style="font-size:1rem;padding:1.125rem 2rem;">Buy individual templates</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── YOU MIGHT ALSO LIKE ────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-3">You might also like</h2>
+    </div>
+    <div class="mini-book-grid">
+      <a href="../one-person-company/index.html" class="home-book-card reveal" style="background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out);">
+        <div style="height:180px;background:linear-gradient(135deg,#0A0E13,#1E2940,#12181F);display:flex;align-items:flex-end;padding:1.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;line-height:1.15;">The One-Person Company</div>
+        </div>
+        <div style="padding:1.25rem;">
+          <span style="font-size:0.75rem;font-weight:600;color:#B83E10;background:rgba(232,84,26,0.12);padding:0.25rem 0.75rem;border-radius:9999px;">Business &amp; AI</span>
+          <p style="font-size:0.875rem;color:var(--text-secondary);margin-top:0.75rem;line-height:1.5;">How AI agents are creating the business of the future.</p>
+        </div>
+      </a>
+      <a href="../money-sorted/index.html" class="home-book-card reveal reveal-delay-1" style="background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out);">
+        <div style="height:180px;background:linear-gradient(135deg,#1E3630,#2A4F48,#0F2A26);display:flex;align-items:flex-end;padding:1.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;line-height:1.15;">Money, Sorted</div>
+        </div>
+        <div style="padding:1.25rem;">
+          <span style="font-size:0.75rem;font-weight:600;color:#9A4B15;background:rgba(221,124,63,0.12);padding:0.25rem 0.75rem;border-radius:9999px;">Personal Finance</span>
+          <p style="font-size:0.875rem;color:var(--text-secondary);margin-top:0.75rem;line-height:1.5;">Finance for freelancers and people with irregular income.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Shukto Press</div>
+        <p class="footer-tagline">Practical, non-hyped eBooks on AI, money, and the future of work.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books &amp; Templates</div>
+        <nav class="footer-links">
+          <a href="../one-person-company/index.html">The One-Person Company</a>
+          <a href="../money-sorted/index.html">Money, Sorted</a>
+          <a href="../ai-handbook-for-kids/index.html">AI Handbook for Kids</a>
+          <a href="../ai-agency-ops-pack/index.html">AI Agency Ops Pack</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Info</div>
+        <nav class="footer-links">
+          <a href="../../index.html">Home</a>
+          <a href="mailto:shuktoai@gmail.com">Contact</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Shukto Press. All rights reserved.</span>
+      <span>Practical books and templates for practical people.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .home-book-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); border-color: transparent; }
+</style>
+<script src="../../main.js"></script>
+<script src="../../book-page-data.js"></script>
+</body>
+</html>

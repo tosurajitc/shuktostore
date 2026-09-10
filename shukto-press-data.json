@@ -353,6 +353,122 @@
       ],
       "razorpay": "RAZORPAY_PAYMENT_LINK_AI_HANDBOOK_FOR_KIDS",
       "download": "EBOOK_DOWNLOAD_LINK_AI_HANDBOOK_FOR_KIDS"
+    },
+    {
+      "id": "ai-agency-ops-pack",
+      "title": "AI Agency Operations Pack",
+      "subtitle": "4 ready-to-use, editable PDF templates to run your AI agency like a pro from day one",
+      "author": "Shukto Press",
+      "category": "Templates · AI Agency · Operations",
+      "audienceLine": "AI agency owners, freelancers, and consultants building productised AI services",
+      "slug": "ai-agency-ops-pack",
+      "positioning": "The AI Agency Operations Pack is a set of 4 professionally designed, browser-editable templates that cover the complete operational layer of running an AI agency: client onboarding, prompt management, automation tracking, and project reporting. Each template opens in any modern browser, lets you click-to-edit every field, and prints to PDF in one click — no design tools or subscriptions needed.",
+      "accent": "#7C3AED",
+      "accentHi": "#8B5CF6",
+      "heroBg": "#0D0826",
+      "rotation": "-3",
+      "cover": null,
+      "insideItems": [
+        {
+          "icon": "📋",
+          "title": "Client Onboarding Brief",
+          "body": "2-page editable onboarding document covering client info, goals, scope of work, deliverables table, onboarding checklist, risk notes, and signature sign-off."
+        },
+        {
+          "icon": "📚",
+          "title": "Prompt Library",
+          "body": "2-page prompt master reference with index table, category tags, detailed prompt cards with variables, model recommendations, and quality ratings."
+        },
+        {
+          "icon": "⚙️",
+          "title": "Automation Tracker",
+          "body": "Landscape A4 tracker for all active automations — status pills, complexity, tool stack, hours saved, monthly cost, and a full ROI summary section."
+        },
+        {
+          "icon": "📊",
+          "title": "Project Dashboard",
+          "body": "2-page client-facing weekly status report with KPI cards, deliverables table, milestones timeline, risk register, and action items split by party."
+        },
+        {
+          "icon": "⚡",
+          "title": "Browser-editable, no tools needed",
+          "body": "Every template opens in any browser. Click a field, type your content, and print to PDF. No Canva, no Figma, no subscriptions."
+        }
+      ],
+      "forItems": [
+        "AI agency owners (solo or small team) managing client projects",
+        "Freelancers and consultants building productised AI services",
+        "Anyone tired of recreating the same ops documents for every new client",
+        "People starting an AI agency who want a solid operational foundation",
+        "Those who want professional-looking deliverables without a designer"
+      ],
+      "notForItems": [
+        "Those who need a full live project management software (this is print-first)",
+        "Anyone looking for business strategy or AI training material",
+        "Agencies with a mature, fully established ops system that already works well"
+      ],
+      "faqItems": [
+        {
+          "q": "What format are the templates?",
+          "a": "Each template is a standalone HTML file. Open in any modern browser, click fields to edit, and use the built-in Save as PDF button. No additional software needed."
+        },
+        {
+          "q": "Can I edit the templates after printing?",
+          "a": "Yes — re-open the same HTML file in your browser any time. We recommend saving a master blank copy before filling in your first project."
+        },
+        {
+          "q": "Can I white-label these with my own branding?",
+          "a": "Yes — the agency name fields are editable. With basic HTML/CSS knowledge you can fully customise colours and fonts too."
+        },
+        {
+          "q": "Is there a refund policy?",
+          "a": "Yes. 30-day no-questions-asked refund. Email shuktoai@gmail.com and we'll process within 2 business days."
+        }
+      ],
+      "stats": [
+        { "num": "4", "label": "Professional templates" },
+        { "num": "7", "label": "Pages of structured content" },
+        { "num": "0", "label": "Tools or subscriptions needed" },
+        { "num": "∞", "label": "Times you can reuse them" }
+      ],
+      "pullQuote": "\"I spend half my onboarding time recreating the same documents from scratch — there has to be a better way to run client projects.\"",
+      "promiseHeading": "From first client call to polished delivery — in one pack.",
+      "promiseBody": "Every template is pre-structured, professionally designed, and editable directly in your browser. Open, fill in, print to PDF. No design tools needed.",
+      "authorBioName": "Surajit Chatterjee",
+      "authorInitial": "SC",
+      "authorBio": "AI architect, IIM alumnus, and founder who has built workflow automation, multi-agent systems, and AI-powered productised services for clients across industries. These templates came directly out of his own agency ops — iterated over dozens of real client engagements.",
+      "authorPhoto": null,
+      "ctaHeading": "Run your AI agency without the operational chaos",
+      "ctaBody": "Get all 4 templates for ₹399. Open, edit, print — in minutes.",
+      "startSteps": [
+        {
+          "title": "Unzip the download folder",
+          "body": "You'll find 4 HTML files inside. Keep the folder somewhere accessible — you'll reuse these for every client."
+        },
+        {
+          "title": "Open a template in your browser",
+          "body": "Double-click any HTML file to open it in Chrome, Edge, or Safari. You'll see the edit hint bar at the top."
+        },
+        {
+          "title": "Click any dashed field to edit",
+          "body": "Fields with a dashed underline are editable. Click once and start typing your content."
+        },
+        {
+          "title": "Click 'Print / Save as PDF' when done",
+          "body": "Use the button at the top. In the print dialog, select Save as PDF. For best results, use Chrome with default margins."
+        }
+      ],
+      "bookTestimonials": [],
+      "price": "399",
+      "pricingFeatures": [
+        "Client Onboarding Brief (2-page PDF template)",
+        "Prompt Library (2-page PDF template)",
+        "Automation Tracker (Landscape PDF template)",
+        "Project Dashboard (2-page PDF template)",
+        "All future updates"
+      ],
+      "razorpay": "RAZORPAY_PAYMENT_LINK_AI_AGENCY_OPS_PACK",
+      "download": "EBOOK_DOWNLOAD_LINK_AI_AGENCY_OPS_PACK"
     }
   ],
   "settings": {

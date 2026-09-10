@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Dashboard — AI Agency Operations Pack</title>
+  <style>
+    :root {
+      --ink: #111827;
+      --ink-muted: #374151;
+      --ink-light: #6B7280;
+      --border: #E5E7EB;
+      --border-strong: #9CA3AF;
+      --accent: #B45309;
+      --accent-light: #FEF3C7;
+      --accent-mid: #D97706;
+      --bg: #FFFFFF;
+      --surface: #FFFBEB;
+      --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      --section-gap: 1.75rem;
+      --green: #16A34A;
+      --green-bg: #F0FDF4;
+      --red: #DC2626;
+      --red-bg: #FEF2F2;
+      --blue: #1D4ED8;
+      --blue-bg: #DBEAFE;
+      --gray: #6B7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      font-size: 11pt;
+      line-height: 1.55;
+      color: var(--ink);
+      background: #D1D5DB;
+      padding: 2rem;
+    }
+    .page {
+      background: var(--bg);
+      width: 794px;
+      min-height: 1123px;
+      margin: 0 auto 2rem;
+      padding: 3rem 3.5rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      border-radius: 4px;
+    }
+    [contenteditable] {
+      outline: none;
+      border-bottom: 1.5px dashed var(--accent-mid);
+      min-width: 40px;
+      display: inline-block;
+      padding: 0 2px;
+      transition: background 150ms;
+      border-radius: 2px;
+    }
+    [contenteditable]:focus { background: var(--accent-light); border-bottom-color: var(--accent); }
+    [contenteditable].block {
+      display: block;
+      border-bottom: none;
+      border: 1.5px dashed var(--accent-mid);
+      padding: 0.4rem 0.625rem;
+      border-radius: 5px;
+      width: 100%;
+      min-height: 2rem;
+    }
+    [contenteditable].block:focus { background: var(--accent-light); border-color: var(--accent); }
+    .print-hint {
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      padding: 0.625rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      width: 794px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .print-hint button {
+      background: white;
+      color: var(--accent);
+      border: none;
+      border-radius: 20px;
+      padding: 0.25rem 1rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
+    .doc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 3px solid var(--accent);
+    }
+    .doc-header-left .agency-name {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .doc-header-left h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+    .doc-header-left .doc-subtitle { font-size: 0.8125rem; color: var(--ink-light); margin-top:0.25rem; }
+    .doc-header-right { text-align: right; font-size: 0.75rem; color: var(--ink-light); line-height: 1.8; }
+    .doc-header-right strong { color: var(--ink); }
+    .section-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .section-block { margin-bottom: var(--section-gap); }
+
+    /* ── KPI STRIP ─────────────── */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid #FDE68A;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+    }
+    .kpi-card .kpi-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .kpi-card .kpi-lbl {
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+    }
+    .kpi-card .kpi-delta {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+    .kpi-card .kpi-delta.up { color: var(--green); }
+    .kpi-card .kpi-delta.down { color: var(--red); }
+
+    /* ── PROGRESS BAR ──────────── */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 0.375rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: var(--accent);
+    }
+
+    /* ── STATUS PILLS ──────────── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.175rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .pill-green  { background: var(--green-bg); color: var(--green); }
+    .pill-amber  { background: #FFFBEB; color: #B45309; }
+    .pill-red    { background: var(--red-bg);   color: var(--red); }
+    .pill-blue   { background: var(--blue-bg);  color: var(--blue); }
+    .pill-gray   { background: #F3F4F6; color: var(--gray); }
+
+    /* ── PROJECT TABLE ──────────── */
+    .proj-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .proj-table thead th {
+      background: var(--accent);
+      color: white;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .proj-table tbody tr { border-bottom: 1px solid var(--border); }
+    .proj-table tbody td { padding: 0.5rem 0.75rem; vertical-align: middle; color: var(--ink-muted); }
+    .proj-table tbody tr:nth-child(even) td { background: var(--surface); }
+
+    /* ── MILESTONE LIST ─────────── */
+    .milestone-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .milestone-row:last-child { border-bottom: none; }
+    .milestone-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .m-done    { background: var(--green); }
+    .m-active  { background: var(--accent); }
+    .m-future  { background: var(--border-strong); }
+    .milestone-meta {
+      font-size: 0.6875rem;
+      color: var(--ink-light);
+      margin-top: 0.125rem;
+    }
+
+    /* ── RISK TABLE ─────────────── */
+    .risk-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+    .risk-table thead th {
+      background: var(--ink);
+      color: white;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .risk-table tbody tr { border-bottom: 1px solid var(--border); }
+    .risk-table tbody td { padding: 0.5rem 0.75rem; vertical-align: middle; }
+    .risk-table tbody tr:nth-child(even) td { background: var(--surface); }
+    .impact { display:inline-block; padding:0.125rem 0.5rem; border-radius:4px; font-size:0.625rem; font-weight:700; text-transform:uppercase; }
+    .impact-high   { background: var(--red-bg); color: var(--red); }
+    .impact-medium { background: #FFF7ED; color: #C2410C; }
+    .impact-low    { background: var(--green-bg); color: var(--green); }
+
+    .doc-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 0.875rem;
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.6875rem;
+      color: var(--ink-light);
+    }
+    .doc-footer .brand { font-weight: 700; color: var(--accent); }
+
+    /* ── README BAR ─────────────────────────── */
+    .readme-bar { width:794px;margin:0 auto 0.75rem;background:#1C1108;border:1px solid rgba(180,83,9,0.3);border-radius:8px;overflow:hidden;font-family:-apple-system,'Segoe UI',sans-serif; }
+    .readme-bar-header { display:flex;align-items:center;justify-content:space-between;padding:0.625rem 1rem;cursor:pointer;user-select:none; }
+    .readme-bar-header-left { display:flex;align-items:center;gap:0.75rem;font-size:0.8125rem;font-weight:700;color:#FCD34D; }
+    .readme-bar-body { display:none;padding:0 1rem 1rem;font-size:0.8125rem;line-height:1.65; }
+    .readme-bar-body.open { display:block; }
+    .readme-section { margin-bottom:0.875rem; }
+    .readme-section:last-child { margin-bottom:0; }
+    .readme-section h4 { font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:0.375rem; }
+    .readme-section ul { padding-left:1.25rem;display:grid;gap:0.2rem; }
+    .readme-section li { color:rgba(253,211,77,0.75);font-size:0.8125rem;line-height:1.6; }
+    .readme-field-table { width:100%;border-collapse:collapse;font-size:0.75rem;margin-top:0.375rem; }
+    .readme-field-table th { text-align:left;color:#D97706;padding:0.25rem 0.5rem;background:rgba(180,83,9,0.1); }
+    .readme-field-table td { padding:0.25rem 0.5rem;border-top:1px solid rgba(180,83,9,0.2);color:rgba(253,211,77,0.75);vertical-align:top; }
+    .readme-field-table td:first-child { font-weight:600;white-space:nowrap;color:#FCD34D; }
+    .readme-tip { background:rgba(180,83,9,0.12);border:1px solid rgba(180,83,9,0.25);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;color:rgba(253,211,77,0.85);margin-top:0.5rem; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .readme-bar { display: none; }
+      .print-hint { display: none; }
+      .page { box-shadow: none; border-radius: 0; margin: 0; width: 100%; padding: 1.5cm 2cm; page-break-after: always; }
+      [contenteditable] { border-bottom: 1px solid #ccc; }
+      [contenteditable].block { border: 1px solid #ccc; background: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── README BAR (hidden on print) ───────────── -->
+<div class="readme-bar">
+  <div class="readme-bar-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('open')?'▲ Hide guide':'▼ How to use this template'">
+    <div class="readme-bar-header-left">📊 Template 04 — Project Dashboard</div>
+    <span style="font-size:0.6875rem;color:rgba(253,211,77,0.6);">▼ How to use this template</span>
+  </div>
+  <div class="readme-bar-body">
+    <div class="readme-section">
+      <h4>What this template is for</h4>
+      <ul>
+        <li>A <strong style="color:#FCD34D;">client-facing weekly status report</strong> — safe to share directly with clients without exposing internal ops details.</li>
+        <li>Use one copy per project per reporting period. Create a new copy each week or bi-weekly.</li>
+        <li>Keeps clients informed, reduces "where are we?" check-in calls, and documents your delivery track record.</li>
+      </ul>
+    </div>
+    <div class="readme-section">
+      <h4>Section-by-section guide</h4>
+      <table class="readme-field-table">
+        <thead><tr><th>Section</th><th>What to enter</th><th>Cadence</th></tr></thead>
+        <tbody>
+          <tr><td>Header (project/client)</td><td>Project name, client name, report date, current status pill</td><td>Every report</td></tr>
+          <tr><td>KPI Strip</td><td>Overall % progress, current day/week, budget spent, open blockers</td><td>Every report — update all 4</td></tr>
+          <tr><td>01 — Project Overview</td><td>Description, start/end dates, project lead, total budget</td><td>Set once, update end date if needed</td></tr>
+          <tr><td>02 — Deliverables table</td><td>Each deliverable, owner, due date, status pill, notes</td><td>Update status each report</td></tr>
+          <tr><td>03 — Milestones Timeline</td><td>5 key milestones with completion notes</td><td>Update dot colour as each milestone completes</td></tr>
+          <tr><td>04 — Risk Register</td><td>Risk, impact level, likelihood, owner, mitigation</td><td>Review weekly — add new risks, close resolved ones</td></tr>
+          <tr><td>05 — This Week's Actions</td><td>Agency actions (→) and client actions needed (!)</td><td>Replaced entirely each report — only current week</td></tr>
+          <tr><td>06 — Notes</td><td>Any context, decisions made, things to carry forward</td><td>Optional — use as a running log</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="readme-section">
+      <h4>Weekly reporting workflow</h4>
+      <ul>
+        <li><strong style="color:#FCD34D;">Step 1</strong> — Duplicate the file at the start of each reporting week. Rename: <code style="background:rgba(180,83,9,0.2);padding:1px 5px;border-radius:3px;font-size:0.75rem;">dashboard-ClientName-Week3.html</code></li>
+        <li><strong style="color:#FCD34D;">Step 2</strong> — Update the KPI strip first — overall progress %, days elapsed, budget, blockers.</li>
+        <li><strong style="color:#FCD34D;">Step 3</strong> — Update deliverable status pills and add notes for anything completed or changed.</li>
+        <li><strong style="color:#FCD34D;">Step 4</strong> — Advance the milestone dot colour: m-done (green) → m-active (amber) → m-future (grey).</li>
+        <li><strong style="color:#FCD34D;">Step 5</strong> — Replace Section 05 actions entirely with this week's specifics.</li>
+        <li><strong style="color:#FCD34D;">Step 6</strong> — Print to PDF and email to client, or paste the link in your shared project channel.</li>
+      </ul>
+    </div>
+    <div class="readme-tip">💡 <strong>Pro tip:</strong> The status pill in the header header (<span style="background:#F0FDF4;color:#16A34A;padding:1px 6px;border-radius:9999px;font-size:0.75rem;font-weight:700;">On Track</span>) is the first thing clients see. Change it honestly — clients prefer a flagged risk over a surprise at go-live.</div>
+  </div>
+</div>
+
+<div class="print-hint">
+  ✏️ Click any field to edit · One project per dashboard · Print or save as PDF when complete
+  <button onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1 — PROJECT OVERVIEW & STATUS
+══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <div class="agency-name"><span contenteditable spellcheck="false">Your AI Agency Name</span></div>
+      <h1>Project Dashboard</h1>
+      <div class="doc-subtitle">AI Agency Operations Pack · Template 04</div>
+    </div>
+    <div class="doc-header-right">
+      <div><strong>Project:</strong> <span contenteditable spellcheck="false">Project Name</span></div>
+      <div><strong>Client:</strong> <span contenteditable spellcheck="false">Client Name</span></div>
+      <div><strong>Report Date:</strong> <span contenteditable spellcheck="false">DD / MM / YYYY</span></div>
+      <div><strong>Status:</strong> <span class="pill pill-green">On Track</span></div>
+    </div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-num" contenteditable spellcheck="false">65%</div>
+      <div class="kpi-lbl">Overall Progress</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:65%;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" contenteditable spellcheck="false">Day 14</div>
+      <div class="kpi-lbl">Current Day</div>
+      <div class="kpi-delta up" contenteditable spellcheck="false">▲ Ahead of schedule</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" contenteditable spellcheck="false">₹18,500</div>
+      <div class="kpi-lbl">Budget Spent</div>
+      <div class="kpi-delta" contenteditable spellcheck="false">of ₹25,000 total</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" contenteditable spellcheck="false">3</div>
+      <div class="kpi-lbl">Open Blockers</div>
+      <div class="kpi-delta down" contenteditable spellcheck="false">▼ Requires attention</div>
+    </div>
+  </div>
+
+  <!-- PROJECT DETAILS -->
+  <div class="section-block">
+    <div class="section-label">01 — Project Overview</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;">
+      <div>
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Project Description</div>
+        <div style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.625rem 0.875rem;min-height:4rem;" contenteditable spellcheck="false">Build and deploy a lead qualification AI agent that automatically scores inbound leads, enriches CRM data, and routes hot leads to the sales team via Slack.</div>
+      </div>
+      <div style="display:grid;gap:0.625rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;">
+          <div>
+            <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Start Date</div>
+            <div style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;" contenteditable spellcheck="false">01 Jan 2025</div>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Target End Date</div>
+            <div style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;" contenteditable spellcheck="false">31 Jan 2025</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;">
+          <div>
+            <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Project Lead</div>
+            <div style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;" contenteditable spellcheck="false">Your Name</div>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Budget Total</div>
+            <div style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;" contenteditable spellcheck="false">₹25,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERABLES STATUS TABLE -->
+  <div class="section-block">
+    <div class="section-label">02 — Deliverables &amp; Status</div>
+    <table class="proj-table">
+      <thead>
+        <tr>
+          <th style="width:35%;">Deliverable</th>
+          <th style="width:15%;">Owner</th>
+          <th style="width:15%;">Due Date</th>
+          <th style="width:15%;">Status</th>
+          <th style="width:20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td contenteditable spellcheck="false">Discovery call &amp; requirements doc</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">03 Jan</td>
+          <td><span class="pill pill-green">Done</span></td>
+          <td contenteditable spellcheck="false">Signed off by client</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">Workflow mapping &amp; architecture</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">07 Jan</td>
+          <td><span class="pill pill-green">Done</span></td>
+          <td contenteditable spellcheck="false">Shared on Notion</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">Lead scoring model prompt (v1)</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">12 Jan</td>
+          <td><span class="pill pill-amber">In Review</span></td>
+          <td contenteditable spellcheck="false">Client reviewing output quality</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">Make.com automation build</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">18 Jan</td>
+          <td><span class="pill pill-blue">In Progress</span></td>
+          <td contenteditable spellcheck="false">CRM access needed</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">UAT &amp; testing with client team</td>
+          <td contenteditable spellcheck="false">Agency + Client</td>
+          <td contenteditable spellcheck="false">24 Jan</td>
+          <td><span class="pill pill-gray">Upcoming</span></td>
+          <td contenteditable spellcheck="false"></td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">Go-live &amp; handover documentation</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">31 Jan</td>
+          <td><span class="pill pill-gray">Upcoming</span></td>
+          <td contenteditable spellcheck="false"></td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td></td>
+          <td contenteditable spellcheck="false"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-footer">
+    <span class="brand">AI Agency Operations Pack</span>
+    <span>Project Dashboard · Page 1 of 2</span>
+    <span>Client-facing safe</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 2 — MILESTONES, RISKS & NEXT ACTIONS
+══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;padding-bottom:1rem;border-bottom:2px solid var(--accent);">
+    <div>
+      <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">Project Dashboard (cont.)</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--ink);" contenteditable spellcheck="false">Project Name — Client Name</div>
+    </div>
+    <div style="font-size:0.75rem;color:var(--ink-light);">Page 2 of 2</div>
+  </div>
+
+  <!-- MILESTONES TIMELINE -->
+  <div class="section-block">
+    <div class="section-label">03 — Milestones Timeline</div>
+    <div>
+      <div class="milestone-row">
+        <div class="milestone-dot m-done"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.875rem;font-weight:600;color:var(--ink);" contenteditable spellcheck="false">Milestone 1: Kickoff &amp; Discovery Complete</div>
+          <div class="milestone-meta" contenteditable spellcheck="false">Completed 03 Jan 2025 · Kickoff call held, brief signed, access granted</div>
+        </div>
+        <div><span class="pill pill-green">✓ Done</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="milestone-dot m-done"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.875rem;font-weight:600;color:var(--ink);" contenteditable spellcheck="false">Milestone 2: Architecture &amp; Design Approved</div>
+          <div class="milestone-meta" contenteditable spellcheck="false">Completed 07 Jan 2025 · Architecture doc reviewed and approved by client</div>
+        </div>
+        <div><span class="pill pill-green">✓ Done</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="milestone-dot m-active"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.875rem;font-weight:600;color:var(--accent);" contenteditable spellcheck="false">Milestone 3: Build &amp; Integration (Current)</div>
+          <div class="milestone-meta" contenteditable spellcheck="false">Target: 18 Jan 2025 · Make.com scenario + CRM integration in progress</div>
+        </div>
+        <div><span class="pill pill-blue">Active</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="milestone-dot m-future"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.875rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">Milestone 4: UAT &amp; Client Testing</div>
+          <div class="milestone-meta" contenteditable spellcheck="false">Target: 24 Jan 2025 · Client + agency test session with real leads</div>
+        </div>
+        <div><span class="pill pill-gray">Upcoming</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="milestone-dot m-future"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.875rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">Milestone 5: Go-Live &amp; Handover</div>
+          <div class="milestone-meta" contenteditable spellcheck="false">Target: 31 Jan 2025 · Full deployment + SOP documentation delivered</div>
+        </div>
+        <div><span class="pill pill-gray">Upcoming</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK REGISTER -->
+  <div class="section-block">
+    <div class="section-label">04 — Risk Register</div>
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th style="width:30%;">Risk Description</th>
+          <th style="width:12%;">Impact</th>
+          <th style="width:12%;">Likelihood</th>
+          <th style="width:12%;">Owner</th>
+          <th style="width:34%;">Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td contenteditable spellcheck="false">Client delays providing CRM access</td>
+          <td><span class="impact impact-high">High</span></td>
+          <td contenteditable spellcheck="false">Medium</td>
+          <td contenteditable spellcheck="false">Client</td>
+          <td contenteditable spellcheck="false">Escalate at next check-in; mock-test with dummy data in parallel</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">GPT API cost overrun in production</td>
+          <td><span class="impact impact-medium">Medium</span></td>
+          <td contenteditable spellcheck="false">Low</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">Set hard token limits; switch to GPT-4o-mini for bulk tasks</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">Lead scoring prompts returning inconsistent output</td>
+          <td><span class="impact impact-high">High</span></td>
+          <td contenteditable spellcheck="false">Medium</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">A/B test prompts on 100 historical leads before go-live</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">Client team not trained on new system</td>
+          <td><span class="impact impact-medium">Medium</span></td>
+          <td contenteditable spellcheck="false">Low</td>
+          <td contenteditable spellcheck="false">Agency</td>
+          <td contenteditable spellcheck="false">Record a Loom walkthrough + prepare one-page SOP</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false"></td>
+          <td></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NEXT ACTIONS -->
+  <div class="section-block">
+    <div class="section-label">05 — This Week's Actions</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;">
+      <div>
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-light);margin-bottom:0.5rem;">Agency Actions</div>
+        <div style="display:grid;gap:0.375rem;">
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">→</span>
+            <span contenteditable spellcheck="false">Complete Make.com scenario build by Wednesday</span>
+          </div>
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">→</span>
+            <span contenteditable spellcheck="false">Run prompt A/B test on 100 sample leads</span>
+          </div>
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">→</span>
+            <span contenteditable spellcheck="false">Prepare UAT test script for client review session</span>
+          </div>
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">→</span>
+            <span contenteditable spellcheck="false" style="color:var(--ink-light);">Add action here…</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-light);margin-bottom:0.5rem;">Client Actions Needed</div>
+        <div style="display:grid;gap:0.375rem;">
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">!</span>
+            <span contenteditable spellcheck="false">Provide CRM API credentials by Monday EOD</span>
+          </div>
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">!</span>
+            <span contenteditable spellcheck="false">Review and approve prompt v1 output by Tuesday</span>
+          </div>
+          <div style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.5rem 0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:0.8125rem;">
+            <span style="flex-shrink:0;color:var(--accent);font-weight:700;">→</span>
+            <span contenteditable spellcheck="false" style="color:var(--ink-light);">Add client action here…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section-block">
+    <div class="section-label">06 — Additional Notes</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.875rem 1rem;min-height:3.5rem;font-size:0.8125rem;color:var(--ink-muted);" contenteditable spellcheck="false">Add any project-level notes, decisions made this week, or context that needs to be carried forward to the next update…</div>
+  </div>
+
+  <div class="doc-footer">
+    <span class="brand">AI Agency Operations Pack</span>
+    <span>Project Dashboard · Page 2 of 2</span>
+    <span>Client-facing safe · Update weekly</span>
+  </div>
+</div>
+
+</body>
+</html>

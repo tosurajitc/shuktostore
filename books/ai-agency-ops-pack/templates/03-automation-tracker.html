@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automation Tracker — AI Agency Operations Pack</title>
+  <style>
+    :root {
+      --ink: #111827;
+      --ink-muted: #374151;
+      --ink-light: #6B7280;
+      --border: #E5E7EB;
+      --border-strong: #9CA3AF;
+      --accent: #1D4ED8;
+      --accent-light: #DBEAFE;
+      --accent-mid: #3B82F6;
+      --bg: #FFFFFF;
+      --surface: #F9FAFB;
+      --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      --section-gap: 1.75rem;
+      --green: #16A34A;
+      --green-bg: #F0FDF4;
+      --yellow: #CA8A04;
+      --yellow-bg: #FEFCE8;
+      --red: #DC2626;
+      --red-bg: #FEF2F2;
+      --orange: #EA580C;
+      --orange-bg: #FFF7ED;
+      --gray: #6B7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      font-size: 11pt;
+      line-height: 1.55;
+      color: var(--ink);
+      background: #D1D5DB;
+      padding: 2rem;
+    }
+    .page {
+      background: var(--bg);
+      width: 1060px; /* A4 landscape */
+      min-height: 794px;
+      margin: 0 auto 2rem;
+      padding: 2.5rem 3rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      border-radius: 4px;
+    }
+    [contenteditable] {
+      outline: none;
+      border-bottom: 1.5px dashed var(--accent-mid);
+      min-width: 40px;
+      display: inline-block;
+      padding: 0 2px;
+      transition: background 150ms;
+      border-radius: 2px;
+    }
+    [contenteditable]:focus { background: var(--accent-light); border-bottom-color: var(--accent); }
+    [contenteditable].block {
+      display: block;
+      border-bottom: none;
+      border: 1.5px dashed var(--accent-mid);
+      padding: 0.4rem 0.625rem;
+      border-radius: 5px;
+      width: 100%;
+      min-height: 2rem;
+    }
+    [contenteditable].block:focus { background: var(--accent-light); border-color: var(--accent); }
+    .print-hint {
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      padding: 0.625rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      width: 1060px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .print-hint button {
+      background: white;
+      color: var(--accent);
+      border: none;
+      border-radius: 20px;
+      padding: 0.25rem 1rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
+    .doc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid var(--accent);
+    }
+    .doc-header-left .agency-name {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+    .doc-header-left h1 { font-size: 1.375rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+    .doc-header-left .doc-subtitle { font-size: 0.75rem; color: var(--ink-light); margin-top: 0.2rem; }
+    .doc-header-right { text-align: right; font-size: 0.6875rem; color: var(--ink-light); line-height: 1.8; }
+    .doc-header-right strong { color: var(--ink); }
+
+    .section-label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.625rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .section-block { margin-bottom: var(--section-gap); }
+
+    /* ── STATUS PILL ──────────── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.175rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pill-live    { background: var(--green-bg);  color: var(--green); }
+    .pill-build   { background: var(--yellow-bg); color: var(--yellow); }
+    .pill-plan    { background: var(--accent-light); color: var(--accent); }
+    .pill-pause   { background: #F3F4F6; color: var(--gray); }
+    .pill-error   { background: var(--red-bg); color: var(--red); }
+
+    /* ── COMPLEXITY DOT ───────── */
+    .complexity {
+      display: inline-flex;
+      gap: 2px;
+      align-items: center;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+    .dot.filled { background: var(--accent); }
+
+    /* ── MAIN TABLE ───────────── */
+    .tracker-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+    }
+    .tracker-table thead th {
+      background: var(--accent);
+      color: white;
+      padding: 0.5rem 0.625rem;
+      text-align: left;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .tracker-table tbody tr { border-bottom: 1px solid var(--border); }
+    .tracker-table tbody tr:hover td { background: #F0F9FF; }
+    .tracker-table tbody td {
+      padding: 0.5rem 0.625rem;
+      vertical-align: middle;
+      color: var(--ink-muted);
+    }
+    .tracker-table tbody tr:nth-child(even) td { background: var(--surface); }
+    .tracker-table tbody tr:nth-child(even):hover td { background: #F0F9FF; }
+
+    /* ── SUMMARY CARDS ─────────── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.875rem;
+      text-align: center;
+    }
+    .summary-card .num {
+      font-size: 1.625rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .summary-card .lbl {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+    }
+
+    /* ── ROI SECTION ──────────── */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.875rem;
+    }
+    .roi-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .roi-card-head {
+      background: var(--accent);
+      color: white;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .roi-card-body {
+      padding: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+    }
+    .roi-card-body .metric {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 0.125rem;
+    }
+
+    .doc-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.625rem;
+      color: var(--ink-light);
+    }
+    .doc-footer .brand { font-weight: 700; color: var(--accent); }
+
+    /* ── README BAR ─────────────────────────── */
+    .readme-bar { width:1060px;margin:0 auto 0.75rem;background:#0A1628;border:1px solid rgba(29,78,216,0.3);border-radius:8px;overflow:hidden;font-family:-apple-system,'Segoe UI',sans-serif; }
+    .readme-bar-header { display:flex;align-items:center;justify-content:space-between;padding:0.625rem 1rem;cursor:pointer;user-select:none; }
+    .readme-bar-header-left { display:flex;align-items:center;gap:0.75rem;font-size:0.8125rem;font-weight:700;color:#93C5FD; }
+    .readme-bar-body { display:none;padding:0 1rem 1rem;font-size:0.8125rem;line-height:1.65; }
+    .readme-bar-body.open { display:block; }
+    .readme-section { margin-bottom:0.875rem; }
+    .readme-section:last-child { margin-bottom:0; }
+    .readme-section h4 { font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#60A5FA;margin-bottom:0.375rem; }
+    .readme-section ul { padding-left:1.25rem;display:grid;gap:0.2rem; }
+    .readme-section li { color:rgba(147,197,253,0.75);font-size:0.8125rem;line-height:1.6; }
+    .readme-field-table { width:100%;border-collapse:collapse;font-size:0.75rem;margin-top:0.375rem; }
+    .readme-field-table th { text-align:left;color:#60A5FA;padding:0.25rem 0.5rem;background:rgba(29,78,216,0.1); }
+    .readme-field-table td { padding:0.25rem 0.5rem;border-top:1px solid rgba(29,78,216,0.2);color:rgba(147,197,253,0.75);vertical-align:top; }
+    .readme-field-table td:first-child { font-weight:600;white-space:nowrap;color:#93C5FD; }
+    .readme-tip { background:rgba(29,78,216,0.12);border:1px solid rgba(29,78,216,0.25);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;color:rgba(147,197,253,0.85);margin-top:0.5rem; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .readme-bar { display: none; }
+      .print-hint { display: none; }
+      .page { box-shadow: none; border-radius: 0; margin: 0; width: 100%; padding: 1cm 1.5cm; page-break-after: always; }
+      @page { size: A4 landscape; margin: 0; }
+      [contenteditable] { border-bottom: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── README BAR (hidden on print) ───────────── -->
+<div class="readme-bar">
+  <div class="readme-bar-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('open')?'▲ Hide guide':'▼ How to use this template'">
+    <div class="readme-bar-header-left">⚙️ Template 03 — Automation Tracker (Landscape A4)</div>
+    <span style="font-size:0.6875rem;color:rgba(147,197,253,0.6);">▼ How to use this template</span>
+  </div>
+  <div class="readme-bar-body">
+    <div class="readme-section">
+      <h4>What this template is for</h4>
+      <ul>
+        <li>Your <strong style="color:#93C5FD;">single source of truth</strong> for every automation running across all client engagements.</li>
+        <li>Track status, ownership, cost, and ROI in one landscape view — update it monthly or after each deployment.</li>
+        <li>Use the ROI summary section to justify automation spend to clients or stakeholders.</li>
+      </ul>
+    </div>
+    <div class="readme-section">
+      <h4>Column-by-column guide</h4>
+      <table class="readme-field-table">
+        <thead><tr><th>Column</th><th>What to enter</th><th>Format</th></tr></thead>
+        <tbody>
+          <tr><td>ID</td><td>Sequential: A-001, A-002…</td><td>Never reuse a retired ID</td></tr>
+          <tr><td>Automation Name</td><td>Short descriptive name, 3–5 words</td><td>e.g. "Lead qualification agent"</td></tr>
+          <tr><td>Client</td><td>Client name or "Internal"</td><td>Use consistent naming</td></tr>
+          <tr><td>Category</td><td>Sales / Content / Ops / Finance / Support / Reporting</td><td>Use consistent labels</td></tr>
+          <tr><td>Tool / Stack</td><td>Main tools used</td><td>e.g. "Make + GPT-4o"</td></tr>
+          <tr><td>Status pill</td><td>Click the pill text to change it: Live / In Build / Planned / Paused / Error</td><td>Keep updated</td></tr>
+          <tr><td>Complexity dots</td><td>Edit dot HTML — add class="dot filled" for each filled dot (1–5)</td><td>1=simple, 5=complex</td></tr>
+          <tr><td>Time Saved</td><td>Estimated hours saved per month</td><td>e.g. "8h / mo"</td></tr>
+          <tr><td>Monthly Cost</td><td>Total tool + API cost to run it</td><td>e.g. "$20 / mo"</td></tr>
+          <tr><td>Go-Live Date</td><td>When it went live (or target date)</td><td>Month + Year</td></tr>
+          <tr><td>Owner</td><td>Person responsible for maintaining it</td><td>First name or initials</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="readme-section">
+      <h4>Updating the ROI summary</h4>
+      <ul>
+        <li>Sum all "Time Saved" values → enter in "Time Recovered" card.</li>
+        <li>Sum all "Monthly Cost" values → enter in "Cost of Automations" card.</li>
+        <li>Multiply total hours by your hourly rate → enter in "Value Generated".</li>
+        <li>ROI = (Value − Cost) ÷ Cost × 100. Update monthly.</li>
+      </ul>
+    </div>
+    <div class="readme-tip">💡 <strong>Print tip:</strong> This template is designed for <strong style="color:#93C5FD;">landscape A4</strong>. In Chrome's print dialog, set orientation to Landscape. Use "Fit to page" if columns get clipped.</div>
+  </div>
+</div>
+
+<div class="print-hint">
+  ✏️ Click any field to edit · This template prints in landscape (A4)
+  <button onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1 — AUTOMATION TRACKER
+══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <div class="agency-name"><span contenteditable spellcheck="false">Your AI Agency Name</span></div>
+      <h1>Automation Tracker</h1>
+      <div class="doc-subtitle">AI Agency Operations Pack · Template 03 · Landscape view</div>
+    </div>
+    <div class="doc-header-right">
+      <div><strong>Client:</strong> <span contenteditable spellcheck="false">All Clients / Client Name</span></div>
+      <div><strong>Period:</strong> <span contenteditable spellcheck="false">Q1 2025</span></div>
+      <div><strong>Updated:</strong> <span contenteditable spellcheck="false">DD / MM / YYYY</span></div>
+      <div><strong>Owner:</strong> <span contenteditable spellcheck="false">Your Name</span></div>
+    </div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="num" style="color:var(--accent);" contenteditable spellcheck="false">12</div>
+      <div class="lbl">Total Automations</div>
+    </div>
+    <div class="summary-card">
+      <div class="num" style="color:var(--green);" contenteditable spellcheck="false">7</div>
+      <div class="lbl">Live</div>
+    </div>
+    <div class="summary-card">
+      <div class="num" style="color:var(--yellow);" contenteditable spellcheck="false">3</div>
+      <div class="lbl">In Build</div>
+    </div>
+    <div class="summary-card">
+      <div class="num" style="color:var(--orange);" contenteditable spellcheck="false">40h</div>
+      <div class="lbl">Hours Saved / Mo</div>
+    </div>
+    <div class="summary-card">
+      <div class="num" style="color:var(--green);" contenteditable spellcheck="false">₹0</div>
+      <div class="lbl">Monthly Cost</div>
+    </div>
+  </div>
+
+  <!-- MAIN TRACKER TABLE -->
+  <div class="section-block">
+    <div class="section-label">Automation Log</div>
+    <table class="tracker-table">
+      <thead>
+        <tr>
+          <th style="width:5%;">ID</th>
+          <th style="width:18%;">Automation Name</th>
+          <th style="width:12%;">Client</th>
+          <th style="width:10%;">Category</th>
+          <th style="width:9%;">Tool / Stack</th>
+          <th style="width:8%;">Status</th>
+          <th style="width:8%;">Complexity</th>
+          <th style="width:8%;">Time Saved</th>
+          <th style="width:8%;">Monthly Cost</th>
+          <th style="width:7%;">Go-Live Date</th>
+          <th style="width:7%;">Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td contenteditable spellcheck="false">A-001</td>
+          <td contenteditable spellcheck="false">Lead qualification AI agent</td>
+          <td contenteditable spellcheck="false">Client A</td>
+          <td contenteditable spellcheck="false">Sales</td>
+          <td contenteditable spellcheck="false">Make + GPT-4o</td>
+          <td><span class="pill pill-live">Live</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">8h / mo</td>
+          <td contenteditable spellcheck="false">$20 / mo</td>
+          <td contenteditable spellcheck="false">Jan 2025</td>
+          <td contenteditable spellcheck="false">Alex</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">A-002</td>
+          <td contenteditable spellcheck="false">Email nurture sequence writer</td>
+          <td contenteditable spellcheck="false">Client A</td>
+          <td contenteditable spellcheck="false">Content</td>
+          <td contenteditable spellcheck="false">n8n + Claude</td>
+          <td><span class="pill pill-live">Live</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">5h / mo</td>
+          <td contenteditable spellcheck="false">$15 / mo</td>
+          <td contenteditable spellcheck="false">Jan 2025</td>
+          <td contenteditable spellcheck="false">Priya</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">A-003</td>
+          <td contenteditable spellcheck="false">Meeting notes → CRM updater</td>
+          <td contenteditable spellcheck="false">Client B</td>
+          <td contenteditable spellcheck="false">Ops</td>
+          <td contenteditable spellcheck="false">Zapier + GPT-4o</td>
+          <td><span class="pill pill-live">Live</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">4h / mo</td>
+          <td contenteditable spellcheck="false">$10 / mo</td>
+          <td contenteditable spellcheck="false">Feb 2025</td>
+          <td contenteditable spellcheck="false">Alex</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">A-004</td>
+          <td contenteditable spellcheck="false">Social content calendar builder</td>
+          <td contenteditable spellcheck="false">Client C</td>
+          <td contenteditable spellcheck="false">Content</td>
+          <td contenteditable spellcheck="false">Make + Claude</td>
+          <td><span class="pill pill-build">In Build</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">6h / mo</td>
+          <td contenteditable spellcheck="false">$18 / mo</td>
+          <td contenteditable spellcheck="false">Mar 2025</td>
+          <td contenteditable spellcheck="false">Priya</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">A-005</td>
+          <td contenteditable spellcheck="false">Invoice creation & send</td>
+          <td contenteditable spellcheck="false">Internal</td>
+          <td contenteditable spellcheck="false">Finance</td>
+          <td contenteditable spellcheck="false">Zapier + Stripe</td>
+          <td><span class="pill pill-live">Live</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">2h / mo</td>
+          <td contenteditable spellcheck="false">$8 / mo</td>
+          <td contenteditable spellcheck="false">Dec 2024</td>
+          <td contenteditable spellcheck="false">Alex</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">A-006</td>
+          <td contenteditable spellcheck="false">Customer support triage bot</td>
+          <td contenteditable spellcheck="false">Client D</td>
+          <td contenteditable spellcheck="false">Support</td>
+          <td contenteditable spellcheck="false">Voiceflow + GPT</td>
+          <td><span class="pill pill-build">In Build</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">10h / mo</td>
+          <td contenteditable spellcheck="false">$35 / mo</td>
+          <td contenteditable spellcheck="false">Apr 2025</td>
+          <td contenteditable spellcheck="false">Priya</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false">A-007</td>
+          <td contenteditable spellcheck="false">Weekly report generator</td>
+          <td contenteditable spellcheck="false">Internal</td>
+          <td contenteditable spellcheck="false">Reporting</td>
+          <td contenteditable spellcheck="false">n8n + GPT-4o</td>
+          <td><span class="pill pill-plan">Planned</span></td>
+          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td contenteditable spellcheck="false">3h / mo</td>
+          <td contenteditable spellcheck="false">$12 / mo</td>
+          <td contenteditable spellcheck="false">TBD</td>
+          <td contenteditable spellcheck="false">Alex</td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td></td>
+          <td></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+        </tr>
+        <tr>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td></td>
+          <td></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+          <td contenteditable spellcheck="false"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:0.5rem;font-size:0.625rem;color:var(--ink-light);">
+      Complexity: ●●●●● = Very High · Status pills: Live = deployed &amp; running · In Build = in development · Planned = backlog · Paused = on hold · Error = needs fix
+    </div>
+  </div>
+
+  <!-- ROI CARDS -->
+  <div class="section-block">
+    <div class="section-label">ROI &amp; Impact Summary</div>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-card-head">Time Recovered</div>
+        <div class="roi-card-body">
+          <div class="metric" contenteditable spellcheck="false">40 hrs / mo</div>
+          <div contenteditable spellcheck="false">Equivalent to 1 full-time week recovered per month across all live automations.</div>
+        </div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-card-head">Cost of Automations</div>
+        <div class="roi-card-body">
+          <div class="metric" contenteditable spellcheck="false">$106 / mo</div>
+          <div contenteditable spellcheck="false">Total monthly tool + API cost for all running automations.</div>
+        </div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-card-head">Value Generated</div>
+        <div class="roi-card-body">
+          <div class="metric" contenteditable spellcheck="false">$3,200 / mo</div>
+          <div contenteditable spellcheck="false">Est. value based on $80/hr agency rate × hours recovered.</div>
+        </div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-card-head">Net ROI</div>
+        <div class="roi-card-body">
+          <div class="metric" contenteditable spellcheck="false">2,917%</div>
+          <div contenteditable spellcheck="false">(Value − Cost) ÷ Cost. Update with real numbers monthly.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span class="brand">AI Agency Operations Pack</span>
+    <span>Automation Tracker · Landscape A4</span>
+    <span>Internal — Update Monthly</span>
+  </div>
+</div>
+
+</body>
+</html>

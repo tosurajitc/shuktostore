@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../../favicon.png" />
+  <title>How to Use Your Templates — AI Agency Ops Pack · Shukto Press</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    :root { --accent: #7C3AED; }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    .guide-nav {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 100%);
+      color: var(--text-on-dark);
+    }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .guide-hero {
+      background: linear-gradient(135deg, #0D0826 0%, #160F35 100%);
+      color: var(--text-on-dark);
+      padding-top: calc(68px + 3rem);
+      padding-bottom: 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .guide-hero .blob-1 { background: radial-gradient(circle, rgba(124,58,237,0.35) 0%, transparent 65%); }
+    .guide-hero .blob-2 { background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 65%); }
+
+    /* ── PAGE LAYOUT ──────────────────────────────────── */
+    .guide-shell {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 3rem;
+      align-items: start;
+      padding-block: 3rem;
+    }
+
+    /* ── STICKY NAV ───────────────────────────────────── */
+    .guide-toc {
+      position: sticky;
+      top: 5rem;
+    }
+    .toc-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7C3AED;
+      margin-bottom: 0.875rem;
+    }
+    .toc-list {
+      list-style: none;
+      display: grid;
+      gap: 0.125rem;
+    }
+    .toc-list a {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: background 150ms, color 150ms;
+      text-decoration: none;
+    }
+    .toc-list a:hover {
+      background: rgba(124,58,237,0.08);
+      color: #7C3AED;
+    }
+    .toc-list a.active {
+      background: rgba(124,58,237,0.1);
+      color: #7C3AED;
+      font-weight: 600;
+    }
+    .toc-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8125rem;
+      flex-shrink: 0;
+    }
+    .toc-divider {
+      border: none;
+      border-top: 1px solid var(--divider);
+      margin: 0.625rem 0;
+    }
+
+    /* ── GUIDE CONTENT ────────────────────────────────── */
+    .guide-content {
+      min-width: 0;
+    }
+
+    /* ── TEMPLATE SECTION ─────────────────────────────── */
+    .template-section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 5rem;
+    }
+    .template-section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--divider);
+    }
+    .template-icon-lg {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.625rem;
+      flex-shrink: 0;
+    }
+    .template-section-header h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.25rem;
+    }
+    .template-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      background: var(--paper-warm);
+      color: var(--text-secondary);
+      border: 1px solid var(--divider);
+    }
+
+    /* ── STEP CARDS ───────────────────────────────────── */
+    .step-cards {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .step-card {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: var(--paper);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+    }
+    .step-num-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.8125rem;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-card-title {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+    }
+    .step-card-body {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .step-card-body code {
+      background: rgba(124,58,237,0.08);
+      color: #6D28D9;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.8125rem;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+    }
+
+    /* ── FIELD REFERENCE TABLE ────────────────────────── */
+    .ref-section {
+      margin-bottom: 1.5rem;
+    }
+    .ref-section-title {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.625rem;
+    }
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .ref-table thead th {
+      text-align: left;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: white;
+    }
+    .ref-table tbody tr { border-bottom: 1px solid var(--divider); }
+    .ref-table tbody tr:last-child { border-bottom: none; }
+    .ref-table tbody td {
+      padding: 0.625rem 0.875rem;
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    .ref-table tbody td:first-child {
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .ref-table tbody tr:nth-child(even) td { background: var(--paper); }
+
+    /* ── TIP BOX ──────────────────────────────────────── */
+    .tip-box {
+      display: flex;
+      gap: 0.875rem;
+      align-items: flex-start;
+      background: rgba(124,58,237,0.05);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .tip-box-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
+    .tip-box-body { font-size: 0.875rem; color: var(--ink-muted, var(--text-secondary)); line-height: 1.6; }
+    .tip-box-body strong { color: #7C3AED; }
+
+    /* ── GENERAL SECTION ─────────────────────────────── */
+    .general-section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 5rem;
+    }
+    .general-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* ── HOW TO USE THE FILES CARDS ─────────────────────── */
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .how-card {
+      background: var(--paper);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+    }
+    .how-card-num {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #7C3AED;
+      margin-bottom: 0.5rem;
+    }
+    .how-card h3 {
+      font-family: var(--font-display);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      margin-bottom: 0.375rem;
+    }
+    .how-card p {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .how-card p code {
+      background: rgba(124,58,237,0.08);
+      color: #6D28D9;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: monospace;
+    }
+
+    /* ── BACK BUTTON ──────────────────────────────────── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(196,181,253,0.8);
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+      transition: color 150ms;
+    }
+    .back-btn:hover { color: #C4B5FD; }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .guide-shell { grid-template-columns: 1fr; }
+      .guide-toc { display: none; }
+      .how-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-sp-slug="ai-agency-ops-pack">
+
+<!-- NAV -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark guide-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);" data-sp="publisher">
+      <img src="../../favicon.png" alt="Shukto Press" />Shukto Press
+    </a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="index.html" style="color:rgba(248,245,239,0.75);">Ops Pack</a>
+    </div>
+    <a href="thank-you.html" class="nav-cta" style="background:rgba(124,58,237,0.25);border:1px solid rgba(124,58,237,0.4);color:var(--text-on-dark);">← Download page</a>
+  </div>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────────────── -->
+<section class="guide-hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:1;"></div>
+  <div class="container" style="position:relative;z-index:2;">
+    <a href="thank-you.html" class="back-btn">← Back to download page</a>
+    <div style="display:flex;align-items:center;gap:0.875rem;margin-bottom:1rem;">
+      <span style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#A78BFA;">AI Agency Ops Pack</span>
+    </div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1rem;">
+      How to Use Your Templates
+    </h1>
+    <p style="font-size:1.0625rem;color:rgba(248,245,239,0.6);max-width:560px;line-height:1.7;">
+      Everything you need to get from "just downloaded" to running your agency operations with all 4 templates — in the right order.
+    </p>
+    <!-- Quick nav pills -->
+    <div style="display:flex;flex-wrap:wrap;gap:0.625rem;margin-top:1.75rem;">
+      <a href="#getting-started" style="display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.875rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:9999px;font-size:0.8125rem;font-weight:600;color:rgba(248,245,239,0.85);text-decoration:none;transition:background 150ms;" onmouseover="this.style.background='rgba(255,255,255,0.14)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">🚀 Getting started</a>
+      <a href="#template-01" style="display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.875rem;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);border-radius:9999px;font-size:0.8125rem;font-weight:600;color:#C4B5FD;text-decoration:none;transition:background 150ms;" onmouseover="this.style.background='rgba(124,58,237,0.3)'" onmouseout="this.style.background='rgba(124,58,237,0.2)'">📋 Onboarding</a>
+      <a href="#template-02" style="display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.875rem;background:rgba(13,148,136,0.2);border:1px solid rgba(13,148,136,0.3);border-radius:9999px;font-size:0.8125rem;font-weight:600;color:#5EEAD4;text-decoration:none;transition:background 150ms;" onmouseover="this.style.background='rgba(13,148,136,0.3)'" onmouseout="this.style.background='rgba(13,148,136,0.2)'">📚 Prompt Library</a>
+      <a href="#template-03" style="display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.875rem;background:rgba(29,78,216,0.2);border:1px solid rgba(29,78,216,0.3);border-radius:9999px;font-size:0.8125rem;font-weight:600;color:#93C5FD;text-decoration:none;transition:background 150ms;" onmouseover="this.style.background='rgba(29,78,216,0.3)'" onmouseout="this.style.background='rgba(29,78,216,0.2)'">⚙️ Automation Tracker</a>
+      <a href="#template-04" style="display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.875rem;background:rgba(180,83,9,0.2);border:1px solid rgba(180,83,9,0.3);border-radius:9999px;font-size:0.8125rem;font-weight:600;color:#FCD34D;text-decoration:none;transition:background 150ms;" onmouseover="this.style.background='rgba(180,83,9,0.3)'" onmouseout="this.style.background='rgba(180,83,9,0.2)'">📊 Project Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── GUIDE BODY ─────────────────────────────────────────────── -->
+<div style="background:var(--bg,#FFFFFF);">
+  <div class="container">
+    <div class="guide-shell">
+
+      <!-- ── STICKY TOC ───────────────────────────────── -->
+      <aside class="guide-toc">
+        <div class="toc-label">On this page</div>
+        <ul class="toc-list">
+          <li><a href="#getting-started" id="toc-getting-started">
+            <span class="toc-icon" style="background:#F5F3FF;">🚀</span> Getting started
+          </a></li>
+          <hr class="toc-divider" />
+          <li><a href="#template-01" id="toc-t01">
+            <span class="toc-icon" style="background:#EDE9FE;">📋</span> 01 — Onboarding
+          </a></li>
+          <li><a href="#template-02" id="toc-t02">
+            <span class="toc-icon" style="background:#CCFBF1;">📚</span> 02 — Prompt Library
+          </a></li>
+          <li><a href="#template-03" id="toc-t03">
+            <span class="toc-icon" style="background:#DBEAFE;">⚙️</span> 03 — Automation Tracker
+          </a></li>
+          <li><a href="#template-04" id="toc-t04">
+            <span class="toc-icon" style="background:#FEF3C7;">📊</span> 04 — Project Dashboard
+          </a></li>
+          <hr class="toc-divider" />
+          <li><a href="#tips" id="toc-tips">
+            <span class="toc-icon" style="background:#F0FDF4;">💡</span> General tips
+          </a></li>
+        </ul>
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:0.75rem;">
+          <div style="font-size:0.75rem;font-weight:700;color:#7C3AED;margin-bottom:0.375rem;">Need help?</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);line-height:1.6;">Email us at<br/><a href="mailto:shuktoai@gmail.com" style="color:#7C3AED;font-weight:600;">shuktoai@gmail.com</a></div>
+        </div>
+      </aside>
+
+      <!-- ── MAIN CONTENT ─────────────────────────────── -->
+      <div class="guide-content">
+
+        <!-- ═══════════ GETTING STARTED ═══════════ -->
+        <div class="general-section" id="getting-started">
+          <h2>Getting started — open and edit your first template</h2>
+          <div class="how-grid">
+            <div class="how-card">
+              <div class="how-card-num">01</div>
+              <h3>Unzip your download</h3>
+              <p>Open the ZIP file. You'll find 4 HTML files inside. Move them into a folder called <code>AI Agency Ops Pack</code> on your computer — somewhere easy to find, like your Desktop or a client work folder.</p>
+            </div>
+            <div class="how-card">
+              <div class="how-card-num">02</div>
+              <h3>Open a template in Chrome</h3>
+              <p>Double-click any <code>.html</code> file. It opens in your default browser. For the best PDF output, use <strong>Chrome</strong> or <strong>Edge</strong>. Safari on Mac also works well.</p>
+            </div>
+            <div class="how-card">
+              <div class="how-card-num">03</div>
+              <h3>Click any dashed field to edit</h3>
+              <p>Every field with a dashed underline is editable. Click once, then type. Your agency name, client details, dates, and all content are yours to fill in — nothing is locked.</p>
+            </div>
+            <div class="how-card">
+              <div class="how-card-num">04</div>
+              <h3>Print / Save as PDF</h3>
+              <p>Click the <strong>"🖨 Print / Save as PDF"</strong> button at the top of the page. In the print dialog, set <strong>Destination → Save as PDF</strong>. Keep default margins. The README bar and print button disappear from the PDF automatically.</p>
+            </div>
+          </div>
+          <div class="tip-box" style="margin-top:1.25rem;">
+            <span class="tip-box-icon">🗂️</span>
+            <div class="tip-box-body">
+              <strong>Before filling in any template:</strong> duplicate the file first and rename the copy (e.g. <code style="background:rgba(124,58,237,0.08);color:#6D28D9;padding:1px 5px;border-radius:4px;font-size:0.8125rem;">onboarding-ClientName.html</code>). Keep the originals blank so you always have a clean base for the next client.
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ TEMPLATE 01 ═══════════ -->
+        <div class="template-section" id="template-01">
+          <div class="template-section-header">
+            <div class="template-icon-lg" style="background:#EDE9FE;">📋</div>
+            <div>
+              <h2 style="border:none;padding:0;margin:0;">Template 01 — Client Onboarding Brief</h2>
+              <div class="template-meta" style="margin-top:0.375rem;">
+                <span class="meta-pill">Portrait A4</span>
+                <span class="meta-pill">2 pages</span>
+                <span class="meta-pill" style="background:#EDE9FE;color:#6D28D9;border-color:#DDD6FE;">Client-facing</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.9375rem;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.7;">
+            Use this at the start of every new client engagement. It captures everything you need in one professional 2-page document that both you and the client sign off on — and doubles as your scope reference if disagreements arise later.
+          </p>
+
+          <div class="ref-section">
+            <div class="ref-section-title">When to use it</div>
+            <div style="font-size:0.875rem;color:var(--text-secondary);background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);padding:1rem 1.25rem;line-height:1.7;">
+              Fill this <strong>before or immediately after your kickoff call</strong>, and send it to the client for review and signature before any paid work begins. Think of it as your mutual agreement on what success looks like.
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Step-by-step</div>
+            <div class="step-cards">
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#7C3AED;">1</div>
+                <div>
+                  <div class="step-card-title">Duplicate the file</div>
+                  <div class="step-card-body">Rename it to <code>onboarding-ClientName-2025.html</code>. Keep the original blank for the next client.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#7C3AED;">2</div>
+                <div>
+                  <div class="step-card-title">Fill in the header first</div>
+                  <div class="step-card-body">Set your agency name, today's date, a project ID (e.g. <code>PROJ-004</code>), and the status badge.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#7C3AED;">3</div>
+                <div>
+                  <div class="step-card-title">Work through Sections 01–06</div>
+                  <div class="step-card-body">Use your discovery call notes. Sections 01–03 capture who the client is and what they want. Section 04 (Scope table) is the most important — be specific about deliverables, owners, and due dates.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#7C3AED;">4</div>
+                <div>
+                  <div class="step-card-title">Complete the onboarding checklist (Section 05)</div>
+                  <div class="step-card-body">Tick each box as the onboarding steps are completed during the first week. This section is ongoing — not something to fill in all at once.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#7C3AED;">5</div>
+                <div>
+                  <div class="step-card-title">Print to PDF → send to client</div>
+                  <div class="step-card-body">Portrait A4, default margins. Send by email for review and signature before starting any work. Use DocuSign, HelloSign, or print and sign physically.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Section reference</div>
+            <div style="overflow-x:auto;">
+              <table class="ref-table">
+                <thead><tr style="background:#7C3AED;"><th>Section</th><th>What to enter</th><th>Fill when</th></tr></thead>
+                <tbody>
+                  <tr><td>01 — Client Info</td><td>Company name, contact, email, phone, website, time zone</td><td>Kickoff call</td></tr>
+                  <tr><td>02 — Business Snapshot</td><td>What they do, target customer, team size, tech stack</td><td>Discovery call</td></tr>
+                  <tr><td>03 — Goals & KPIs</td><td>Primary goal, how you'll measure success, timeline, budget</td><td>Discovery call</td></tr>
+                  <tr><td>04 — Scope of Work</td><td>Deliverables table — what, who owns it, due date, status</td><td>After scoping</td></tr>
+                  <tr><td>05 — Onboarding Checklist</td><td>8 tasks to tick as they complete (contract, access, payment…)</td><td>Ongoing during week 1</td></tr>
+                  <tr><td>06 — Risks & Notes</td><td>Blockers, out-of-scope items, client dependencies</td><td>Before sending</td></tr>
+                  <tr><td>07 — Signatures</td><td>Agency rep + client rep names and dates</td><td>Before work begins</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-box-icon">💡</span>
+            <div class="tip-box-body"><strong>Scope creep tip:</strong> If a client asks for something not in the Scope of Work table, open this brief, point to Section 04, and say "That's outside what we agreed — happy to quote it as a new line." This document protects you.</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ TEMPLATE 02 ═══════════ -->
+        <div class="template-section" id="template-02">
+          <div class="template-section-header">
+            <div class="template-icon-lg" style="background:#CCFBF1;">📚</div>
+            <div>
+              <h2 style="border:none;padding:0;margin:0;">Template 02 — Prompt Library</h2>
+              <div class="template-meta" style="margin-top:0.375rem;">
+                <span class="meta-pill">Portrait A4</span>
+                <span class="meta-pill">2 pages</span>
+                <span class="meta-pill" style="background:#CCFBF1;color:#0D9488;border-color:#99F6E4;">Agency-wide</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.9375rem;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.7;">
+            Your master reference for every reusable AI prompt across all client work. Keep one copy of this file — it grows over time. When you find a prompt that reliably delivers great output, it goes in here.
+          </p>
+
+          <div class="ref-section">
+            <div class="ref-section-title">When to use it</div>
+            <div style="font-size:0.875rem;color:var(--text-secondary);background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);padding:1rem 1.25rem;line-height:1.7;">
+              This is an <strong>ongoing living document</strong> — not a per-project file. Add to it whenever you discover a prompt that works well. Print a PDF snapshot monthly to archive your library's state.
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Step-by-step</div>
+            <div class="step-cards">
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#0D9488;">1</div>
+                <div>
+                  <div class="step-card-title">Keep ONE master file — never per-client copies</div>
+                  <div class="step-card-body">Your prompt library is agency-wide. All your team's reusable prompts live here. Don't create separate files per client.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#0D9488;">2</div>
+                <div>
+                  <div class="step-card-title">Add to the index table (Page 1) first</div>
+                  <div class="step-card-body">Give the prompt a sequential ID (P-001, P-002…), name it, tag its category, and note which model works best.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#0D9488;">3</div>
+                <div>
+                  <div class="step-card-title">Add the detail card (Page 2)</div>
+                  <div class="step-card-body">In the browser, right-click an existing card → Inspect → duplicate the HTML block. Fill in the prompt text, variables, rating, and limitations.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#0D9488;">4</div>
+                <div>
+                  <div class="step-card-title">Update the summary stats (top of Page 1)</div>
+                  <div class="step-card-body">The 4 stat boxes show total prompts and per-category counts. Click each number to update it after adding entries.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#0D9488;">5</div>
+                <div>
+                  <div class="step-card-title">Archive monthly — keep HTML as the live version</div>
+                  <div class="step-card-body">Print to PDF once a month as a snapshot. The HTML file is your working document — it stays open and editable in the browser.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Prompt card field reference</div>
+            <div style="overflow-x:auto;">
+              <table class="ref-table">
+                <thead><tr style="background:#0D9488;"><th>Field</th><th>What to write</th><th>Notes</th></tr></thead>
+                <tbody>
+                  <tr><td>Prompt ID</td><td>P-001, P-002… sequential</td><td>Never reuse a retired ID</td></tr>
+                  <tr><td>Category</td><td>Sales / Content / Ops / Ads / Support</td><td>Use consistent labels across all cards</td></tr>
+                  <tr><td>Prompt Text</td><td>The full prompt exactly as you use it</td><td>Write variables as [PLACEHOLDERS]</td></tr>
+                  <tr><td>Variables</td><td>List every [BRACKET] placeholder</td><td>Makes it easy to hand off to a team member</td></tr>
+                  <tr><td>Recommended Model</td><td>GPT-4o / Claude 3.5 / etc.</td><td>Update if you switch models</td></tr>
+                  <tr><td>Quality Rating</td><td>⭐ to ⭐⭐⭐⭐⭐</td><td>Rate based on at least 10 real uses</td></tr>
+                  <tr><td>Limitations</td><td>Known failure modes, hallucination risks</td><td>Be honest — this protects you and your team</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip-box" style="border-color:rgba(13,148,136,0.3);background:rgba(13,148,136,0.05);">
+            <span class="tip-box-icon">💡</span>
+            <div class="tip-box-body" style="color:var(--text-secondary);"><strong style="color:#0D9488;">Category colours:</strong> The template has four pre-built category tag styles — <span style="background:#FFF7ED;color:#C2410C;padding:1px 5px;border-radius:9999px;font-size:0.75rem;font-weight:700;">Sales</span> <span style="background:#EFF6FF;color:#1D4ED8;padding:1px 5px;border-radius:9999px;font-size:0.75rem;font-weight:700;">Content</span> <span style="background:#F5F3FF;color:#6D28D9;padding:1px 5px;border-radius:9999px;font-size:0.75rem;font-weight:700;">Ops</span> <span style="background:#FDF2F8;color:#9D174D;padding:1px 5px;border-radius:9999px;font-size:0.75rem;font-weight:700;">Ads</span>. Use them consistently across every card.</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ TEMPLATE 03 ═══════════ -->
+        <div class="template-section" id="template-03">
+          <div class="template-section-header">
+            <div class="template-icon-lg" style="background:#DBEAFE;">⚙️</div>
+            <div>
+              <h2 style="border:none;padding:0;margin:0;">Template 03 — Automation Tracker</h2>
+              <div class="template-meta" style="margin-top:0.375rem;">
+                <span class="meta-pill">Landscape A4</span>
+                <span class="meta-pill">1 page</span>
+                <span class="meta-pill" style="background:#DBEAFE;color:#1D4ED8;border-color:#BFDBFE;">Agency-wide</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.9375rem;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.7;">
+            Your single source of truth for every automation running across all client engagements. Track status, ownership, cost, and ROI in one landscape view. Update it monthly or after each deployment.
+          </p>
+
+          <div class="ref-section" style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:var(--radius-lg);padding:1rem 1.25rem;">
+            <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.875rem;font-weight:600;color:#1D4ED8;margin-bottom:0.375rem;">
+              <span>🖨️</span> Important: this template prints in Landscape
+            </div>
+            <div style="font-size:0.875rem;color:#374151;line-height:1.6;">
+              When printing, open Chrome's print dialog and set <strong>Orientation → Landscape</strong>. If columns get clipped, enable <strong>"Fit to page"</strong>. Portrait will cut off the right-hand columns.
+            </div>
+          </div>
+
+          <div class="ref-section" style="margin-top:1.5rem;">
+            <div class="ref-section-title">Step-by-step</div>
+            <div class="step-cards">
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#1D4ED8;">1</div>
+                <div>
+                  <div class="step-card-title">Keep ONE master file across all clients</div>
+                  <div class="step-card-body">Unlike the onboarding brief, this file is not per-client. Every automation you build for any client goes in the same tracker. Use the "Client" column to distinguish them.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#1D4ED8;">2</div>
+                <div>
+                  <div class="step-card-title">Add a row for every automation you deploy</div>
+                  <div class="step-card-body">Give it an ID (A-001, A-002…), fill in the name, client, category, tool stack, and set the status pill. Add even automations that are just Planned.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#1D4ED8;">3</div>
+                <div>
+                  <div class="step-card-title">Update status after each change</div>
+                  <div class="step-card-body">Click the status pill text to change it: Live / In Build / Planned / Paused / Error. Keeping this accurate takes 2 minutes and saves hours of "where is that automation?" confusion.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#1D4ED8;">4</div>
+                <div>
+                  <div class="step-card-title">Update the ROI summary section monthly</div>
+                  <div class="step-card-body">Sum the Time Saved column → enter total. Sum the Monthly Cost column → enter total. Multiply hours by your hourly rate for Value Generated. ROI = (Value − Cost) ÷ Cost × 100.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Column reference</div>
+            <div style="overflow-x:auto;">
+              <table class="ref-table">
+                <thead><tr style="background:#1D4ED8;"><th>Column</th><th>What to enter</th><th>Format / example</th></tr></thead>
+                <tbody>
+                  <tr><td>ID</td><td>Sequential identifier</td><td>A-001, A-002…</td></tr>
+                  <tr><td>Automation Name</td><td>Short descriptive name</td><td>"Lead qualification agent"</td></tr>
+                  <tr><td>Client</td><td>Client name or "Internal"</td><td>Use consistent naming</td></tr>
+                  <tr><td>Category</td><td>Function area</td><td>Sales / Content / Ops / Finance / Support / Reporting</td></tr>
+                  <tr><td>Tool / Stack</td><td>Main tools used</td><td>"Make + GPT-4o"</td></tr>
+                  <tr><td>Status</td><td>Current state</td><td>Live / In Build / Planned / Paused / Error</td></tr>
+                  <tr><td>Complexity</td><td>1–5 filled dots</td><td>1 = simple trigger, 5 = multi-agent flow</td></tr>
+                  <tr><td>Time Saved</td><td>Estimated hours saved per month</td><td>"8h / mo"</td></tr>
+                  <tr><td>Monthly Cost</td><td>Total tool + API cost to run it</td><td>"$20 / mo"</td></tr>
+                  <tr><td>Go-Live Date</td><td>When it went live</td><td>"Jan 2025" or target date</td></tr>
+                  <tr><td>Owner</td><td>Person responsible for maintaining it</td><td>First name or initials</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip-box" style="border-color:rgba(29,78,216,0.3);background:rgba(29,78,216,0.05);">
+            <span class="tip-box-icon">💡</span>
+            <div class="tip-box-body" style="color:var(--text-secondary);"><strong style="color:#1D4ED8;">Show clients the ROI section.</strong> When a client asks "what have we built so far?", print this sheet and hand them the ROI summary. Hours saved and cost per month is the language they understand.</div>
+          </div>
+        </div>
+
+        <!-- ═══════════ TEMPLATE 04 ═══════════ -->
+        <div class="template-section" id="template-04">
+          <div class="template-section-header">
+            <div class="template-icon-lg" style="background:#FEF3C7;">📊</div>
+            <div>
+              <h2 style="border:none;padding:0;margin:0;">Template 04 — Project Dashboard</h2>
+              <div class="template-meta" style="margin-top:0.375rem;">
+                <span class="meta-pill">Portrait A4</span>
+                <span class="meta-pill">2 pages</span>
+                <span class="meta-pill" style="background:#FEF3C7;color:#B45309;border-color:#FDE68A;">Client-facing</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.9375rem;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.7;">
+            A professional weekly or bi-weekly status report you can send directly to clients. It covers everything a client wants to know — progress, what's done, what's next, blockers, and what they need to action — without exposing any internal agency detail.
+          </p>
+
+          <div class="ref-section">
+            <div class="ref-section-title">When to use it</div>
+            <div style="font-size:0.875rem;color:var(--text-secondary);background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);padding:1rem 1.25rem;line-height:1.7;">
+              Create a <strong>new copy every reporting cycle</strong> (weekly or bi-weekly). Do not edit the same file repeatedly — keep each week's report as a permanent record. Name files like <code style="background:rgba(124,58,237,0.08);color:#6D28D9;padding:1px 5px;border-radius:4px;font-size:0.8125rem;">dashboard-ClientName-Week3.html</code>
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Step-by-step (weekly reporting workflow)</div>
+            <div class="step-cards">
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#B45309;">1</div>
+                <div>
+                  <div class="step-card-title">Duplicate → rename</div>
+                  <div class="step-card-body">Start from your previous week's report or a fresh blank. Rename the file with the client and week number.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#B45309;">2</div>
+                <div>
+                  <div class="step-card-title">Update the KPI strip first</div>
+                  <div class="step-card-body">Set overall progress %, current day/week, budget spent to date, and count of open blockers. These 4 numbers tell the story at a glance.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#B45309;">3</div>
+                <div>
+                  <div class="step-card-title">Update deliverable status pills</div>
+                  <div class="step-card-body">Change status pills from "Upcoming" → "In Progress" → "In Review" → "Done" as work moves through your pipeline. Add a note for anything that changed.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#B45309;">4</div>
+                <div>
+                  <div class="step-card-title">Advance the milestone dots</div>
+                  <div class="step-card-body">Change <code>m-future</code> → <code>m-active</code> → <code>m-done</code> as milestones complete. There should be exactly one <code>m-active</code> dot at any time.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#B45309;">5</div>
+                <div>
+                  <div class="step-card-title">Replace Section 05 actions entirely</div>
+                  <div class="step-card-body">Delete last week's actions and write only this week's items. Keep agency actions (→) and client actions (!) clearly separated. The yellow highlight draws the client's eye to what they need to do.</div>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-num-badge" style="background:#B45309;">6</div>
+                <div>
+                  <div class="step-card-title">Print → send to client</div>
+                  <div class="step-card-body">Portrait A4, default margins. Email as PDF, or share the link in your Slack / Notion channel if you work that way.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <div class="ref-section-title">Section reference</div>
+            <div style="overflow-x:auto;">
+              <table class="ref-table">
+                <thead><tr style="background:#B45309;"><th>Section</th><th>What to enter</th><th>Update cadence</th></tr></thead>
+                <tbody>
+                  <tr><td>Header</td><td>Project name, client, report date, overall status pill</td><td>Every report</td></tr>
+                  <tr><td>KPI Strip</td><td>Progress %, day/week, budget spent, blocker count</td><td>Every report</td></tr>
+                  <tr><td>01 — Overview</td><td>Description, dates, lead, total budget</td><td>Set once at project start</td></tr>
+                  <tr><td>02 — Deliverables</td><td>Status pill + notes per deliverable</td><td>Every report</td></tr>
+                  <tr><td>03 — Milestones</td><td>Dot colour + completion note per milestone</td><td>When a milestone completes</td></tr>
+                  <tr><td>04 — Risk Register</td><td>New risks, closed risks, updated mitigations</td><td>Weekly review</td></tr>
+                  <tr><td>05 — Actions</td><td>This week only — replace entirely each report</td><td>Every report</td></tr>
+                  <tr><td>06 — Notes</td><td>Context, decisions made, carry-forwards</td><td>As needed</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip-box" style="border-color:rgba(180,83,9,0.3);background:rgba(180,83,9,0.05);">
+            <span class="tip-box-icon">💡</span>
+            <div class="tip-box-body" style="color:var(--text-secondary);">
+              <strong style="color:#B45309;">The header status pill is the first thing clients see.</strong> Be honest about it — change it to <span style="background:#FEF2F2;color:#DC2626;padding:1px 6px;border-radius:9999px;font-size:0.75rem;font-weight:700;">At Risk</span> when something is genuinely at risk. Clients always prefer an early flag over a surprise at go-live. Honest reporting builds more trust than always showing <span style="background:#F0FDF4;color:#16A34A;padding:1px 6px;border-radius:9999px;font-size:0.75rem;font-weight:700;">On Track</span>.
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ GENERAL TIPS ═══════════ -->
+        <div class="general-section" id="tips">
+          <h2>General tips</h2>
+          <div style="display:grid;gap:1rem;">
+            <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);">
+              <span style="font-size:1.375rem;flex-shrink:0;">📁</span>
+              <div>
+                <div style="font-weight:700;margin-bottom:0.25rem;">Folder structure that works</div>
+                <div style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Keep the 4 blank originals in one folder. Create a per-client subfolder (e.g. <code style="background:rgba(124,58,237,0.08);color:#6D28D9;padding:1px 4px;border-radius:3px;font-size:0.8125rem;">Clients/AcmeCorp/</code>) and duplicate the relevant templates there when you start a new project.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);">
+              <span style="font-size:1.375rem;flex-shrink:0;">🌐</span>
+              <div>
+                <div style="font-weight:700;margin-bottom:0.25rem;">Best browser for printing</div>
+                <div style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Use <strong>Google Chrome</strong> for the most accurate PDF output. The print layout is optimised for Chrome. Edge also works well. Safari handles it but may render fonts slightly differently.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);">
+              <span style="font-size:1.375rem;flex-shrink:0;">✏️</span>
+              <div>
+                <div style="font-weight:700;margin-bottom:0.25rem;">The in-file guides don't print</div>
+                <div style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">The coloured README bar at the top of each template (the one you click to expand) is automatically hidden when you print. The print hint bar with the "🖨 Print" button is also hidden. Your PDF will contain only the clean template content.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);">
+              <span style="font-size:1.375rem;flex-shrink:0;">🔄</span>
+              <div>
+                <div style="font-weight:700;margin-bottom:0.25rem;">Updates are free</div>
+                <div style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">If we release an updated version of this pack, you'll receive it at no charge. We'll email you (at the address used at checkout) when an update is available with a link to download the new version.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--paper);border:1px solid var(--divider);border-radius:var(--radius-lg);">
+              <span style="font-size:1.375rem;flex-shrink:0;">❓</span>
+              <div>
+                <div style="font-weight:700;margin-bottom:0.25rem;">Something not working?</div>
+                <div style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Email <a href="mailto:shuktoai@gmail.com" style="color:#7C3AED;font-weight:600;">shuktoai@gmail.com</a> with your order details and what you're seeing. We'll reply within 1 business day.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA back to download -->
+        <div style="background:linear-gradient(135deg,#0D0826,#160F35);border-radius:var(--radius-xl);padding:2.5rem;text-align:center;margin-top:1rem;">
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#A78BFA;margin-bottom:0.75rem;">You're all set</div>
+          <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;letter-spacing:-0.03em;color:white;margin-bottom:0.75rem;">Ready to open your first template?</h3>
+          <p style="font-size:0.9375rem;color:rgba(248,245,239,0.6);margin-bottom:1.75rem;line-height:1.65;">Go back to the download page and grab your ZIP if you haven't already.</p>
+          <a href="thank-you.html" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 2rem;background:#7C3AED;color:white;border-radius:9999px;font-weight:700;font-size:0.9375rem;text-decoration:none;transition:filter 200ms;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">← Back to your download page</a>
+        </div>
+
+      </div><!-- /guide-content -->
+    </div><!-- /guide-shell -->
+  </div><!-- /container -->
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Shukto Press</div>
+        <p class="footer-tagline">Practical, non-hyped eBooks on AI, money, and the future of work.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books &amp; Templates</div>
+        <nav class="footer-links">
+          <a href="../../books/one-person-company/index.html">The One-Person Company</a>
+          <a href="../../books/money-sorted/index.html">Money, Sorted</a>
+          <a href="../../books/ai-handbook-for-kids/index.html">AI Handbook for Kids</a>
+          <a href="../../books/ai-agency-ops-pack/index.html">AI Agency Ops Pack</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Help</div>
+        <nav class="footer-links">
+          <a href="../../index.html">Home</a>
+          <a href="mailto:shuktoai@gmail.com">Contact support</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Shukto Press. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../main.js"></script>
+<!-- Scroll spy for TOC active state -->
+<script>
+(function () {
+  var sections = ['getting-started','template-01','template-02','template-03','template-04','tips'];
+  var tocMap = {
+    'getting-started': 'toc-getting-started',
+    'template-01':     'toc-t01',
+    'template-02':     'toc-t02',
+    'template-03':     'toc-t03',
+    'template-04':     'toc-t04',
+    'tips':            'toc-tips'
+  };
+
+  function getActiveSection() {
+    var scrollY = window.scrollY + 120;
+    var active = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      var el = document.getElementById(sections[i]);
+      if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+        active = sections[i];
+      }
+    }
+    return active;
+  }
+
+  function updateToc() {
+    var active = getActiveSection();
+    sections.forEach(function (id) {
+      var link = document.getElementById(tocMap[id]);
+      if (link) {
+        link.classList.toggle('active', id === active);
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateToc, { passive: true });
+  updateToc();
+})();
+</script>
+</body>
+</html>
