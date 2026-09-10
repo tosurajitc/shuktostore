@@ -407,7 +407,16 @@
     const pub     = (settings && settings.publisher) || 'Shukto Press';
     const tagline = (settings && settings.tagline)   || 'Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.';
     const email   = (settings && settings.email)     || 'shuktoai@gmail.com';
-    document.querySelectorAll('[data-sp="publisher"]').forEach(el => { el.textContent = pub; });
+    document.querySelectorAll('[data-sp="publisher"]').forEach(el => {
+      /* Preserve child <img> (nav logo) — only replace text nodes */
+      const img = el.querySelector('img');
+      if (img) {
+        Array.from(el.childNodes).filter(n => n.nodeType === Node.TEXT_NODE).forEach(n => n.remove());
+        el.appendChild(document.createTextNode(pub));
+      } else {
+        el.textContent = pub;
+      }
+    });
     document.querySelectorAll('[data-sp="tagline"]').forEach(el => { el.textContent = tagline; });
     document.querySelectorAll('[data-sp="contact-email"]').forEach(el => {
       el.textContent = email;
@@ -441,10 +450,12 @@
         grid.className = 'tpl-grid';
         templates.forEach((tpl, i) => {
           const cell = document.createElement('div');
-          cell.className = 'reveal' + (i > 0 ? ' reveal-delay-' + Math.min(i, 4) : '');
+          /* Add reveal + visible immediately — these are primary content injected
+             after DOMContentLoaded; the IntersectionObserver won't re-fire for
+             elements already in the viewport when they're inserted. */
+          cell.className = 'reveal visible' + (i > 0 ? ' reveal-delay-' + Math.min(i, 4) : '');
           cell.appendChild(makeCard(tpl, i));
           grid.appendChild(cell);
-          if (window._spRevealObserver) window._spRevealObserver.observe(cell);
         });
         container.appendChild(grid);
       }
