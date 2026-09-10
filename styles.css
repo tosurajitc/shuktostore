@@ -1132,7 +1132,7 @@ ul, ol { list-style: none; }
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: var(--space-12);
   margin-bottom: var(--space-12);
 }
@@ -1230,7 +1230,7 @@ ul, ol { list-style: none; }
   .bento { grid-template-columns: repeat(4, 1fr); }
   .bento-cell.span-4 { grid-column: span 4; }
   .bento-cell.span-3 { grid-column: span 2; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 @media (max-width: 1024px) {

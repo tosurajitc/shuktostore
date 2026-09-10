@@ -346,13 +346,24 @@
       }
     }
 
-    /* ── Footer books nav ────────────────────────────────────── */
+    /* ── Footer nav — Books column ───────────────────────────── */
     const footerBooksNav = document.getElementById('sp-footer-books-nav');
     if (footerBooksNav && books.length) {
-      footerBooksNav.innerHTML = books.map(b => {
+      const booksOnly = books.filter(b => b.productType !== 'template');
+      footerBooksNav.innerHTML = booksOnly.map(b => {
         const slug  = b.slug || b.id || '';
         const title = esc(b.title || slug);
-        /* All products live under /books/ — templates have productType but same path */
+        return `<a href="books/${slug}/index.html">${title}</a>`;
+      }).join('');
+    }
+
+    /* ── Footer nav — Templates column ──────────────────────── */
+    const footerTemplatesNav = document.getElementById('sp-footer-templates-nav');
+    if (footerTemplatesNav && books.length) {
+      const templatesOnly = books.filter(b => b.productType === 'template');
+      footerTemplatesNav.innerHTML = templatesOnly.map(b => {
+        const slug  = b.slug || b.id || '';
+        const title = esc(b.title || slug);
         return `<a href="books/${slug}/index.html">${title}</a>`;
       }).join('');
     }
