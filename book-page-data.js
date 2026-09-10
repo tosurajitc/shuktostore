@@ -479,16 +479,17 @@
 
     /* ── "You might also like" grid ────────────────────────────── */
     document.querySelectorAll('[data-sp-also-like]').forEach(container => {
-      const currentDir = document.body.dataset.spProductType === 'template' ? 'templates' : 'books';
+      /* All products (books + templates) live under /books/<slug>/ */
       const others = books.filter(b => b.slug !== slug && b.title);
       if (!others.length) return;
-      container.innerHTML = others.map((b, i) => {
+      /* Shuffle and pick up to 3 */
+      const shuffled = others.slice().sort(() => Math.random() - 0.5).slice(0, 3);
+      container.innerHTML = shuffled.map((b, i) => {
         const delay = i > 0 ? ` reveal-delay-${i}` : '';
         const cardBg = b.heroBg || '#0A0E13';
         const cardAccent = b.accent || '#E8541A';
-        /* Pages live beside the current product page */
-        const otherDir = b.productType === 'template' ? 'templates' : 'books';
-        const href = currentDir === otherDir ? `../${b.slug}/index.html` : `../../${otherDir}/${b.slug}/index.html`;
+        /* All products live one level up relative to any book/template page */
+        const href = `../${b.slug}/index.html`;
         const coverInner = b.cover
           ? `<img src="${b.cover}" alt="${esc(b.title)}" style="width:100%;height:100%;object-fit:cover;"/>`
           : `<div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;line-height:1.15;">${esc(b.title)}</div>`;

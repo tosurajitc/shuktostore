@@ -203,7 +203,8 @@
     /* ── Hero cover stack ────────────────────────────────────── */
     const heroStack = document.getElementById('sp-hero-cover-stack');
     if (heroStack) {
-      const stackBooks = books.length ? books.slice(-3) : [];
+      const booksOnly = books.filter(b => b.productType !== 'template');
+      const stackBooks = booksOnly.length ? booksOnly.slice(-3) : [];
       const fallbackGrads = [
         'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)',
         'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)',
@@ -293,25 +294,52 @@
         return wrap;
       }
 
-      catalogGrid.innerHTML = '';
-      if (books.length) {
+      function buildGrid(items, startIndex) {
         const grid = document.createElement('div');
         grid.className = 'catalog-uniform-grid';
-        books.forEach((book, i) => {
+        items.forEach((book, i) => {
           const cell = document.createElement('div');
-          cell.className = `reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}`;
-          cell.appendChild(makeCard(book, i));
+          const delay = (startIndex + i);
+          cell.className = `reveal${delay > 0 ? ' reveal-delay-' + Math.min(delay, 4) : ''}`;
+          cell.appendChild(makeCard(book, startIndex + i));
           grid.appendChild(cell);
           if (window._spRevealObserver) window._spRevealObserver.observe(cell);
         });
-        catalogGrid.appendChild(grid);
+        return grid;
+      }
+
+      const booksOnly     = books.filter(b => b.productType !== 'template');
+      const templatesOnly = books.filter(b => b.productType === 'template');
+
+      catalogGrid.innerHTML = '';
+
+      /* Books sub-section */
+      if (booksOnly.length) {
+        const booksSection = document.createElement('div');
+        booksSection.className = 'catalog-subsection';
+        booksSection.innerHTML = `<h3 class="catalog-subsection-heading">Books</h3>`;
+        booksSection.appendChild(buildGrid(booksOnly, 0));
+        catalogGrid.appendChild(booksSection);
+      }
+
+      /* Templates sub-section */
+      if (templatesOnly.length) {
+        const tmplSection = document.createElement('div');
+        tmplSection.className = 'catalog-subsection';
+        tmplSection.innerHTML = `<h3 class="catalog-subsection-heading">Templates</h3>`;
+        tmplSection.appendChild(buildGrid(templatesOnly, booksOnly.length));
+        catalogGrid.appendChild(tmplSection);
       }
 
       if (catalogSubtitle) {
         const tail = hp.catalogSubtitle || DEFAULTS.catalogSubtitle;
         if (books.length) {
-          const n = books.length;
-          catalogSubtitle.textContent = `${n} book${n === 1 ? '' : 's'}. ${tail}`;
+          const nb = booksOnly.length;
+          const nt = templatesOnly.length;
+          const bookPart = nb ? `${nb} book${nb === 1 ? '' : 's'}` : '';
+          const tmplPart = nt ? `${nt} template${nt === 1 ? '' : 's'}` : '';
+          const countStr = [bookPart, tmplPart].filter(Boolean).join(' · ');
+          catalogSubtitle.textContent = `${countStr}. ${tail}`;
         } else {
           catalogSubtitle.textContent = tail;
         }
@@ -324,8 +352,8 @@
       footerBooksNav.innerHTML = books.map(b => {
         const slug  = b.slug || b.id || '';
         const title = esc(b.title || slug);
-        const dir = b.productType === 'template' ? 'templates' : 'books';
-        return `<a href="${dir}/${slug}/index.html">${title}</a>`;
+        /* All products live under /books/ — templates have productType but same path */
+        return `<a href="books/${slug}/index.html">${title}</a>`;
       }).join('');
     }
 
