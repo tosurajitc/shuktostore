@@ -373,8 +373,8 @@
     const ac          = accentPalette[i % accentPalette.length];
     const slug        = tpl.slug || tpl.id || '';
     const title       = esc(tpl.title || 'Untitled');
-    const tag         = esc(tpl.tag || tpl.genre || 'Template');
-    const desc        = esc(tpl.desc || tpl.description || '');
+    const tag         = esc(tpl.tag || tpl.genre || tpl.category || 'Template');
+    const desc        = esc(tpl.desc || tpl.description || tpl.positioning || '');
     const price       = fmtPrice(tpl.price);
     const accentSolid = tpl.accentSolid || ac.solid;
     const tagBg       = tpl.tagBg  || ac.bg;
