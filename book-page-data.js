@@ -102,6 +102,7 @@
       (b.slug === slugAlias) || (b.id === slugAlias)
     );
     if (!book) return;
+    document.body.dataset.spProductType = book.productType || 'book';
 
     /* Resolve accent color for dynamic renders */
     const accent = book.accent || '#E8541A';
@@ -478,14 +479,16 @@
 
     /* ── "You might also like" grid ────────────────────────────── */
     document.querySelectorAll('[data-sp-also-like]').forEach(container => {
+      const currentDir = document.body.dataset.spProductType === 'template' ? 'templates' : 'books';
       const others = books.filter(b => b.slug !== slug && b.title);
       if (!others.length) return;
       container.innerHTML = others.map((b, i) => {
         const delay = i > 0 ? ` reveal-delay-${i}` : '';
         const cardBg = b.heroBg || '#0A0E13';
         const cardAccent = b.accent || '#E8541A';
-        /* Pages live at books/<slug>/index.html — relative from any book page */
-        const href = `../${b.slug}/index.html`;
+        /* Pages live beside the current product page */
+        const otherDir = b.productType === 'template' ? 'templates' : 'books';
+        const href = currentDir === otherDir ? `../${b.slug}/index.html` : `../../${otherDir}/${b.slug}/index.html`;
         const coverInner = b.cover
           ? `<img src="${b.cover}" alt="${esc(b.title)}" style="width:100%;height:100%;object-fit:cover;"/>`
           : `<div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;line-height:1.15;">${esc(b.title)}</div>`;

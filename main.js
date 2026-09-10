@@ -145,6 +145,8 @@
   /* Nav link labels */
   var booksEl = document.getElementById('sp-nav-link-books');
   if (booksEl && settings.navLinkBooks) booksEl.textContent = settings.navLinkBooks;
+  var templatesEl = document.getElementById('sp-nav-link-templates');
+  if (templatesEl && settings.navLinkTemplates) templatesEl.textContent = settings.navLinkTemplates;
   var aboutEl = document.getElementById('sp-nav-link-about');
   if (aboutEl && settings.navLinkAbout) aboutEl.textContent = settings.navLinkAbout;
 

@@ -767,6 +767,7 @@
     <a href="/" class="nav-logo" style="color:var(--text-on-dark);" data-sp="publisher"><img src="/favicon.png" alt="Shukto Press" />Shukto Press</a>
     <div class="nav-links" style="color:var(--text-on-dark);">
       <a href="#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="#catalog" id="sp-nav-link-templates" style="color:rgba(248,245,239,0.75);">Templates</a>
       <a href="#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
     </div>
     <a href="#catalog" class="nav-cta" id="sp-nav-cta" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--text-on-dark);">Browse Books →</a>
@@ -913,7 +914,7 @@
         <p class="footer-tagline" data-sp="tagline">Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.</p>
       </div>
       <div>
-        <div class="footer-col-title">Books</div>
+        <div class="footer-col-title">Books &amp; Templates</div>
         <nav class="footer-links" id="sp-footer-books-nav">
           <!-- Populated dynamically by site-data.js -->
         </nav>
@@ -1158,6 +1159,7 @@
           var ac = accentCycle[idx % accentCycle.length];
           book = {
             id:          slug,
+            productType: b.productType || 'book',
             title:       b.title    || 'Untitled',
             subtitle:    b.subtitle || '',
             tag:         b.tag      || b.genre || '',
@@ -1169,8 +1171,8 @@
             coverPhAccent: b.accentSolid || ac.solid,
             positioning: b.positioning || b.desc || b.description || '',
             desc:        b.desc     || b.description || '',
-            price:       b.price    || '',
-            salesPage:   b.salesPage || ('books/' + slug + '/index.html'),
+            price:        b.price    || '',
+            salesPage:   b.salesPage || ((b.productType === 'template' ? 'templates/' : 'books/') + slug + '/index.html'),
             buyLink:     b.razorpay || '#'
           };
         }

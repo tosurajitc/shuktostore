@@ -24,6 +24,7 @@ const router   = require('express').Router();
 const { pool } = require('./db');
 
 const BOOKS_DIR = path.join(__dirname, '..', 'books');
+const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');
 
 /* ── Session guard (inline — avoids circular require) ────────── */
 async function requireSession(req, res, next) {
@@ -150,7 +151,7 @@ router.post('/books', requireSession, async (req, res) => {
 
 /* POST /api/books/write-files — write index.html + thank-you.html to disk */
 router.post('/books/write-files', requireSession, async (req, res) => {
-  const { slug, salesHtml, thanksHtml } = req.body || {};
+  const { slug, type, salesHtml, thanksHtml } = req.body || {};
   if (!slug || !salesHtml || !thanksHtml) {
     return res.status(400).json({ error: 'slug, salesHtml and thanksHtml required' });
   }
@@ -159,11 +160,11 @@ router.post('/books/write-files', requireSession, async (req, res) => {
     return res.status(400).json({ error: 'Invalid slug' });
   }
   try {
-    const dir = path.join(BOOKS_DIR, slug);
+    const dir = path.join(type === 'template' ? TEMPLATES_DIR : BOOKS_DIR, slug);
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'index.html'),     salesHtml,  'utf8');
     fs.writeFileSync(path.join(dir, 'thank-you.html'), thanksHtml, 'utf8');
-    console.log(`[data] write-files: wrote books/${slug}/`);
+    console.log(`[data] write-files: wrote ${type === 'template' ? 'templates' : 'books'}/${slug}/`);
     res.json({ ok: true });
   } catch (err) {
     console.error('[data] POST /books/write-files error:', err);
@@ -190,11 +191,11 @@ router.delete('/books/:id/files', requireSession, async (req, res) => {
     return res.status(400).json({ error: 'Invalid id' });
   }
   try {
-    const dir = path.join(BOOKS_DIR, id);
-    if (fs.existsSync(dir)) {
-      fs.rmSync(dir, { recursive: true, force: true });
-      console.log(`[data] delete-files: removed books/${id}/`);
-    }
+    const dirs = [path.join(BOOKS_DIR, id), path.join(TEMPLATES_DIR, id)];
+    dirs.forEach(dir => {
+      if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
+    });
+    console.log(`[data] delete-files: removed product folder for ${id}`);
     res.json({ ok: true });
   } catch (err) {
     console.error('[data] DELETE /books/:id/files error:', err);

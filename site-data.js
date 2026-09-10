@@ -28,6 +28,7 @@
   /* ── Default content (matches hard-coded index.html) ──────────── */
   const DEFAULTS = {
     navLinkBooks: 'Books',
+    navLinkTemplates: 'Templates',
     navLinkAbout: 'About',
     navCta: 'Browse Books →',
     heroLabel:    'Shukto Press — Practical Books',
@@ -105,6 +106,8 @@
     /* ── Nav links ───────────────────────────────────────────── */
     const navBooks = document.getElementById('sp-nav-link-books');
     if (navBooks) navBooks.textContent = settings.navLinkBooks || DEFAULTS.navLinkBooks;
+    const navTemplates = document.getElementById('sp-nav-link-templates');
+    if (navTemplates) navTemplates.textContent = settings.navLinkTemplates || DEFAULTS.navLinkTemplates;
     const navAbout = document.getElementById('sp-nav-link-about');
     if (navAbout) navAbout.textContent = settings.navLinkAbout || DEFAULTS.navLinkAbout;
     const navCta = document.getElementById('sp-nav-cta');
@@ -250,6 +253,7 @@
       function makeCard(book, i) {
         const ac = accentPalette[i % accentPalette.length];
         const slug        = book.slug || book.id || '';
+        const productType = book.productType === 'template' ? 'template' : 'book';
         const title       = esc(book.title || 'Untitled');
         const tag         = esc(book.tag || book.genre || '');
         const desc        = esc(book.desc || book.description || '');
@@ -267,6 +271,7 @@
         wrap.innerHTML = `
           <button class="home-book-card book-modal-trigger"
                   data-book="${slug}"
+                  data-product-type="${productType}"
                   style="height:100%;width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer;"
                   aria-label="Preview ${title}">
             <div class="home-book-card-cover">
@@ -319,7 +324,8 @@
       footerBooksNav.innerHTML = books.map(b => {
         const slug  = b.slug || b.id || '';
         const title = esc(b.title || slug);
-        return `<a href="books/${slug}/index.html">${title}</a>`;
+        const dir = b.productType === 'template' ? 'templates' : 'books';
+        return `<a href="${dir}/${slug}/index.html">${title}</a>`;
       }).join('');
     }
 

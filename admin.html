@@ -239,10 +239,10 @@ select option{background:#1A2130;color:#F8F5EF}
 <div class="view active" id="view-books">
   <div class="page-header">
     <div>
-      <div class="page-title">Your Books</div>
-      <div class="page-subtitle">All books in the catalog. Click Edit to update details.</div>
+      <div class="page-title">Your Products</div>
+      <div class="page-subtitle">Books and templates in the catalog. Click Edit to update details.</div>
     </div>
-    <button class="btn btn-primary" onclick="startNewBook()">+ Add New Book</button>
+    <button class="btn btn-primary" onclick="startNewBook()">+ Add Product</button>
   </div>
   <div class="card">
     <div id="book-list-container" class="book-list">
@@ -260,7 +260,7 @@ select option{background:#1A2130;color:#F8F5EF}
 <div class="view" id="view-add-book">
   <div class="page-header">
     <div>
-      <div class="page-title" id="form-view-title">Add New Book</div>
+      <div class="page-title" id="form-view-title">Add New Product</div>
       <div class="page-subtitle">Fill in the details below. All fields marked * are required.</div>
     </div>
     <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
@@ -717,6 +717,11 @@ select option{background:#1A2130;color:#F8F5EF}
         <label>"Books" Link Text</label>
         <input type="text" id="s-nav-books" value="Books" placeholder="Books"/>
         <span class="field-hint">First link — jumps to the catalog section on the homepage</span>
+      </div>
+      <div class="form-col">
+        <label>"Templates" Link Text</label>
+        <input type="text" id="s-nav-templates" value="Templates" placeholder="Templates"/>
+        <span class="field-hint">Second link — jumps to the catalog section on the homepage</span>
       </div>
       <div class="form-col">
         <label>"About" Link Text</label>
@@ -1840,7 +1845,7 @@ function startNewBook() {
   coverDataURL = null;
   markClean();
   setSaveEditsBtnsVisible(false);
-  document.getElementById('form-view-title').textContent = 'Add New Book';
+  document.getElementById('form-view-title').textContent = 'Add New Product';
   // Reset form
   document.getElementById('f-product-type').value = 'book';
   ['f-title','f-subtitle','f-author','f-category','f-audience-line','f-slug','f-positioning',
@@ -1888,7 +1893,7 @@ function editBook(id) {
   if (!book) return;
   editingId = id;
   markClean();
-  document.getElementById('form-view-title').textContent = 'Edit Book';
+  document.getElementById('form-view-title').textContent = 'Edit Product';
   setSaveEditsBtnsVisible(true);
   initStatsGrid(book.stats);
   populateForm(book);
@@ -1898,7 +1903,7 @@ function editBook(id) {
 
 /* ── DELETE BOOK ────────────────────────────────────────────── */
 async function deleteBook(id) {
-  if (!confirm('Delete this book? This will also delete the books/' + id + '/ folder on the server. This cannot be undone.')) return;
+  if (!confirm('Delete this product? This will also delete its product folder on the server. This cannot be undone.')) return;
   try {
     await DB.delete(id);
     renderBookList();
@@ -1908,7 +1913,7 @@ async function deleteBook(id) {
       await fetch('/api/books/' + encodeURIComponent(id) + '/files', { method: 'DELETE' });
       toast('Book folder deleted ✓', '🗑', 3000);
     } catch (e) {
-      toast('DB deleted but folder delete failed — remove books/' + id + '/ manually', '⚠️', 5000);
+      toast('DB deleted but folder delete failed — remove the product folder manually', '⚠️', 5000);
     }
   } catch (err) {
     toast('Delete failed: ' + err.message, '⚠️', 4000);
@@ -1970,7 +1975,7 @@ async function saveBookEdits() {
         body: JSON.stringify({ slug: d.slug, type: d.productType, salesHtml, thanksHtml })
       });
       if (r.ok) {
-        toast(`✓ Saved & pages written to books/${d.slug}/`, '📄', 4000);
+        toast(`✓ Saved & pages written to ${d.productType === 'template' ? 'templates' : 'books'}/${d.slug}/`, '📄', 4000);
       } else {
         toast('Data saved but file write failed — download files manually', '⚠️', 5000);
       }
@@ -2042,6 +2047,7 @@ function loadSettings() {
   sv('s-publisher',    s.publisher);
   sv('s-email',        s.email);
   sv('s-nav-books',    s.navLinkBooks);
+  sv('s-nav-templates', s.navLinkTemplates);
   sv('s-nav-about',    s.navLinkAbout);
   sv('s-nav-cta',      s.navCta);
   sv('s-tagline',      s.tagline);
@@ -2053,6 +2059,7 @@ async function saveSettings() {
       publisher:           document.getElementById('s-publisher').value,
       email:               document.getElementById('s-email').value,
       navLinkBooks:        document.getElementById('s-nav-books').value,
+      navLinkTemplates:    document.getElementById('s-nav-templates').value,
       navLinkAbout:        document.getElementById('s-nav-about').value,
       navCta:              document.getElementById('s-nav-cta').value,
       tagline:             document.getElementById('s-tagline').value,
@@ -2322,6 +2329,7 @@ function buildSalesPageHTML(b) {
   const bg = b.heroBg || '#0A0E13';
   const rot = b.rotation || '-3';
   const slug = b.slug;
+  const productDir = b.productType === 'template' ? 'templates' : 'books';
   /* Cover tag: always carries data-sp-cover so runtime patcher can swap it */
   const coverTag = b.cover
     ? `<img src="../../assets/covers/${slug}.jpg" alt="${htmlEsc(b.title)}" class="mockup-cover" data-tilt data-base-rotation="${rot}" data-sp-cover style="--cover-rotation:${rot}deg;transform:rotate(${rot}deg);width:280px;" />`
@@ -2370,13 +2378,13 @@ function buildSalesPageHTML(b) {
     @media(max-width:900px) { .two-col { grid-template-columns:1fr; } .author-card { flex-direction:column; } }
   </style>
 </head>
-<body data-sp-slug="${b.slug}">
+<body data-sp-slug="${b.slug}" data-sp-product-type="${b.productType || 'book'}">
 <div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
 <nav class="nav nav-dark" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
-    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Books</a></div>
-    <a href="${htmlEsc(b.razorpay)}" class="nav-cta" style="background:${a};border-color:${a};" data-sp-razorpay>Get the eBook →</a>
+    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Products</a></div>
+    <a href="${htmlEsc(b.razorpay)}" class="nav-cta" style="background:${a};border-color:${a};" data-sp-razorpay>Get the ${b.productType === 'template' ? 'template' : 'eBook'} →</a>
   </div>
 </nav>
 
@@ -2399,10 +2407,10 @@ function buildSalesPageHTML(b) {
           ${htmlEsc(b.positioning)}
         </p>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <a href="${htmlEsc(b.razorpay)}" class="book-btn-primary" data-sp-razorpay>Get this eBook — <span data-sp-price>${htmlEsc(b.price)}</span> →</a>
+          <a href="${htmlEsc(b.razorpay)}" class="book-btn-primary" data-sp-razorpay>Get this ${b.productType === 'template' ? 'template' : 'eBook'} — <span data-sp-price>${htmlEsc(b.price)}</span> →</a>
           <a href="#inside" class="book-btn-ghost">See what's inside</a>
         </div>
-        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">PDF · Instant delivery · 30-day refund guarantee</p>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">Digital download · Instant delivery · 30-day refund guarantee</p>
       </div>
       <div class="hero-visual">
         <div class="mockup-wrap" style="padding:2rem 2rem 3rem;position:relative;">
@@ -2522,13 +2530,13 @@ ${b.promiseHeading ? `
 <section class="section" id="pricing" style="background:var(--paper);">
   <div class="container" style="max-width:680px;">
     <div class="section-header centered reveal">
-      <h2 class="heading-2">Get the eBook</h2>
-      <p class="section-subtitle">One payment. Yours forever. PDF delivered instantly.</p>
+      <h2 class="heading-2">Get the ${b.productType === 'template' ? 'template' : 'eBook'}</h2>
+      <p class="section-subtitle">One payment. Yours forever. Delivered instantly.</p>
     </div>
     <div class="pricing-card reveal" style="--accent:${a};text-align:center;">
       <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${a};">${htmlEsc(b.title)}</div>
       <div class="pricing-price-display" style="color:${a};" data-sp-price>${htmlEsc(b.price)}</div>
-      <p style="color:var(--text-secondary);margin-bottom:2rem;">One-time payment · PDF format · Instant download</p>
+      <p style="color:var(--text-secondary);margin-bottom:2rem;">One-time payment · Digital download</p>
       <ul class="pricing-features" style="text-align:left;" data-sp-pricing-features>${buildPricingFeatures(b.pricingFeatures || ['Full eBook (PDF)'], a)}
       </ul>
       <div style="margin-top:2.5rem;">
@@ -2579,7 +2587,7 @@ ${b.promiseHeading ? `
   <div class="container">
     <div class="footer-grid">
       <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline || 'Practical, non-hyped eBooks.')}</p></div>
-      <div><div class="footer-col-title">Books</div><nav class="footer-links"><a href="../../index.html#catalog">All Books</a></nav></div>
+      <div><div class="footer-col-title">Books &amp; Templates</div><nav class="footer-links"><a href="../../index.html#catalog">All Products</a></nav></div>
       <div><div class="footer-col-title">Info</div><nav class="footer-links"><a href="../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact</a></nav></div>
     </div>
     <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
@@ -2597,8 +2605,9 @@ function buildThanksPageHTML(b) {
   const email = settings.email || 'hello@shuktopress.com';
   const a = b.accent || '#B8874B';
   const bg = b.heroBg || '#0A0E13';
+  const productDir = b.productType === 'template' ? 'templates' : 'books';
   const coverTag = b.cover
-    ? `<img src="../../../assets/covers/${b.slug}.jpg" alt="${htmlEsc(b.title)}" style="width:120px;height:160px;border-radius:var(--radius-md);object-fit:cover;" />`
+    ? `<img src="../../assets/covers/${b.slug}.jpg" alt="${htmlEsc(b.title)}" style="width:120px;height:160px;border-radius:var(--radius-md);object-fit:cover;" />`
     : `<div style="width:120px;height:160px;background:${bg};border-radius:var(--radius-md);display:flex;align-items:flex-end;padding:0.75rem;"><div style="font-family:var(--font-display);font-size:0.625rem;font-weight:800;color:white;line-height:1.3;">${htmlEsc(b.title)}</div></div>`;
 
   return `<!DOCTYPE html>
@@ -2624,12 +2633,12 @@ function buildThanksPageHTML(b) {
     .mini-book-link:hover { transform:translateY(-4px);box-shadow:var(--shadow-card-hover); }
   </style>
 </head>
-<body data-sp-slug="${b.slug}">
+<body data-sp-slug="${b.slug}" data-sp-product-type="${b.productType || 'book'}">
 <div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
 <nav class="nav nav-dark" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
-    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Books</a></div>
+    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Products</a></div>
   </div>
 </nav>
 
@@ -2642,7 +2651,7 @@ function buildThanksPageHTML(b) {
       Payment confirmed
     </div>
     <h1 style="font-family:var(--font-display);font-size:clamp(2.25rem,5.5vw,4.5rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;">
-      You're in.<br/><span style="color:${a};">Your book is ready.</span>
+      You're in.<br/><span style="color:${a};">Your ${b.productType === 'template' ? 'template' : 'book'} is ready.</span>
     </h1>
     <p style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:520px;margin:0 auto;line-height:1.65;">
       Your copy of <strong style="color:rgba(248,245,239,0.9);">${htmlEsc(b.title)}</strong> is ready to download below.
@@ -2655,12 +2664,12 @@ function buildThanksPageHTML(b) {
     <div class="download-card reveal" style="--accent:${a};margin-bottom:3rem;">
       <div class="download-cover">${coverTag}</div>
       <div class="download-body">
-        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${a};margin-bottom:0.5rem;">Your eBook</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${a};margin-bottom:0.5rem;">Your ${b.productType === 'template' ? 'Template' : 'eBook'}</div>
         <h2 style="font-family:var(--font-display);font-size:1.375rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.5rem;">${htmlEsc(b.title)}</h2>
-        <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:1.25rem;">${htmlEsc(b.subtitle)} — PDF format</p>
+        <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:1.25rem;">${htmlEsc(b.subtitle)} — digital download</p>
         <a href="${htmlEsc(b.download)}" class="download-btn" download>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 1v10M9 11l-3.5-3.5M9 11l3.5-3.5M2 14h14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Download Your eBook (PDF)
+          Download Your ${b.productType === 'template' ? 'Template' : 'eBook'}
         </a>
         <p style="margin-top:0.75rem;font-size:0.75rem;color:var(--text-muted);">If the download doesn't start, right-click → "Save link as". Bookmark this page.</p>
       </div>
@@ -2697,7 +2706,7 @@ function buildThanksPageHTML(b) {
   <div class="container">
     <div class="footer-grid">
       <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline||'Practical, non-hyped eBooks.')}</p></div>
-      <div><div class="footer-col-title">Books</div><nav class="footer-links"><a href="../../index.html#catalog">All Books</a></nav></div>
+      <div><div class="footer-col-title">Books &amp; Templates</div><nav class="footer-links"><a href="../../index.html#catalog">All Products</a></nav></div>
       <div><div class="footer-col-title">Help</div><nav class="footer-links"><a href="../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact support</a></nav></div>
     </div>
     <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
@@ -2711,13 +2720,14 @@ function buildThanksPageHTML(b) {
 
 function buildHomepageCardHTML(b) {
   const a = b.accent || '#B8874B';
+  const productDir = b.productType === 'template' ? 'templates' : 'books';
   const bg = b.heroBg || '#0A0E13';
   const coverInner = b.cover
     ? `<img src="assets/covers/${b.slug}.jpg" alt="${htmlEsc(b.title)}" style="width:100%;height:100%;object-fit:cover;" />`
     : `<div style="width:100%;height:100%;background:${bg};display:flex;align-items:flex-end;padding:1.5rem;"><div style="font-family:var(--font-display);font-size:1rem;font-weight:800;color:white;line-height:1.2;">${htmlEsc(b.title)}</div></div>`;
   return `<!-- Book card for ${htmlEsc(b.title)} — paste inside .catalog-book-stack in index.html -->
 <div class="reveal">
-  <a href="books/${b.slug}/index.html" class="home-book-card">
+  <a href="${productDir}/${b.slug}/index.html" class="home-book-card">
     <div class="home-book-card-cover" style="height:240px;overflow:hidden;">
       ${coverInner}
     </div>
