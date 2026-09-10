@@ -571,24 +571,7 @@
 <!-- ── STAT STRIP ─────────────────────────────────────────────── -->
 <section class="stat-strip">
   <div class="container">
-    <div class="stat-grid">
-      <div class="stat-item reveal">
-        <div class="stat-num">4</div>
-        <div class="stat-label">Professional templates</div>
-      </div>
-      <div class="stat-item reveal reveal-delay-1">
-        <div class="stat-num">7</div>
-        <div class="stat-label">Pages of structured content</div>
-      </div>
-      <div class="stat-item reveal reveal-delay-2">
-        <div class="stat-num">0</div>
-        <div class="stat-label">Tools or subscriptions needed</div>
-      </div>
-      <div class="stat-item reveal reveal-delay-3">
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Times you can reuse them</div>
-      </div>
-    </div>
+    <div class="stat-grid" data-sp-stats></div>
   </div>
 </section>
 
@@ -720,51 +703,7 @@
     <div class="section-header reveal">
       <h2 class="heading-2">FAQ</h2>
     </div>
-    <div class="faq-list" style="--accent:#7C3AED;">
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">What format are the templates?</button>
-        <div class="faq-a" hidden>
-          Each template is a standalone HTML file. You open it in any modern web browser (Chrome, Firefox, Safari, Edge), click any field to edit directly, and use the built-in "Save as PDF" button to print it. No additional software, design tools, or subscriptions required.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">Can I edit the templates after printing?</button>
-        <div class="faq-a" hidden>
-          Yes — the HTML files are yours to keep. You can re-open the same file in your browser and edit it again any time. We recommend saving a master blank copy before filling in your first project so you always have a clean version ready.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">Do the templates work on Mac and Windows?</button>
-        <div class="faq-a" hidden>
-          Yes. HTML files work identically on any operating system. Open with Chrome or Edge for the most consistent print-to-PDF output. Safari on Mac also works well.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">Can I white-label these templates with my own branding?</button>
-        <div class="faq-a" hidden>
-          Yes — the agency name fields are editable, and the HTML is fully open. You can customise colours, fonts, and logos if you have basic HTML/CSS knowledge. For non-technical users, editing the text fields and agency name is all you need for a professional result.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">What's the difference between buying individual templates vs. the pack?</button>
-        <div class="faq-a" hidden>
-          Individual templates let you buy only what you need at ₹149 each. The full pack (₹399) gives you all 4 templates together at a 33% discount compared to buying them separately (₹596 total). The pack also includes all future template updates.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">Is there a refund policy?</button>
-        <div class="faq-a" hidden>
-          Yes. We offer a 30-day no-questions-asked refund. Email <a href="mailto:shuktoai@gmail.com" style="color:#7C3AED;font-weight:600;">shuktoai@gmail.com</a> and we'll process your refund within 2 business days.
-        </div>
-      </div>
-
-    </div>
+    <div class="faq-list" data-sp-faq-list></div>
   </div>
 </section>
 
@@ -799,26 +738,8 @@
     <div class="section-header reveal">
       <h2 class="heading-3">You might also like</h2>
     </div>
-    <div class="mini-book-grid">
-      <a href="../one-person-company/index.html" class="home-book-card reveal" style="background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out);">
-        <div style="height:180px;background:linear-gradient(135deg,#0A0E13,#1E2940,#12181F);display:flex;align-items:flex-end;padding:1.5rem;">
-          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;line-height:1.15;">The One-Person Company</div>
-        </div>
-        <div style="padding:1.25rem;">
-          <span style="font-size:0.75rem;font-weight:600;color:#B83E10;background:rgba(232,84,26,0.12);padding:0.25rem 0.75rem;border-radius:9999px;">Business &amp; AI</span>
-          <p style="font-size:0.875rem;color:var(--text-secondary);margin-top:0.75rem;line-height:1.5;">How AI agents are creating the business of the future.</p>
-        </div>
-      </a>
-      <a href="../money-sorted/index.html" class="home-book-card reveal reveal-delay-1" style="background:white;border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--divider);display:flex;flex-direction:column;transition:transform var(--duration-base) var(--ease-out),box-shadow var(--duration-base) var(--ease-out);">
-        <div style="height:180px;background:linear-gradient(135deg,#1E3630,#2A4F48,#0F2A26);display:flex;align-items:flex-end;padding:1.5rem;">
-          <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:white;line-height:1.15;">Money, Sorted</div>
-        </div>
-        <div style="padding:1.25rem;">
-          <span style="font-size:0.75rem;font-weight:600;color:#9A4B15;background:rgba(221,124,63,0.12);padding:0.25rem 0.75rem;border-radius:9999px;">Personal Finance</span>
-          <p style="font-size:0.875rem;color:var(--text-secondary);margin-top:0.75rem;line-height:1.5;">Finance for freelancers and people with irregular income.</p>
-        </div>
-      </a>
-    </div>
+    <!-- Filled dynamically by book-page-data.js -->
+    <div class="mini-book-grid" data-sp-also-like></div>
   </div>
 </section>
 
