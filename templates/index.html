@@ -461,6 +461,26 @@
       }
     }
 
+    /* Hero visual — show up to 3 template covers (real img or gradient) */
+    const heroVisual = document.getElementById('tpl-hero-visual');
+    if (heroVisual && templates.length) {
+      const picks = templates.slice(0, 3);
+      heroVisual.innerHTML = picks.map((tpl, i) => {
+        const ac    = accentPalette[i % accentPalette.length];
+        const grad  = tpl.coverPh || ac.grad;
+        const title = esc(tpl.title || 'Template');
+        // Stagger sizes and offsets exactly like the original static cards
+        const sizes   = [{w:160,offset:0},{w:180,offset:-12},{w:155,offset:0}];
+        const s       = sizes[i] || sizes[0];
+        const transform = s.offset ? `transform:translateY(${s.offset}px);` : '';
+        const inner = tpl.cover
+          ? `<img src="${tpl.cover}" alt="${title}" style="width:100%;height:100%;object-fit:cover;border-radius:1rem;">`
+          : ``;
+        const bg = tpl.cover ? '' : `background:${grad};`;
+        return `<div style="width:${s.w}px;aspect-ratio:3/4;border-radius:1rem;${bg}box-shadow:0 20px 60px rgba(0,0,0,0.5);${transform}overflow:hidden;">${inner}</div>`;
+      }).join('');
+    }
+
     /* Footer — books */
     const footerBooks = document.getElementById('tpl-footer-books-nav');
     if (footerBooks && booksOnly.length) {
