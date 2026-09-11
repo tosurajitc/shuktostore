@@ -185,11 +185,11 @@ select option{background:#1A2130;color:#F8F5EF}
     <div class="nav-section-label">Manage</div>
     <button class="nav-btn active" onclick="showView('books')" id="nav-books">
       <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.7.378 3.8 1.029A7.969 7.969 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
-      Books
+      Books / Templates
     </button>
     <button class="nav-btn" onclick="showView('add-book')" id="nav-add-book">
       <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-      Add / Edit Book
+      Add / Edit Product
     </button>
     <button class="nav-btn" onclick="showView('settings')" id="nav-settings">
       <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h4a1 1 0 001-1v-3h2v3a1 1 0 001 1h4a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
@@ -264,8 +264,8 @@ select option{background:#1A2130;color:#F8F5EF}
       <div class="page-subtitle">Fill in the details below. All fields marked * are required.</div>
     </div>
     <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
-      <button class="btn btn-primary" id="save-edits-btn" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
-      <button class="btn btn-secondary" onclick="showView('books')">← Back to books</button>
+      <button class="btn btn-primary" id="save-edits-btn" onclick="saveBookEdits()">💾 Save to Database</button>
+      <button class="btn btn-secondary" onclick="showView('books')">← Back</button>
     </div>
   </div>
   <!-- Step indicator -->
@@ -280,7 +280,7 @@ select option{background:#1A2130;color:#F8F5EF}
   <div id="unsaved-banner" style="display:none;align-items:center;gap:1rem;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.3);border-radius:0.625rem;padding:0.75rem 1.25rem;margin-bottom:1.25rem;">
     <span style="font-size:1rem;">⚠️</span>
     <span style="font-size:0.875rem;color:rgba(234,179,8,0.9);flex:1;">You have unsaved changes.</span>
-    <button class="btn btn-success" style="padding:0.4rem 1rem;font-size:0.8125rem;" onclick="saveBookEdits()">💾 Save Changes</button>
+    <button class="btn btn-success" style="padding:0.4rem 1rem;font-size:0.8125rem;" onclick="saveBookEdits()">💾 Save to Database</button>
   </div>
   <!-- ── STEP 1: Identity ── -->
   <div id="step-1" class="step-panel">
@@ -327,6 +327,7 @@ select option{background:#1A2130;color:#F8F5EF}
       </div>
     </div>
     <div class="btn-row">
+      <button class="btn btn-success save-new-btn" onclick="saveBookEdits()">💾 Save to Database</button>
       <button class="btn btn-primary" onclick="goStep(2)">Next: Design →</button>
     </div>
   </div>
@@ -391,11 +392,17 @@ select option{background:#1A2130;color:#F8F5EF}
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-success save-new-btn" onclick="saveBookEdits()">💾 Save to Database</button>
       <button class="btn btn-primary" onclick="goStep(3)">Next: Content →</button>
     </div>
   </div>
   <!-- ── STEP 3: Content ── -->
   <div id="step-3" class="step-panel" style="display:none">
+    <!-- Template notice — shown only when type = template -->
+    <div id="template-content-notice" class="alert alert-info" style="display:none">
+      <span>📋</span>
+      <span>You're adding a <strong>Template</strong>. Fill in the sections that apply — book-specific fields (author bio, "the gap", promise cards) are hidden. You can still use "What's Inside", For/Not-for, FAQ and testimonials.</span>
+    </div>
     <div class="card">
       <div class="card-title">📋 "What's Inside" — Bento Points</div>
       <span class="field-hint" style="margin-bottom:0.75rem;display:block">8–10 items. Each becomes a bento grid cell on the sales page.</span>
@@ -495,6 +502,8 @@ select option{background:#1A2130;color:#F8F5EF}
         </div>
       </div>
     </div>
+    <!-- ── BOOK-ONLY SECTIONS (hidden for templates) ── -->
+    <div id="book-only-content">
     <div class="card">
       <div class="card-title">🔍 "The Gap This Book Fills" Section</div>
       <div class="form-grid">
@@ -572,14 +581,17 @@ select option{background:#1A2130;color:#F8F5EF}
       <div class="dynamic-list" id="book-testimonials-list"></div>
       <button class="add-item-btn" onclick="addBookTestimonial()">+ Add testimonial</button>
     </div>
+    </div><!-- /book-only-content -->
+
     <div class="card">
       <div class="card-title">📦 Thank-You — "Where to Start" Steps</div>
-      <span class="field-hint" style="margin-bottom:0.75rem;display:block">4 steps shown on the thank-you page after purchase.</span>
+      <span class="field-hint" style="margin-bottom:0.75rem;display:block">Steps shown on the thank-you page after purchase. For templates: setup instructions.</span>
       <div class="dynamic-list" id="start-steps-list"></div>
       <button class="add-item-btn" onclick="addStartStep()">+ Add step</button>
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-success save-new-btn" onclick="saveBookEdits()">💾 Save to Database</button>
       <button class="btn btn-success save-edits-inline" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
       <button class="btn btn-primary" onclick="goStep(4)">Next: Links &amp; Price →</button>
     </div>
@@ -608,9 +620,9 @@ select option{background:#1A2130;color:#F8F5EF}
           <span class="field-hint">Shown to visitors outside India instead of the Razorpay link. Leave blank and international buyers will see the Razorpay link as fallback.</span>
         </div>
         <div class="form-col span-2">
-          <label>PDF Download Link URL (for thank-you page)</label>
-          <input type="text" id="f-download" placeholder="https://drive.google.com/... or leave blank"/>
-          <span class="field-hint">Where the actual PDF is hosted. Leave blank to use the placeholder.</span>
+          <label id="download-link-label">PDF / Notion Template Link URL (for thank-you page)</label>
+          <input type="text" id="f-download" placeholder="https://drive.google.com/... or Notion share link — leave blank for placeholder"/>
+          <span class="field-hint" id="download-link-hint">Where the file is delivered. For templates: paste the Notion "Duplicate" share link here. Leave blank to use the placeholder.</span>
         </div>
       </div>
     </div>
@@ -644,22 +656,24 @@ select option{background:#1A2130;color:#F8F5EF}
 
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-success save-new-btn" onclick="saveBookEdits()">💾 Save to Database</button>
       <button class="btn btn-success save-edits-inline" style="display:none" onclick="saveBookEdits()">💾 Save Changes</button>
       <button class="btn btn-primary" onclick="goStep(5)">Next: Review →</button>
     </div>
   </div>
   <!-- ── STEP 5: Review ── -->
   <div id="step-5" class="step-panel" style="display:none">
-    <div class="alert alert-info">
+    <div class="alert alert-info" id="review-alert">
       <span>ℹ️</span>
-      <span>Review your book details below. When ready, click <strong>Generate Files</strong> — this creates the HTML for you to download and place in the right folders.</span>
+      <span id="review-alert-text">Review your book details below. When ready, click <strong>Save to Database</strong> — this saves the record. For books: click <strong>Generate Files</strong> to download the HTML pages.</span>
     </div>
     <div class="card" id="review-card">
       <!-- populated on enter -->
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
-      <button class="btn btn-success btn-lg" onclick="generateFiles()">⚡ Generate HTML Files</button>
+      <button class="btn btn-success btn-lg" onclick="saveBookEdits()">💾 Save to Database</button>
+      <button class="btn btn-primary btn-lg" id="generate-files-btn" onclick="generateFiles()">⚡ Generate HTML Files</button>
     </div>
   </div>
 </div>
@@ -1457,7 +1471,37 @@ document.getElementById('f-slug').addEventListener('input', function() {
 });
 document.getElementById('f-product-type').addEventListener('change', function() {
   document.getElementById('slug-type-preview').textContent = this.value === 'template' ? 'templates' : 'books';
+  applyProductTypeUI(this.value);
 });
+
+function applyProductTypeUI(type) {
+  const isTemplate = type === 'template';
+  // Show/hide book-only content section in Step 3
+  const bookOnly = document.getElementById('book-only-content');
+  if (bookOnly) bookOnly.style.display = isTemplate ? 'none' : '';
+  // Show template notice in Step 3
+  const notice = document.getElementById('template-content-notice');
+  if (notice) notice.style.display = isTemplate ? 'flex' : 'none';
+  // Download link label / hint
+  const dlLabel = document.getElementById('download-link-label');
+  const dlHint  = document.getElementById('download-link-hint');
+  if (dlLabel) dlLabel.textContent = isTemplate
+    ? 'Notion Template Link (for thank-you page)'
+    : 'PDF Download Link URL (for thank-you page)';
+  if (dlHint) dlHint.textContent = isTemplate
+    ? 'Paste the Notion "Duplicate as template" share link here. Leave blank to use the placeholder.'
+    : 'Where the actual PDF is hosted. Leave blank to use the placeholder.';
+  // Review step alert text
+  const rat = document.getElementById('review-alert-text');
+  if (rat) rat.innerHTML = isTemplate
+    ? 'Review your template details below. Click <strong>Save to Database</strong> — your template is already live at its URL.'
+    : 'Review your book details below. Click <strong>Save to Database</strong> to save the record, then <strong>Generate Files</strong> to download the HTML pages.';
+  // Show/hide generate-files button (not useful for templates that already have pages)
+  const genBtn = document.getElementById('generate-files-btn');
+  if (genBtn) genBtn.style.display = isTemplate ? 'none' : '';
+  // Show/hide save-new-btn buttons (for template always visible; for book only when not editing)
+  document.querySelectorAll('.save-new-btn').forEach(b => b.style.display = '');
+}
 
 /* ── COLOR HELPERS ──────────────────────────────────────────── */
 function syncColorText(colorId, textId) {
@@ -1846,6 +1890,7 @@ function startNewBook() {
   markClean();
   setSaveEditsBtnsVisible(false);
   document.getElementById('form-view-title').textContent = 'Add New Product';
+  applyProductTypeUI('book');
   // Reset form
   document.getElementById('f-product-type').value = 'book';
   ['f-title','f-subtitle','f-author','f-category','f-audience-line','f-slug','f-positioning',
@@ -1897,6 +1942,7 @@ function editBook(id) {
   setSaveEditsBtnsVisible(true);
   initStatsGrid(book.stats);
   populateForm(book);
+  applyProductTypeUI(book.productType || 'book');
   goStep(1);
   showView('add-book');
 }
@@ -1950,8 +1996,10 @@ function buildReview() {
 }
 
 function setSaveEditsBtnsVisible(visible) {
-  document.getElementById('save-edits-btn').style.display = visible ? '' : 'none';
+  // save-edits-btn is now always shown (header button) — no toggling
   document.querySelectorAll('.save-edits-inline').forEach(b => b.style.display = visible ? '' : 'none');
+  // When editing, hide the save-new-btn buttons to avoid duplicate saves
+  document.querySelectorAll('.save-new-btn').forEach(b => b.style.display = visible ? 'none' : '');
 }
 
 /* ── SAVE BOOK EDITS (edit mode only) ───────────────────────── */
