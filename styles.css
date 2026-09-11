@@ -1164,6 +1164,9 @@ ul, ol { list-style: none; }
   transition: color var(--duration-fast);
 }
 .footer-links a:hover { color: var(--text-on-dark); }
+.whatsapp-link { display: inline-flex; align-items: center; gap: 0.4rem; }
+.whatsapp-icon { width: 1.05rem; height: 1.05rem; flex: 0 0 auto; }
+
 .footer-bottom {
   border-top: 1px solid var(--divider-dark);
   padding-top: var(--space-6);
