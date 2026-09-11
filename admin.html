@@ -301,7 +301,7 @@ select option{background:#1A2130;color:#F8F5EF}
         </div>
         <div class="form-col">
           <label class="required">Subtitle</label>
-          <input type="text" id="f-subtitle" placeholder="e.g. How AI Agents Are Creating the Business of the Future"/>
+          <textarea id="f-subtitle" rows="2" placeholder="e.g. How AI Agents Are Creating the Business of the Future"></textarea>
         </div>
         <div class="form-col">
           <label class="required">Author</label>
@@ -431,7 +431,7 @@ select option{background:#1A2130;color:#F8F5EF}
         </div>
         <div class="form-col">
           <label>Promise Heading</label>
-          <input type="text" id="f-promise-heading" placeholder="e.g. By the last chapter, you'll have a plan — not just a perspective."/>
+          <textarea id="f-promise-heading" rows="2" placeholder="e.g. By the last chapter, you'll have a plan — not just a perspective."></textarea>
         </div>
         <div class="form-col span-2">
           <label>Promise Body</label>
@@ -454,7 +454,7 @@ select option{background:#1A2130;color:#F8F5EF}
               </div>
               <div class="form-col span-2">
                 <label>Description</label>
-                <input type="text" id="f-promise-card-body-1" placeholder="e.g. Design any AI agent for any function in 5 structured steps"/>
+                <textarea id="f-promise-card-body-1" rows="2" placeholder="e.g. Design any AI agent for any function in 5 structured steps"></textarea>
               </div>
             </div>
           </div>
@@ -471,7 +471,7 @@ select option{background:#1A2130;color:#F8F5EF}
               </div>
               <div class="form-col span-2">
                 <label>Description</label>
-                <input type="text" id="f-promise-card-body-2" placeholder="e.g. Know exactly which tasks in your business to automate first"/>
+                <textarea id="f-promise-card-body-2" rows="2" placeholder="e.g. Know exactly which tasks in your business to automate first"></textarea>
               </div>
             </div>
           </div>
@@ -488,7 +488,7 @@ select option{background:#1A2130;color:#F8F5EF}
               </div>
               <div class="form-col span-2">
                 <label>Description</label>
-                <input type="text" id="f-promise-card-body-3" placeholder="e.g. Design an AI-augmented company from zero, step by step"/>
+                <textarea id="f-promise-card-body-3" rows="2" placeholder="e.g. Design an AI-augmented company from zero, step by step"></textarea>
               </div>
             </div>
           </div>
@@ -500,7 +500,7 @@ select option{background:#1A2130;color:#F8F5EF}
       <div class="form-grid">
         <div class="form-col span-2">
           <label>Section Heading</label>
-          <input type="text" id="f-gap-heading" placeholder="e.g. The gap this book fills"/>
+          <textarea id="f-gap-heading" rows="2" placeholder="e.g. The gap this book fills"></textarea>
           <span class="field-hint">The bold heading shown above the two paragraphs.</span>
         </div>
         <div class="form-col span-2">
@@ -558,11 +558,11 @@ select option{background:#1A2130;color:#F8F5EF}
       <div class="form-grid">
         <div class="form-col">
           <label>CTA Heading</label>
-          <input type="text" id="f-cta-heading" placeholder="e.g. Start building your one-person company."/>
+          <textarea id="f-cta-heading" rows="2" placeholder="e.g. Start building your one-person company."></textarea>
         </div>
         <div class="form-col">
           <label>CTA Body</label>
-          <input type="text" id="f-cta-body" placeholder="e.g. Get the frameworks, the blueprint, and the 30-day plan."/>
+          <textarea id="f-cta-body" rows="2" placeholder="e.g. Get the frameworks, the blueprint, and the 30-day plan."></textarea>
         </div>
       </div>
     </div>
@@ -1573,7 +1573,7 @@ function makeItemRow(listId, value = '', placeholder = '', extraFields = null) {
         <input type="text" class="inside-title" placeholder="Title (4–6 words)" value="${esc(vals.title)}" style="flex:1"/>
         <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
       </div>
-      <input type="text" class="inside-body" placeholder="One-sentence description" value="${esc(vals.body)}" style="width:100%"/>`;
+      <textarea class="inside-body" placeholder="One-sentence description" rows="2" style="width:100%">${esc(vals.body)}</textarea>`;
   } else if (listId === 'start-steps-list') {
     row.style.flexDirection = 'column';
     row.style.alignItems = 'stretch';
@@ -1588,7 +1588,7 @@ function makeItemRow(listId, value = '', placeholder = '', extraFields = null) {
         <input type="text" class="step-title-f" placeholder="Step title, e.g. Chapter 1 — The Core Framework" value="${esc(vals.title)}" style="flex:1"/>
         <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
       </div>
-      <input type="text" class="step-body-f" placeholder="One-sentence instruction" value="${esc(vals.body)}" style="width:100%"/>`;
+      <textarea class="step-body-f" placeholder="One-sentence instruction" rows="2" style="width:100%">${esc(vals.body)}</textarea>`;
   } else if (listId === 'faq-list') {
     const ef = extraFields || { q: '', a: '' };
     row.style.flexDirection = 'column';
@@ -1599,9 +1599,9 @@ function makeItemRow(listId, value = '', placeholder = '', extraFields = null) {
     row.style.borderRadius = '0.5rem';
     row.style.padding = '0.75rem';
     row.innerHTML = `
-      <div style="display:flex;gap:0.5rem;align-items:center">
-        <input type="text" class="faq-q" placeholder="Question" value="${esc(ef.q)}" style="flex:1"/>
-        <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+      <div style="display:flex;gap:0.5rem;align-items:flex-start">
+        <textarea class="faq-q" placeholder="Question" rows="2" style="flex:1">${esc(ef.q)}</textarea>
+        <button class="btn-icon danger" style="margin-top:0.25rem" onclick="this.closest('.dynamic-item').remove()">✕</button>
       </div>
       <textarea class="faq-a" placeholder="Answer" rows="2" style="width:100%">${esc(ef.a)}</textarea>`;
   } else if (listId === 'book-testimonials-list') {
@@ -1614,9 +1614,9 @@ function makeItemRow(listId, value = '', placeholder = '', extraFields = null) {
     row.style.borderRadius = '0.5rem';
     row.style.padding = '0.75rem';
     row.innerHTML = `
-      <div style="display:flex;gap:0.5rem;align-items:center">
-        <input type="text" class="bt-quote" placeholder="Reader quote (leave blank for placeholder)" value="${esc(ef.quote)}" style="flex:1"/>
-        <button class="btn-icon danger" onclick="this.closest('.dynamic-item').remove()">✕</button>
+      <div style="display:flex;gap:0.5rem;align-items:flex-start">
+        <textarea class="bt-quote" placeholder="Reader quote (leave blank for placeholder)" rows="2" style="flex:1">${esc(ef.quote)}</textarea>
+        <button class="btn-icon danger" style="margin-top:0.25rem" onclick="this.closest('.dynamic-item').remove()">✕</button>
       </div>
       <div style="display:flex;gap:0.5rem;">
         <input type="text" class="bt-name" placeholder="Reader name" value="${esc(ef.name)}" style="flex:1"/>
