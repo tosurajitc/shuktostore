@@ -3738,17 +3738,24 @@ async function uploadPendingPreviews(slug) {
     });
     renderPreviewSlots();
 
-    // Persist the now-confirmed R2 URLs back into the book record.
-    // collectFormData() was called before the upload and saved previewImages:[]
-    // for new uploads (data-only slots have no url yet). Now that we have real
-    // URLs we must re-save just the previewImages field so a page refresh shows
-    // the correct images.
+    // Persist the now-confirmed R2 URLs back into the book record in the DB.
+    // collectFormData() ran before this upload and produced previewImages:[]
+    // (new files only have .data, not .url yet), so the initial DB.upsert()
+    // wrote [] to the DB. Now that we have real R2 URLs we patch the in-memory
+    // cache entry directly and POST only the previewImages field update so the
+    // DB reflects the correct state on the next page load.
     try {
       const finalUrls = _previewImages.filter(img => img.url).map(img => img.url);
-      const book = DB.getById(editingId);
-      if (book) {
-        book.previewImages = finalUrls;
-        await DB.upsert(book);
+      // Patch the cache entry in-place so DB.getById returns the updated object
+      if (DB._cache) {
+        const cached = DB._cache.find(b => b.id === editingId);
+        if (cached) cached.previewImages = finalUrls;
+      }
+      // POST the updated book directly to the API
+      const bookToSave = DB.getById(editingId);
+      if (bookToSave) {
+        bookToSave.previewImages = finalUrls;
+        await apiPost('/api/books', { book: bookToSave });
       }
     } catch (saveErr) {
       console.warn('[preview] Could not persist R2 URLs to DB:', saveErr.message);
