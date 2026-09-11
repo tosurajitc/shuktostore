@@ -2382,9 +2382,13 @@ function buildSalesPageHTML(b) {
 <div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
 <nav class="nav nav-dark" aria-label="Main navigation">
   <div class="nav-inner">
-    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
-    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Products</a></div>
-    <a href="${htmlEsc(b.razorpay)}" class="nav-cta" style="background:${a};border-color:${a};" data-sp-razorpay>Get the ${b.productType === 'template' ? 'template' : 'eBook'} →</a>
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);"><img src="../../favicon.png" alt="${htmlEsc(pub)}" />${htmlEsc(pub)}</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="/templates" id="sp-nav-link-templates" style="color:rgba(248,245,239,0.75);">Templates</a>
+      <a href="../../index.html#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="${htmlEsc(b.razorpay)}" class="nav-cta" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--text-on-dark);" data-sp-razorpay>Get this eBook →</a>
   </div>
 </nav>
 
@@ -2586,11 +2590,37 @@ ${b.promiseHeading ? `
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline || 'Practical, non-hyped eBooks.')}</p></div>
-      <div><div class="footer-col-title">Books &amp; Templates</div><nav class="footer-links"><a href="../../index.html#catalog">All Products</a></nav></div>
-      <div><div class="footer-col-title">Info</div><nav class="footer-links"><a href="../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact</a></nav></div>
+      <div>
+        <div class="footer-brand" data-sp="publisher">${htmlEsc(pub)}</div>
+        <p class="footer-tagline" data-sp="tagline">${htmlEsc(settings.tagline || 'Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.')}</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links">
+          <a href="/books/one-person-company/">The One-Person Company</a>
+          <a href="/books/money-sorted/">Money, Sorted</a>
+          <a href="/books/ai-handbook-for-kids/">AI Handbook for Kids</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Templates</div>
+        <nav class="footer-links">
+          <a href="/templates">All templates</a>
+          <a href="/templates/ai-agency-ops-pack/">AI Agency Ops Pack</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <nav class="footer-links">
+          <a href="/">Home</a>
+          <a href="mailto:${htmlEsc(email)}" data-sp="contact-email">${htmlEsc(email)}</a>
+        </nav>
+      </div>
     </div>
-    <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
+    <div class="footer-bottom">
+      <span>© <span data-sp="year">${new Date().getFullYear()}</span> <span data-sp="publisher">${htmlEsc(pub)}</span>. All rights reserved.</span>
+      <span id="sp-footer-bottom-tagline">Practical books for practical people.</span>
+    </div>
   </div>
 </footer>
 <script src="../../main.js"><\/script>
@@ -2637,8 +2667,13 @@ function buildThanksPageHTML(b) {
 <div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
 <nav class="nav nav-dark" aria-label="Main navigation">
   <div class="nav-inner">
-    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);">${htmlEsc(pub)}</a>
-    <div class="nav-links"><a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">All Products</a></div>
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);"><img src="../../favicon.png" alt="${htmlEsc(pub)}" />${htmlEsc(pub)}</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" id="sp-nav-link-books" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="/templates" id="sp-nav-link-templates" style="color:rgba(248,245,239,0.75);">Templates</a>
+      <a href="../../index.html#about" id="sp-nav-link-about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="/" class="nav-cta" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--text-on-dark);">Browse Books →</a>
   </div>
 </nav>
 
@@ -2705,11 +2740,37 @@ function buildThanksPageHTML(b) {
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><div class="footer-brand">${htmlEsc(pub)}</div><p class="footer-tagline">${htmlEsc(settings.tagline||'Practical, non-hyped eBooks.')}</p></div>
-      <div><div class="footer-col-title">Books &amp; Templates</div><nav class="footer-links"><a href="../../index.html#catalog">All Products</a></nav></div>
-      <div><div class="footer-col-title">Help</div><nav class="footer-links"><a href="../../index.html">Home</a><a href="mailto:${htmlEsc(email)}">Contact support</a></nav></div>
+      <div>
+        <div class="footer-brand" data-sp="publisher">${htmlEsc(pub)}</div>
+        <p class="footer-tagline" data-sp="tagline">${htmlEsc(settings.tagline || 'Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.')}</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links">
+          <a href="/books/one-person-company/">The One-Person Company</a>
+          <a href="/books/money-sorted/">Money, Sorted</a>
+          <a href="/books/ai-handbook-for-kids/">AI Handbook for Kids</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Templates</div>
+        <nav class="footer-links">
+          <a href="/templates">All templates</a>
+          <a href="/templates/ai-agency-ops-pack/">AI Agency Ops Pack</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <nav class="footer-links">
+          <a href="/">Home</a>
+          <a href="mailto:${htmlEsc(email)}" data-sp="contact-email">${htmlEsc(email)}</a>
+        </nav>
+      </div>
     </div>
-    <div class="footer-bottom"><span>© ${new Date().getFullYear()} ${htmlEsc(pub)}. All rights reserved.</span></div>
+    <div class="footer-bottom">
+      <span>© <span data-sp="year">${new Date().getFullYear()}</span> <span data-sp="publisher">${htmlEsc(pub)}</span>. All rights reserved.</span>
+      <span id="sp-footer-bottom-tagline">Practical books for practical people.</span>
+    </div>
   </div>
 </footer>
 <script src="../../main.js"><\/script>
