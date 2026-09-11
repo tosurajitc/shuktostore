@@ -3738,6 +3738,22 @@ async function uploadPendingPreviews(slug) {
     });
     renderPreviewSlots();
 
+    // Persist the now-confirmed R2 URLs back into the book record.
+    // collectFormData() was called before the upload and saved previewImages:[]
+    // for new uploads (data-only slots have no url yet). Now that we have real
+    // URLs we must re-save just the previewImages field so a page refresh shows
+    // the correct images.
+    try {
+      const finalUrls = _previewImages.filter(img => img.url).map(img => img.url);
+      const book = DB.getById(editingId);
+      if (book) {
+        book.previewImages = finalUrls;
+        await DB.upsert(book);
+      }
+    } catch (saveErr) {
+      console.warn('[preview] Could not persist R2 URLs to DB:', saveErr.message);
+    }
+
     if (statusEl) {
       statusEl.style.background = 'rgba(47,174,157,0.12)';
       statusEl.style.color = '#2FAE9D';
