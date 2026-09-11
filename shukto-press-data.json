@@ -467,8 +467,87 @@
         "Project Dashboard (2-page PDF template)",
         "All future updates"
       ],
+      "productType": "template",
       "razorpay": "RAZORPAY_PAYMENT_LINK_AI_AGENCY_OPS_PACK",
       "download": "EBOOK_DOWNLOAD_LINK_AI_AGENCY_OPS_PACK"
+    },
+    {
+      "id": "home-sorted",
+      "productType": "template",
+      "title": "Home Sorted",
+      "subtitle": "Stop keeping your entire household in your head.",
+      "author": "Shukto Press",
+      "category": "Notion Template · Home Management",
+      "audienceLine": "Busy households, couples and families who want one calm system for everything",
+      "slug": "home-sorted",
+      "positioning": "Home Sorted is a beautifully designed Notion template that organises your money, bills, chores, meals, maintenance and more — all in one calm, simple place. 13 sections, pre-filled with sample data, ready to use in under 10 minutes.",
+      "accent": "#4E7553",
+      "accentHi": "#7A9E7E",
+      "heroBg": "#1C2E1E",
+      "rotation": "-2",
+      "cover": null,
+      "insideItems": [
+        { "icon": "🏠", "title": "Live Dashboard", "body": "Spending, upcoming bills, pending chores, low stock and attention items — all in one live view." },
+        { "icon": "💰", "title": "Money Tracker", "body": "Log income and expenses by category. See monthly totals and remaining budget automatically." },
+        { "icon": "💳", "title": "Bills & Subscriptions", "body": "Every recurring payment in one place. Due Soon, Overdue and Paid status tracking." },
+        { "icon": "🛒", "title": "Shopping List", "body": "Priority shopping list with estimated costs. Shared across the whole household." },
+        { "icon": "🧹", "title": "Chores Planner", "body": "Weekly and monthly chore planner with assignees. Due, Done, Overdue status tracking." },
+        { "icon": "💸", "title": "Fixed Commitments", "body": "Track home loan EMI, car loan, SIPs, life insurance and health insurance premiums in one place." },
+        { "icon": "🔧", "title": "Home Maintenance", "body": "AC service, water purifier, pest control — never forget a maintenance task again." },
+        { "icon": "🤖", "title": "AI Assistant", "body": "6 ready-made prompts for ChatGPT and Gemini. Plan your week, reduce spending, create meal plans." }
+      ],
+      "forItems": [
+        "Busy working couples managing a shared household",
+        "Families with children and lots of moving parts",
+        "People living independently for the first time",
+        "Anyone who keeps saying 'I really need to get organised'"
+      ],
+      "notForItems": [
+        "People who want automated bank syncing or live financial dashboards",
+        "Businesses or teams — this is designed for households only",
+        "Those who don't use Notion (a free account is required)"
+      ],
+      "faqItems": [
+        { "q": "Do I need a paid Notion account?", "a": "No. Notion's free plan is fully sufficient for Home Sorted. Create a free account at notion.so and duplicate the template." },
+        { "q": "How long does setup take?", "a": "Under 10 minutes. The template is pre-built and pre-filled with examples. Just duplicate it and start replacing the sample data with yours." },
+        { "q": "Can I share it with my family?", "a": "Yes. Notion's free plan allows limited workspace sharing so your partner or family can view and update the same system." },
+        { "q": "Is there a refund policy?", "a": "Yes. 30-day no-questions-asked refund. Email shuktoai@gmail.com and we'll process within 2 business days." }
+      ],
+      "stats": [
+        { "num": "13", "label": "Sections covering every area of home life" },
+        { "num": "1", "label": "Simple system, not 12 different apps" },
+        { "num": "10", "label": "Minutes to set up" },
+        { "num": "0", "label": "Subscriptions needed — free Notion account only" }
+      ],
+      "pullQuote": "\"When is that bill due? Did we buy detergent? How much have we spent this month? — Home Sorted answers all of it.\"",
+      "promiseHeading": "Your home's command centre.",
+      "promiseBody": "Home Sorted was designed by asking one question for every feature: Does this make managing the home easier? If not, it was removed.",
+      "authorBioName": "Surajit Chatterjee",
+      "authorInitial": "SC",
+      "authorBio": "Built by someone who got tired of managing household life through a mixture of WhatsApp messages, paper notes, calendar reminders and pure memory. Home Sorted is the system that didn't exist — so it was built.",
+      "authorPhoto": null,
+      "ctaHeading": "Your entire home. One simple system.",
+      "ctaBody": "Stop keeping everything in your head. Home Sorted gives your household a home — calm, organised and always up to date.",
+      "startSteps": [
+        { "title": "Click the Notion link on the thank-you page", "body": "You'll see a preview of the Home Sorted workspace in Notion." },
+        { "title": "Click 'Duplicate' in the top-right corner", "body": "Notion copies the entire system into your own workspace. It takes about 5 seconds." },
+        { "title": "Go to the Start Here page first", "body": "Fill in your household name, budget, family members and fixed monthly commitments." },
+        { "title": "Check your Dashboard", "body": "Your dashboard now shows live data from all other sections. Replace sample data whenever you're ready." }
+      ],
+      "bookTestimonials": [],
+      "price": "999",
+      "pricingFeatures": [
+        "Full 13-section Notion template",
+        "Dashboard, Money, Bills, Shopping, Chores",
+        "Inventory, Maintenance, Meals, Dates, Documents",
+        "Home Projects tracker",
+        "Fixed Commitments (EMI, SIP, insurance)",
+        "AI Assistant with 6 ready-made prompts",
+        "Sample data pre-filled in every section",
+        "Works on phone and desktop (free Notion app)"
+      ],
+      "razorpay": "RAZORPAY_PAYMENT_LINK_HOME_SORTED",
+      "download": "NOTION_TEMPLATE_LINK_HOME_SORTED"
     }
   ],
   "settings": {

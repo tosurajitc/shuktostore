@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../../favicon.png" />
+  <title>Home Sorted — Notion Home Management System · Shukto Press</title>
+  <meta name="description" content="Stop keeping your entire household in your head. Home Sorted is a beautifully designed Notion template that organises your money, bills, chores, meals, maintenance and more — in one calm, simple place." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    /* ── Accent overrides ── */
+    :root {
+      --hs-sage:      #4E7553;
+      --hs-sage-hi:   #7A9E7E;
+      --hs-terra:     #C0715A;
+      --hs-cream:     #FBF8F3;
+      --hs-gold:      #C9A84C;
+      --hs-charcoal:  #2C2C2C;
+      --accent:       #4E7553;
+      --accent-hi:    #7A9E7E;
+    }
+
+    /* ── HERO ── */
+    .hs-hero {
+      background: linear-gradient(135deg, #1C2E1E 0%, #243527 50%, #1A2B1C 100%);
+      color: var(--text-on-dark);
+    }
+    .hs-hero .blob-1 { background: radial-gradient(circle, rgba(78,117,83,0.5) 0%, transparent 65%); }
+    .hs-hero .blob-2 { background: radial-gradient(circle, rgba(192,113,90,0.25) 0%, transparent 65%); }
+    .hs-hero .blob-3 { background: radial-gradient(circle, rgba(15,30,16,0.4) 0%, transparent 65%); }
+
+    .hs-eyebrow {
+      background: rgba(78,117,83,0.18);
+      border-color: rgba(78,117,83,0.35);
+      color: #A8C5AA;
+    }
+    .hs-btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      background: var(--hs-sage); color: white;
+      border-radius: 9999px; font-weight: 700; font-size: 1.0625rem;
+      transition: transform 200ms cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 200ms cubic-bezier(0.16,1,0.3,1),
+                  filter 200ms;
+    }
+    .hs-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(78,117,83,0.45);
+      filter: brightness(1.1);
+    }
+    .hs-btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      border: 1.5px solid rgba(255,255,255,0.2); color: rgba(248,245,239,0.85);
+      border-radius: 9999px; font-weight: 600; font-size: 1.0625rem;
+      transition: border-color 200ms, background 200ms;
+    }
+    .hs-btn-ghost:hover {
+      border-color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.06);
+    }
+    .accent-hs { color: var(--hs-sage); }
+    .accent-terra { color: var(--hs-terra); }
+
+    /* ── BEFORE / AFTER ── */
+    .before-after-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .ba-card {
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+    }
+    .ba-card-before {
+      background: #FFF5F3;
+      border: 1px solid #F5C9BF;
+    }
+    .ba-card-after {
+      background: #EAF2EA;
+      border: 1px solid #A8C5AA;
+    }
+    .ba-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .ba-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+    .ba-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+
+    /* ── PROMISE BAND ── */
+    .hs-promise {
+      background: linear-gradient(135deg, #1C2E1E 0%, #243527 100%);
+      color: var(--text-on-dark);
+      padding-block: var(--section-gap);
+      position: relative;
+      overflow: hidden;
+    }
+    .hs-promise::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(78,117,83,0.12) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* ── TAB CARDS ── */
+    .tab-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .tab-card {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      transition: transform var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out);
+    }
+    .tab-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .tab-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.875rem;
+      display: block;
+    }
+    .tab-card h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.375rem;
+    }
+    .tab-card p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── PRICING ── */
+    .hs-pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .hs-price-card {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out);
+    }
+    .hs-price-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .hs-price-card.featured {
+      background: linear-gradient(135deg, #1C2E1E 0%, #243527 100%);
+      border: 2px solid rgba(78,117,83,0.5);
+      color: var(--text-on-dark);
+      position: relative;
+    }
+    .hs-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--hs-sage);
+      color: white;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 1rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .hs-price-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .hs-price-sub {
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+    .hs-feature-list { list-style: none; padding: 0; margin: 0 0 1.5rem; flex: 1; }
+    .hs-feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.9375rem;
+      margin-bottom: 0.625rem;
+      line-height: 1.5;
+    }
+    .hs-feature-list .check { color: var(--hs-sage); flex-shrink: 0; font-size: 0.875rem; margin-top: 2px; }
+    .hs-price-card.featured .hs-feature-list .check { color: #A8C5AA; }
+    .hs-price-card.featured .hs-feature-list li { color: rgba(248,245,239,0.85); }
+    .hs-price-card.featured .hs-price-sub { color: rgba(248,245,239,0.5); }
+
+    /* ── NOTION PREVIEW MOCK ── */
+    .notion-mock {
+      background: #191919;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-float);
+    }
+    .notion-mock-bar {
+      background: #2C2C2C;
+      padding: 0.625rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nm-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .notion-mock-body { padding: 1.5rem; }
+    .nm-page-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+    }
+    .nm-prop-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.375rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8125rem;
+    }
+    .nm-prop-label { color: rgba(255,255,255,0.4); width: 120px; flex-shrink: 0; }
+    .nm-prop-value { color: rgba(255,255,255,0.85); }
+    .nm-tag {
+      display: inline-flex;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* ── FINAL CTA ── */
+    .hs-final-cta {
+      background: linear-gradient(135deg, #1C2E1E 0%, #243527 100%);
+      color: var(--text-on-dark);
+    }
+    .hs-final-cta .blob-1 { background: radial-gradient(circle, rgba(78,117,83,0.4) 0%, transparent 65%); }
+    .hs-final-cta .blob-2 { background: radial-gradient(circle, rgba(192,113,90,0.2) 0%, transparent 65%); }
+    .hs-final-cta .blob-3 { display: none; }
+
+    /* ── TWO-COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+      .before-after-grid { grid-template-columns: 1fr; }
+      .tab-grid { grid-template-columns: 1fr 1fr; }
+      .hs-pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    }
+    @media (max-width: 600px) {
+      .tab-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-sp-slug="home-sorted">
+
+<!-- NAV -->
+<div id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;pointer-events:none;"></div>
+<nav class="nav nav-dark" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" style="color:var(--text-on-dark);"><img src="../../favicon.png" alt="Shukto Press" />Shukto Press</a>
+    <div class="nav-links" style="color:var(--text-on-dark);">
+      <a href="../../index.html#catalog" style="color:rgba(248,245,239,0.75);">Books</a>
+      <a href="../../templates/index.html" style="color:rgba(248,245,239,0.75);">Templates</a>
+      <a href="../../index.html#about" style="color:rgba(248,245,239,0.75);">About</a>
+    </div>
+    <a href="RAZORPAY_PAYMENT_LINK_HOME_SORTED" class="nav-cta" style="background:rgba(78,117,83,0.25);border:1px solid rgba(78,117,83,0.4);color:var(--text-on-dark);" data-sp-razorpay>Get Home Sorted →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<section class="hero hs-hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+  <div class="container hero-content" style="padding-block:3rem;">
+    <div class="hero-grid" style="gap:4rem;">
+      <div class="hero-text">
+        <div class="hero-eyebrow hs-eyebrow">
+          <span>Notion Template</span>
+          <span>·</span>
+          <span>Home Management</span>
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:clamp(2.5rem,5.5vw,4.75rem);font-weight:800;letter-spacing:-0.045em;line-height:1.02;color:white;margin-bottom:1.25rem;">
+          Home Sorted
+        </h1>
+        <p style="font-family:var(--font-display);font-size:clamp(1.05rem,2vw,1.375rem);font-weight:500;color:rgba(248,245,239,0.65);letter-spacing:-0.01em;margin-bottom:1.5rem;line-height:1.4;">
+          Stop keeping your entire household in your head.
+        </p>
+        <p style="font-size:1.0625rem;color:rgba(248,245,239,0.6);max-width:520px;line-height:1.7;margin-bottom:2.25rem;">
+          Bills. Shopping. Chores. Maintenance. Money. Meals. Important dates.
+          Instead of juggling 12 different apps, WhatsApp notes and sticky reminders —
+          put everything in one calm, simple Notion system.
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="RAZORPAY_PAYMENT_LINK_HOME_SORTED" class="hs-btn-primary" data-sp-razorpay>
+            Get Home Sorted — <span data-sp-price>₹XX</span> →
+          </a>
+          <a href="#whats-inside" class="hs-btn-ghost">See what's inside</a>
+        </div>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:rgba(248,245,239,0.4);">Notion template · 13 sections · Instant delivery · Works on phone &amp; desktop</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-wrap" style="padding:1.5rem 1.5rem 3rem;">
+          <!-- Notion-style mock -->
+          <div class="notion-mock" data-tilt data-base-rotation="-2" style="transform:rotate(-2deg);width:320px;">
+            <div class="notion-mock-bar">
+              <div class="nm-dot" style="background:#FF5F57;"></div>
+              <div class="nm-dot" style="background:#FFBD2E;"></div>
+              <div class="nm-dot" style="background:#28C840;"></div>
+              <span style="margin-left:0.5rem;font-size:0.75rem;color:rgba(255,255,255,0.3);">🏠 Dashboard</span>
+            </div>
+            <div class="notion-mock-body">
+              <div class="nm-page-title">🏠 Home Sorted</div>
+              <div class="nm-prop-row"><span class="nm-prop-label">Monthly budget</span><span class="nm-prop-value">₹50,000</span></div>
+              <div class="nm-prop-row"><span class="nm-prop-label">Spent so far</span><span class="nm-prop-value" style="color:#C0715A;">₹31,240</span></div>
+              <div class="nm-prop-row"><span class="nm-prop-label">Remaining</span><span class="nm-prop-value" style="color:#7A9E7E;">₹18,760</span></div>
+              <div style="margin:0.875rem 0 0.5rem;font-size:0.75rem;color:rgba(255,255,255,0.35);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">Needs attention</div>
+              <div style="display:flex;flex-direction:column;gap:0.375rem;">
+                <div style="background:rgba(192,113,90,0.2);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.8125rem;color:rgba(255,255,255,0.8);">💳 Electricity bill due in 3 days</div>
+                <div style="background:rgba(201,168,76,0.2);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.8125rem;color:rgba(255,255,255,0.8);">📦 Rice running low</div>
+                <div style="background:rgba(78,117,83,0.2);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.8125rem;color:rgba(255,255,255,0.8);">🧹 Laundry due today</div>
+              </div>
+            </div>
+          </div>
+          <!-- Floating badge -->
+          <div style="position:absolute;bottom:1.5rem;right:-0.5rem;background:white;border-radius:var(--radius-md);padding:0.75rem 1rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:var(--ink);white-space:nowrap;">
+            <span style="color:#4E7553;font-size:1rem;">✓</span> Works on phone &amp; desktop
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BEFORE / AFTER ─────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Sound familiar?</h2>
+      <p class="section-subtitle">This is the average household before Home Sorted.</p>
+    </div>
+
+    <div class="before-after-grid">
+      <div class="ba-card ba-card-before reveal">
+        <div class="ba-label" style="color:var(--hs-terra);">😩 Before</div>
+        <div class="ba-item"><span class="ba-icon">😬</span> "When is that electricity bill due again?"</div>
+        <div class="ba-item"><span class="ba-icon">🤷</span> "Did we buy detergent? I thought you bought it."</div>
+        <div class="ba-item"><span class="ba-icon">😰</span> "How much have we actually spent this month?"</div>
+        <div class="ba-item"><span class="ba-icon">😤</span> "When did we last service the AC? It's making that noise."</div>
+        <div class="ba-item"><span class="ba-icon">🙈</span> "I think the insurance expires soon. Or was that last month?"</div>
+        <div class="ba-item"><span class="ba-icon">💸</span> "I have no idea where the money goes every month."</div>
+        <div class="ba-item"><span class="ba-icon">📱</span> Notes app. WhatsApp. Paper. Calendar. Receipts. Memory.</div>
+      </div>
+      <div class="ba-card ba-card-after reveal reveal-delay-2">
+        <div class="ba-label" style="color:var(--hs-sage);">✅ After — Home Sorted</div>
+        <div class="ba-item"><span class="ba-icon">🏠</span> One place. Everything about your home. Always.</div>
+        <div class="ba-item"><span class="ba-icon">💳</span> Every bill tracked. Due dates visible. No surprises.</div>
+        <div class="ba-item"><span class="ba-icon">💰</span> Spending by category, live. You always know where you stand.</div>
+        <div class="ba-item"><span class="ba-icon">🔧</span> Maintenance schedule. You get reminded before things break.</div>
+        <div class="ba-item"><span class="ba-icon">🛒</span> Shopping list that everyone can see and update.</div>
+        <div class="ba-item"><span class="ba-icon">🧹</span> Chores assigned. No more "I thought you were doing it."</div>
+        <div class="ba-item"><span class="ba-icon">😮‍💨</span> Less mental load. More time. A calmer household.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMISE BAND ────────────────────────────────── -->
+<section class="hs-promise">
+  <div class="container">
+    <div class="two-col" style="align-items:center;">
+      <div class="reveal">
+        <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#A8C5AA;margin-bottom:1rem;">The idea behind it</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.875rem,4vw,3rem);font-weight:800;letter-spacing:-0.035em;line-height:1.1;margin-bottom:1.5rem;">
+          Your home's<br/>command centre.
+        </h2>
+        <p style="font-size:1.0625rem;color:rgba(248,245,239,0.65);line-height:1.7;margin-bottom:1rem;">
+          Home Sorted was designed by asking one question for every feature:
+          <em style="color:rgba(248,245,239,0.85);">"Does this make managing the home easier?"</em>
+          If not, it was removed.
+        </p>
+        <p style="font-size:1.0625rem;color:rgba(248,245,239,0.65);line-height:1.7;">
+          The result is a system that feels like a calm, practical household assistant —
+          not a complicated spreadsheet.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-2" style="display:grid;gap:1rem;">
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.25rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">💰</span>
+          <div><div style="font-weight:700;margin-bottom:0.2rem;color:white;">Know where your money goes</div><div style="font-size:0.875rem;color:rgba(248,245,239,0.55);">Track income, expenses, bills and EMIs. See your real monthly picture.</div></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.25rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">🧹</span>
+          <div><div style="font-weight:700;margin-bottom:0.2rem;color:white;">Share the household load</div><div style="font-size:0.875rem;color:rgba(248,245,239,0.55);">Assign chores, track maintenance, split responsibilities fairly.</div></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:1.25rem;display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-size:1.5rem;flex-shrink:0;">🤖</span>
+          <div><div style="font-weight:700;margin-bottom:0.2rem;color:white;">Built-in AI prompts</div><div style="font-size:0.875rem;color:rgba(248,245,239,0.55);">6 ready-made prompts for ChatGPT and Gemini. No prompt engineering needed.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S INSIDE ───────────────────────────────── -->
+<section class="section" id="whats-inside" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">13 sections. Everything your home needs.</h2>
+      <p class="section-subtitle">Each section is beautifully designed, pre-filled with examples, and ready to use in minutes.</p>
+    </div>
+
+    <div class="tab-grid">
+      <div class="tab-card reveal">
+        <span class="tab-card-icon">🏠</span>
+        <h3>Dashboard</h3>
+        <p>Live overview — spending, upcoming bills, pending chores, low stock and attention items. Everything at a glance.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-1">
+        <span class="tab-card-icon">💰</span>
+        <h3>Money Tracker</h3>
+        <p>Log income and expenses by category. See monthly totals, spending by category and remaining budget — automatically.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-2">
+        <span class="tab-card-icon">💳</span>
+        <h3>Bills &amp; Subscriptions</h3>
+        <p>Every recurring payment in one place. Status indicators for Due Soon, Overdue and Paid. No more missed payments.</p>
+      </div>
+      <div class="tab-card reveal">
+        <span class="tab-card-icon">🛒</span>
+        <h3>Shopping List</h3>
+        <p>Priority shopping list with estimated costs. Mark items off as you shop. Shared across the whole household.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-1">
+        <span class="tab-card-icon">📦</span>
+        <h3>Home Inventory</h3>
+        <p>Track household supplies. Auto-flags items that need replenishing. Never run out of essentials again.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-2">
+        <span class="tab-card-icon">🧹</span>
+        <h3>Chores</h3>
+        <p>Weekly and monthly chore planner. Assign to family members. Status tracking — Due, Done, Overdue.</p>
+      </div>
+      <div class="tab-card reveal">
+        <span class="tab-card-icon">🔧</span>
+        <h3>Home Maintenance</h3>
+        <p>AC service, water purifier, pest control — never forget a maintenance task again. Because apparently that's a job now.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-1">
+        <span class="tab-card-icon">🍽️</span>
+        <h3>Meal Planner</h3>
+        <p>7-day meal planner with dietary notes. Converts directly to a shopping list. Stop the daily "what's for dinner?" debate.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-2">
+        <span class="tab-card-icon">📅</span>
+        <h3>Important Dates</h3>
+        <p>Birthdays, insurance renewals, school events, appointments. All in one place with advance reminders.</p>
+      </div>
+      <div class="tab-card reveal">
+        <span class="tab-card-icon">📁</span>
+        <h3>Documents &amp; Warranties</h3>
+        <p>Track where every document is stored. Passports, insurance policies, warranties, vehicle papers — all traceable.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-1">
+        <span class="tab-card-icon">🏗️</span>
+        <h3>Home Projects</h3>
+        <p>Bathroom renovation, new sofa, paint the bedroom — track budget, progress and next actions for bigger tasks.</p>
+      </div>
+      <div class="tab-card reveal reveal-delay-2">
+        <span class="tab-card-icon">🤖</span>
+        <h3>AI Assistant</h3>
+        <p>6 ready-made prompts for ChatGPT or Gemini. Plan your week, reduce spending, create meal plans — no prompt engineering.</p>
+      </div>
+    </div>
+
+    <!-- Bonus: Fixed commitments highlight -->
+    <div class="reveal" style="margin-top:2.5rem;background:linear-gradient(135deg,#EAF2EA,#FBF8F3);border:1px solid #A8C5AA;border-radius:var(--radius-xl);padding:2rem;display:flex;gap:1.5rem;align-items:flex-start;">
+      <span style="font-size:2.5rem;flex-shrink:0;">💸</span>
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.125rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.375rem;color:var(--ink);">Fixed Monthly Commitments — built in</h3>
+        <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.6;">Home Sorted is the only household template that tracks your home loan EMI, car loan, SIPs, LIC premium, health insurance and other fixed commitments in one place — so you see exactly how much of your income is already spoken for before you spend a rupee on groceries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO IT'S FOR ────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <h2 class="heading-3" style="margin-bottom:1.5rem;">Made for real households.<br/>Not productivity influencers.</h2>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;">
+          Home Sorted is not a complicated system designed to impress people on YouTube. It's a practical tool built for busy adults who just want their home life to feel less chaotic.
+        </p>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1.5rem;">
+          You don't need to be good with Notion. The template comes pre-built, pre-filled with examples, and ready to use in under 10 minutes.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:0.625rem;">
+          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
+            <span style="color:var(--hs-sage);font-size:1rem;">✓</span> Busy working couples
+          </div>
+          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
+            <span style="color:var(--hs-sage);font-size:1rem;">✓</span> Families with children
+          </div>
+          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
+            <span style="color:var(--hs-sage);font-size:1rem;">✓</span> People living independently for the first time
+          </div>
+          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
+            <span style="color:var(--hs-sage);font-size:1rem;">✓</span> Anyone who says "I should get organised" every month
+          </div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div style="background:white;border:1px solid var(--divider);border-radius:var(--radius-xl);padding:2rem;">
+          <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;">What you get</div>
+          <div style="display:flex;flex-direction:column;gap:0.875rem;">
+            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#EAF2EA;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📋</div>
+              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Full Notion template</div><div style="font-size:0.8125rem;color:var(--text-secondary);">Duplicate to your Notion workspace in one click</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#EAF2EA;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📝</div>
+              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Sample data pre-filled</div><div style="font-size:0.8125rem;color:var(--text-secondary);">So you see exactly how it works from the start</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#EAF2EA;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📱</div>
+              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Works on phone &amp; desktop</div><div style="font-size:0.8125rem;color:var(--text-secondary);">Notion app is free and available on all devices</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#EAF2EA;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🔄</div>
+              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Yours forever</div><div style="font-size:0.8125rem;color:var(--text-secondary);">One-time purchase. No subscription. No expiry.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ──────────────────────────────────────── -->
+<section class="section" id="pricing" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Simple pricing</h2>
+      <p class="section-subtitle">One-time payment. Yours to keep and customise forever.</p>
+    </div>
+
+    <div class="hs-pricing-grid">
+      <div class="hs-price-card reveal">
+        <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--hs-sage);margin-bottom:0.75rem;">Starter</div>
+        <div class="hs-price-num" style="color:var(--ink);" data-sp-price>₹XX</div>
+        <div class="hs-price-sub" style="color:var(--text-secondary);">One-time · Instant access</div>
+        <ul class="hs-feature-list">
+          <li><span class="check">✓</span> Dashboard</li>
+          <li><span class="check">✓</span> Money Tracker</li>
+          <li><span class="check">✓</span> Bills &amp; Subscriptions</li>
+          <li><span class="check">✓</span> Shopping List</li>
+          <li><span class="check">✓</span> Chores Planner</li>
+          <li><span class="check">✓</span> Sample data included</li>
+        </ul>
+        <a href="RAZORPAY_PAYMENT_LINK_HOME_SORTED" class="hs-btn-primary" style="text-align:center;justify-content:center;" data-sp-razorpay>Get Starter →</a>
+      </div>
+
+      <div class="hs-price-card featured reveal reveal-delay-1">
+        <div class="hs-badge">Most popular</div>
+        <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#A8C5AA;margin-bottom:0.75rem;">Complete</div>
+        <div class="hs-price-num" data-sp-price>₹XX</div>
+        <div class="hs-price-sub">One-time · Everything included</div>
+        <ul class="hs-feature-list">
+          <li><span class="check">✓</span> Everything in Starter</li>
+          <li><span class="check">✓</span> Home Inventory</li>
+          <li><span class="check">✓</span> Home Maintenance log</li>
+          <li><span class="check">✓</span> Meal Planner</li>
+          <li><span class="check">✓</span> Important Dates</li>
+          <li><span class="check">✓</span> Documents &amp; Warranties</li>
+          <li><span class="check">✓</span> Home Projects tracker</li>
+          <li><span class="check">✓</span> Fixed Commitments (EMI, SIP, insurance)</li>
+          <li><span class="check">✓</span> AI Assistant prompts</li>
+        </ul>
+        <a href="RAZORPAY_PAYMENT_LINK_HOME_SORTED" class="hs-btn-primary" style="text-align:center;justify-content:center;" data-sp-razorpay>Get Complete →</a>
+      </div>
+    </div>
+
+    <p class="reveal" style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:var(--text-muted);">Requires a free Notion account · Works on all devices · No subscription</p>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ────────────────────────────────────── -->
+<section class="hero hs-final-cta" style="padding-block:5rem;">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="container" style="position:relative;z-index:2;text-align:center;max-width:680px;">
+    <div class="reveal">
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;line-height:1.1;margin-bottom:1.25rem;">
+        Your entire home.<br/>One simple system.
+      </h2>
+      <p style="font-size:1.125rem;color:rgba(248,245,239,0.65);line-height:1.7;margin-bottom:2.5rem;">
+        Stop keeping everything in your head. Home Sorted gives your household a home — calm, organised and always up to date.
+      </p>
+      <a href="RAZORPAY_PAYMENT_LINK_HOME_SORTED" class="hs-btn-primary" style="font-size:1.125rem;padding:1.125rem 2.75rem;" data-sp-razorpay>
+        Get Home Sorted — <span data-sp-price>₹XX</span> →
+      </a>
+      <p style="margin-top:1.25rem;font-size:0.8125rem;color:rgba(248,245,239,0.35);">One-time payment · Notion template · Instant delivery</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand" data-sp="publisher">Shukto Press</div>
+        <p class="footer-tagline" data-sp="tagline">Practical, non-hyped eBooks on AI, money, and the future of work. Written by Shukto.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Books</div>
+        <nav class="footer-links" id="sp-footer-books-nav">
+          <a href="/books/one-person-company/">The One-Person Company</a>
+          <a href="/books/money-sorted/">Money, Sorted</a>
+          <a href="/books/ai-handbook-for-kids/">AI Handbook for Kids</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Templates</div>
+        <nav class="footer-links" id="sp-footer-templates-nav">
+          <a href="/templates">All templates</a>
+          <a href="/templates/home-sorted/">Home Sorted</a>
+          <a href="/templates/ai-agency-ops-pack/">AI Agency Ops Pack</a>
+        </nav>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <nav class="footer-links">
+          <a href="/">Home</a>
+          <a href="mailto:shuktoai@gmail.com" data-sp="contact-email">shuktoai@gmail.com</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-sp="year">2025</span> <span data-sp="publisher">Shukto Press</span>. All rights reserved.</span>
+      <span>Practical tools for real life.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../main.js"></script>
+<script src="../../book-page-data.js"></script>
+</body>
+</html>

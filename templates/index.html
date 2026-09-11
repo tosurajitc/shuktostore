@@ -440,12 +440,42 @@
     const container = document.getElementById('tpl-grid-container');
     if (container) {
       if (templates.length === 0) {
-        container.innerHTML = `
-          <div class="tpl-empty">
-            <div class="tpl-empty-icon">🗂️</div>
-            <h3>Templates coming soon</h3>
-            <p>We're building more templates right now. Check back soon or <a href="/" style="color:var(--tpl-accent);">browse the books</a>.</p>
-          </div>`;
+        /* Fallback: show known templates as static cards until admin is set up */
+        const fallbackTpls = [
+          {
+            slug: 'home-sorted',
+            title: 'Home Sorted',
+            tag: 'Notion Template · Home Management',
+            desc: 'Stop keeping your entire household in your head. Bills, chores, money, meals and maintenance — in one calm Notion system.',
+            price: '₹XX',
+            accentSolid: '#4E7553',
+            tagBg: 'rgba(78,117,83,0.12)',
+            tagColor: '#2E5232',
+            coverPh: 'linear-gradient(135deg,#1C2E1E 0%,#243527 50%,#1A2B1C 100%)',
+            salesPage: '/templates/home-sorted/index.html',
+          },
+          {
+            slug: 'ai-agency-ops-pack',
+            title: 'AI Agency Operations Pack',
+            tag: 'Template Pack · AI Agency',
+            desc: '4 ready-to-use HTML templates to run your AI agency like a pro from day one.',
+            price: '₹XX',
+            accentSolid: '#7C3AED',
+            tagBg: 'rgba(124,58,237,0.12)',
+            tagColor: '#5B21B6',
+            coverPh: 'linear-gradient(135deg,#0D0826 0%,#160F35 50%,#2D1B69 100%)',
+            salesPage: '/templates/ai-agency-ops-pack/index.html',
+          },
+        ];
+        const grid = document.createElement('div');
+        grid.className = 'tpl-grid';
+        fallbackTpls.forEach((tpl, i) => {
+          const cell = document.createElement('div');
+          cell.className = 'reveal visible' + (i > 0 ? ' reveal-delay-1' : '');
+          cell.appendChild(makeCard(tpl, i));
+          grid.appendChild(cell);
+        });
+        container.appendChild(grid);
       } else {
         const grid = document.createElement('div');
         grid.className = 'tpl-grid';
