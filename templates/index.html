@@ -250,9 +250,9 @@
       <div class="hero-visual" style="padding-block:2rem;">
         <!-- Visual placeholder — replaced dynamically -->
         <div id="tpl-hero-visual" style="display:flex;gap:1.25rem;align-items:flex-end;justify-content:center;">
-          <div style="width:160px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#0D0826 0%,#2D1B69 100%);box-shadow:0 20px 60px rgba(0,0,0,0.5);"></div>
-          <div style="width:180px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#160F35 0%,#4C1D95 100%);box-shadow:0 24px 80px rgba(0,0,0,0.55);transform:translateY(-12px);"></div>
-          <div style="width:155px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#0D0826 0%,#1E1060 100%);box-shadow:0 16px 48px rgba(0,0,0,0.45);"></div>
+          <div style="width:210px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#0D0826 0%,#2D1B69 100%);box-shadow:0 20px 60px rgba(0,0,0,0.5);"></div>
+          <div style="width:240px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#160F35 0%,#4C1D95 100%);box-shadow:0 24px 80px rgba(0,0,0,0.55);transform:translateY(-16px);"></div>
+          <div style="width:205px;aspect-ratio:3/4;border-radius:1rem;background:linear-gradient(135deg,#0D0826 0%,#1E1060 100%);box-shadow:0 16px 48px rgba(0,0,0,0.45);"></div>
         </div>
       </div>
     </div>
@@ -471,7 +471,7 @@
         const grad  = tpl.coverPh || ac.grad;
         const title = esc(tpl.title || 'Template');
         // Stagger sizes and offsets exactly like the original static cards
-        const sizes   = [{w:160,offset:0},{w:180,offset:-12},{w:155,offset:0}];
+        const sizes   = [{w:210,offset:0},{w:240,offset:-16},{w:205,offset:0}];
         const s       = sizes[i] || sizes[0];
         const transform = s.offset ? `transform:translateY(${s.offset}px);` : '';
         const inner = tpl.cover
