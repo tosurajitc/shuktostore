@@ -91,6 +91,23 @@ async function patchData() {
     const patches = [
       { id: 'one-person-company', razorpay: 'https://rzp.io/rzp/rzpzqaSc' },
     ];
+
+    // Keep the kids handbook's persisted theme and title aligned with its page.
+    await client.query(
+      `UPDATE books
+       SET data = jsonb_set(
+         jsonb_set(
+           jsonb_set(
+             jsonb_set(data, '{title}', '"AI Handbook for Kids"'::jsonb, true),
+             '{accent}', '"#E8541A"'::jsonb, true
+           ),
+           '{accentHi}', '"#F07040"'::jsonb, true
+         ),
+         '{heroBg}', '"#1A1412"'::jsonb, true
+       ), updated_at = now()
+       WHERE id = 'ai-handbook-for-kids'
+         AND (data->>'accent' = '#B8874B' OR data->>'title' = 'Ai handbook for kids')`
+    );
     for (const p of patches) {
       await client.query(
         `UPDATE books

@@ -33,7 +33,7 @@ const EXPIRES_SEC = 60 * 60; // 1 hour
 const R2_FILE_MAP = {
   'one-person-company':   'The One Person Company.pdf',
   'money-sorted':         'Money_Sorted.pdf',
-  'ai-with-sayuj':        'AI_Handbook_for_Kids.pdf',
+
   'ai-handbook-for-kids': 'AI_Handbook_for_Kids.pdf',
   // AI Agency Ops Pack — delivered as a ZIP containing all 4 HTML templates
   'ai-agency-ops-pack':               'AI_Agency_Ops_Pack.zip',

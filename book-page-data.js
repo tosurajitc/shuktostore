@@ -571,6 +571,7 @@
     const [books, bundles, country] = await Promise.all([fetchBooks(), fetchBundles(), fetchCountry()]);
     applyBookData(books, country);
     applyBundleData(books, bundles);
+    document.body.classList.add('sp-data-ready');
   }
 
   if (document.readyState === 'loading') {
@@ -586,6 +587,7 @@
       const country = sessionStorage.getItem('sp_country') || 'IN';
       applyBookData(books, country);
       applyBundleData(books, bundles);
+      document.body.classList.add('sp-data-ready');
     } catch {
       applyBookData([], 'IN');
     }

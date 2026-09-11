@@ -2911,7 +2911,7 @@ const DEFAULT_TRUST = [
 const DEFAULT_TESTIMONIALS = [
   { quote: '', name: 'Reader Name', role: 'Role / Context — The One-Person Company', avatarInitial: 'A', avatarColor: '#B8874B' },
   { quote: '', name: 'Reader Name', role: 'Role / Context — Money, Sorted',          avatarInitial: 'B', avatarColor: '#DD7C3F' },
-  { quote: '', name: 'Reader Name', role: 'Role / Context — AI with Sayuj',           avatarInitial: 'C', avatarColor: '#2FAE9D' }
+  { quote: '', name: 'Reader Name', role: 'Role / Context — AI Handbook for Kids',           avatarInitial: 'C', avatarColor: '#2FAE9D' }
 ];
 
 const DEFAULT_MARQUEE_ITEMS = [
@@ -2929,8 +2929,8 @@ const DEFAULT_MARQUEE_ITEMS = [
 /* Known books for the cover uploader — always includes saved books */
 function getKnownBooks() {
   const saved = DB.load();
-  /* ai-with-sayuj is the old DB slug for the same book — treat as alias */
-  const SLUG_ALIAS = { 'ai-with-sayuj': 'ai-handbook-for-kids' };
+  /* ai-handbook-for-kids is the old DB slug for the same book — treat as alias */
+  const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-handbook-for-kids' };
   const built_in = [
     { slug: 'one-person-company',  title: 'The One-Person Company' },
     { slug: 'money-sorted',        title: 'Money, Sorted' },
@@ -3112,7 +3112,7 @@ function renderCoverUploadList() {
   const books = DB.load();
   const knownBooks = getKnownBooks();
   /* Reverse alias map: canonical slug → possible DB slug */
-  const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-with-sayuj' };
+  const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-handbook-for-kids' };
 
   list.innerHTML = '';
   knownBooks.forEach(kb => {
@@ -3149,8 +3149,8 @@ function handleCoverUploadForBook(e, slug) {
   reader.onload = ev => {
     compressImage(ev.target.result, 800, 0.75, async dataUrl => {
       // Update or create the book record in DB with the cover
-      // Also search by alias (ai-with-sayuj is the DB slug for ai-handbook-for-kids)
-      const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-with-sayuj' };
+      // Also search by alias (ai-handbook-for-kids is the DB slug for ai-handbook-for-kids)
+      const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-handbook-for-kids' };
       const books = DB.load();
       let idx = books.findIndex(b => b.slug === slug);
       if (idx < 0 && SLUG_ALIAS[slug]) idx = books.findIndex(b => b.slug === SLUG_ALIAS[slug]);
@@ -3159,7 +3159,7 @@ function handleCoverUploadForBook(e, slug) {
         await DB.upsert(books[idx]);
       } else {
         // Book not in DB yet — store a minimal record just for the cover
-        const knownTitles = { 'one-person-company': 'The One-Person Company', 'money-sorted': 'Money, Sorted', 'ai-handbook-for-kids': 'AI Handbook for Kids', 'ai-with-sayuj': 'AI Handbook for Kids' };
+        const knownTitles = { 'one-person-company': 'The One-Person Company', 'money-sorted': 'Money, Sorted', 'ai-handbook-for-kids': 'AI Handbook for Kids', 'ai-handbook-for-kids': 'AI Handbook for Kids' };
         const newBook = { id: slug, slug, title: knownTitles[slug] || slug, cover: dataUrl };
         await DB.upsert(newBook);
       }
@@ -3185,7 +3185,7 @@ function handleCoverUploadForBook(e, slug) {
 
 function removeCoverForBook(slug) {
   if (!confirm('Remove cover image for this book?')) return;
-  const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-with-sayuj' };
+  const SLUG_ALIAS = { 'ai-handbook-for-kids': 'ai-handbook-for-kids' };
   const books = DB.load();
   let idx = books.findIndex(b => b.slug === slug);
   if (idx < 0 && SLUG_ALIAS[slug]) idx = books.findIndex(b => b.slug === SLUG_ALIAS[slug]);

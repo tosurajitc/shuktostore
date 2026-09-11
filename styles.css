@@ -35,10 +35,10 @@
   --b2-teal:       #1E5C56;
   --b2-teal-hi:    #2A7A72;
 
-  /* Book 3 — AI with Sayuj — Teal/Mint with Orange spark */
-  --b3-accent:     #2FAE9D;
+  /* Book 3 — AI Handbook for Kids — Orange */
+  --b3-accent:     #E8541A;
   --b3-accent-hi:  #59C7B8;
-  --b3-accent-lo:  #1E8070;
+  --b3-accent-lo:  #B83E10;
   --b3-spark:      #EE7B39;
 
   /* Typography */
@@ -1034,7 +1034,7 @@ ul, ol { list-style: none; }
   font-size: var(--text-base);
   line-height: 1.5;
 }
-.for-list .check { color: #2FAE9D; font-size: 1rem; margin-top: 2px; }
+.for-list .check { color: #E8541A; font-size: 1rem; margin-top: 2px; }
 .for-list .cross  { color: #DC2626; font-size: 1rem; margin-top: 2px; }
 
 /* ── STEP LIST ──────────────────────────────────────────────── */

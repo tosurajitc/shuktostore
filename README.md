@@ -13,7 +13,7 @@ A complete, production-ready static website for Shukto Press — built with plai
 │   └── covers/
 │       ├── one-person-company.jpg      ← Add real cover image here
 │       ├── money-sorted.jpg            ← Add real cover image here
-│       └── ai-with-sayuj.jpg           ← Add real cover image here
+│       └── ai-handbook-for-kids.jpg           ← Add real cover image here
 └── books/
     ├── one-person-company/
     │   ├── index.html                  ← Sales page
@@ -21,7 +21,7 @@ A complete, production-ready static website for Shukto Press — built with plai
     ├── money-sorted/
     │   ├── index.html
     │   └── thank-you.html
-    └── ai-with-sayuj/
+    └── ai-handbook-for-kids/
         ├── index.html
         └── thank-you.html
 ```
@@ -35,12 +35,12 @@ In each sales page and thank-you page, replace these placeholder strings with yo
 |-------------|---------|
 | `RAZORPAY_PAYMENT_LINK_ONE_PERSON_COMPANY` | `books/one-person-company/index.html` |
 | `RAZORPAY_PAYMENT_LINK_MONEY_SORTED` | `books/money-sorted/index.html` |
-| `RAZORPAY_PAYMENT_LINK_AI_WITH_SAYUJ` | `books/ai-with-sayuj/index.html` |
+| `RAZORPAY_PAYMENT_LINK_AI_HANDBOOK_FOR_KIDS` | `books/ai-handbook-for-kids/index.html` |
 
 In the Razorpay dashboard for each link, set the **Success redirect URL** to:
 - `https://yourdomain.com/books/one-person-company/thank-you.html`
 - `https://yourdomain.com/books/money-sorted/thank-you.html`
-- `https://yourdomain.com/books/ai-with-sayuj/thank-you.html`
+- `https://yourdomain.com/books/ai-handbook-for-kids/thank-you.html`
 
 ### 2. PDF Download Links
 In each thank-you page, replace these with your actual hosted PDF URLs:
@@ -49,7 +49,7 @@ In each thank-you page, replace these with your actual hosted PDF URLs:
 |-------------|------|
 | `EBOOK_DOWNLOAD_LINK_ONE_PERSON_COMPANY` | `books/one-person-company/thank-you.html` |
 | `EBOOK_DOWNLOAD_LINK_MONEY_SORTED` | `books/money-sorted/thank-you.html` |
-| `EBOOK_DOWNLOAD_LINK_AI_WITH_SAYUJ` | `books/ai-with-sayuj/thank-you.html` |
+| `EBOOK_DOWNLOAD_LINK_AI_HANDBOOK_FOR_KIDS` | `books/ai-handbook-for-kids/thank-you.html` |
 
 ### 3. Prices
 Replace all `$XX` instances with actual prices. They appear in:
@@ -63,7 +63,7 @@ You can do a global find-and-replace: `$XX` → `$19` (or whatever price you set
 Place the actual cover JPGs at:
 - `assets/covers/one-person-company.jpg`
 - `assets/covers/money-sorted.jpg`
-- `assets/covers/ai-with-sayuj.jpg`
+- `assets/covers/ai-handbook-for-kids.jpg`
 
 Then in each sales page hero and thank-you download card, uncomment the `<img>` tag and delete the placeholder `<div>` beneath it. The comment looks like:
 ```html

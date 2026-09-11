@@ -73,7 +73,7 @@
     testimonials: [
       { quote: '', name: 'Reader Name', role: 'Role / Context — The One-Person Company', avatarInitial: 'A', avatarColor: '#E8541A' },
       { quote: '', name: 'Reader Name', role: 'Role / Context — Money, Sorted',          avatarInitial: 'B', avatarColor: '#DD7C3F' },
-      { quote: '', name: 'Reader Name', role: 'Role / Context — AI with Sayuj',           avatarInitial: 'C', avatarColor: '#2FAE9D' }
+      { quote: '', name: 'Reader Name', role: 'Role / Context — AI Handbook for Kids',           avatarInitial: 'C', avatarColor: '#E8541A' }
     ]
   };
 
@@ -254,7 +254,7 @@
       const accentPalette = [
         { solid: '#E8541A', bg: 'rgba(232,84,26,0.12)', text: '#B83E10', grad: 'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
         { solid: '#DD7C3F', bg: 'rgba(221,124,63,0.12)',  text: '#9A4B15', grad: 'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)' },
-        { solid: '#2FAE9D', bg: 'rgba(47,174,157,0.12)',  text: '#1a7a6e', grad: 'linear-gradient(135deg,#0A2A28 0%,#1B5E57 50%,#0E3A35 100%)' },
+        { solid: '#E8541A', bg: 'rgba(47,174,157,0.12)',  text: '#1a7a6e', grad: 'linear-gradient(135deg,#0A2A28 0%,#1B5E57 50%,#0E3A35 100%)' },
         { solid: '#7C6AF5', bg: 'rgba(124,106,245,0.12)', text: '#4B3CBF', grad: 'linear-gradient(135deg,#1A1240 0%,#2E2470 50%,#110E30 100%)' },
         { solid: '#E05C8A', bg: 'rgba(224,92,138,0.12)',  text: '#A02050', grad: 'linear-gradient(135deg,#2A0A18 0%,#5A1535 50%,#200812 100%)' },
       ];
