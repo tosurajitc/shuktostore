@@ -1959,13 +1959,20 @@ async function saveBookEdits() {
   const d = collectFormData();
   if (!d.title || !d.slug) { toast('Title and slug are required', '⚠️'); return; }
   try {
+    // 1. Upload any pending preview images to R2 FIRST so we have the real URLs
+    //    before saving the book record. This prevents a race where the book is
+    //    saved with previewImages:[] and then the R2 result is never persisted.
+    const uploadedUrls = await uploadPendingPreviews(d.slug);
+    if (uploadedUrls !== null) {
+      // Use the confirmed R2 URLs (or the existing ones if nothing was pending)
+      d.previewImages = uploadedUrls;
+    }
+    // 2. Save the complete book record (including the now-correct previewImages)
     await DB.upsert(d);
     editingId = d.id;
     markClean();
     toast('Changes saved ✓ — writing page files…', '💾', 2000);
-    // Upload any pending preview images to R2 (fire-and-forget alongside file write)
-    uploadPendingPreviews(d.slug);
-    // Auto-write book page files to disk on the server
+    // 3. Auto-write book page files to disk on the server
     try {
       const salesHtml  = buildSalesPageHTML(d);
       const thanksHtml = buildThanksPageHTML(d);
@@ -3703,13 +3710,18 @@ function removePreviewSlot(index) {
   renderPreviewSlots();
 }
 
-/* Upload all pending (data-URL) images to R2, then save */
+/* Upload any pending (data-URL) images to R2.
+   Returns the final list of R2 URLs (existing + newly uploaded), or null on failure.
+   Caller is responsible for saving the URLs into the book record. */
 async function uploadPendingPreviews(slug) {
   const pending = _previewImages
     .map((img, i) => img.data ? { index: i + 1, data: img.data, ext: img.ext || 'jpg' } : null)
     .filter(Boolean);
 
-  if (!pending.length) return; // nothing new to upload
+  if (!pending.length) {
+    // Nothing new to upload — return the already-confirmed URLs
+    return _previewImages.filter(img => img.url).map(img => img.url);
+  }
 
   const statusEl = document.getElementById('preview-upload-status');
   if (statusEl) {
@@ -3728,7 +3740,7 @@ async function uploadPendingPreviews(slug) {
     const json = await r.json();
     if (!r.ok) throw new Error(json.error || 'Upload failed');
 
-    // Replace data-URLs with the returned R2 URLs so the grid reflects final state
+    // Replace data-URLs with the returned R2 URLs in the slot state
     let urlIdx = 0;
     _previewImages = _previewImages.map(img => {
       if (img.data && json.urls[urlIdx] !== undefined) {
@@ -3738,35 +3750,15 @@ async function uploadPendingPreviews(slug) {
     });
     renderPreviewSlots();
 
-    // Persist the now-confirmed R2 URLs back into the book record in the DB.
-    // collectFormData() ran before this upload and produced previewImages:[]
-    // (new files only have .data, not .url yet), so the initial DB.upsert()
-    // wrote [] to the DB. Now that we have real R2 URLs we patch the in-memory
-    // cache entry directly and POST only the previewImages field update so the
-    // DB reflects the correct state on the next page load.
-    try {
-      const finalUrls = _previewImages.filter(img => img.url).map(img => img.url);
-      // Patch the cache entry in-place so DB.getById returns the updated object
-      if (DB._cache) {
-        const cached = DB._cache.find(b => b.id === editingId);
-        if (cached) cached.previewImages = finalUrls;
-      }
-      // POST the updated book directly to the API
-      const bookToSave = DB.getById(editingId);
-      if (bookToSave) {
-        bookToSave.previewImages = finalUrls;
-        await apiPost('/api/books', { book: bookToSave });
-      }
-    } catch (saveErr) {
-      console.warn('[preview] Could not persist R2 URLs to DB:', saveErr.message);
-    }
-
     if (statusEl) {
       statusEl.style.background = 'rgba(47,174,157,0.12)';
       statusEl.style.color = '#2FAE9D';
       statusEl.textContent = `✓ ${pending.length} preview image${pending.length > 1 ? 's' : ''} uploaded to R2 successfully.`;
       setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
     }
+
+    // Return final URL list so the caller can include them in the book save
+    return _previewImages.filter(img => img.url).map(img => img.url);
   } catch (err) {
     if (statusEl) {
       statusEl.style.background = 'rgba(248,113,113,0.1)';
@@ -3774,6 +3766,7 @@ async function uploadPendingPreviews(slug) {
       statusEl.textContent = '⚠ Preview upload failed: ' + err.message;
     }
     toast('Preview image upload failed: ' + err.message, '⚠️', 6000);
+    return null; // signal failure; caller should save without overwriting existing URLs
   }
 }
 
