@@ -10,8 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="../../styles.css" />
   <style>
-    /* Book-1 accent overrides */
-    --accent: #E8541A;
+    /* Book-1 accent defaults — overridden at runtime by book-page-data.js */
     :root { --accent: #E8541A; --accent-hi: #F07040; }
 
     .b1-hero { background: var(--b1-bg); color: var(--text-on-dark); }
@@ -378,9 +377,9 @@
       <h2 class="heading-2">Get the eBook</h2>
       <p class="section-subtitle">One payment. Yours forever. PDF delivered instantly.</p>
     </div>
-    <div class="pricing-card reveal" style="--accent:#E8541A;text-align:center;">
-      <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#E8541A;">The One-Person Company</div>
-      <div class="pricing-price-display" style="--accent:#E8541A;" data-sp-price>₹XX</div>
+    <div class="pricing-card reveal" style="text-align:center;">
+      <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);">The One-Person Company</div>
+      <div class="pricing-price-display" data-sp-price>₹XX</div>
       <p style="color:var(--text-secondary);margin-bottom:2rem;">One-time payment · PDF format · Instant download</p>
       <ul class="pricing-features" style="text-align:left;" data-sp-pricing-features></ul>
       <div style="margin-top:2.5rem;">
@@ -400,7 +399,7 @@
     <div class="section-header reveal">
       <h2 class="heading-2">FAQ</h2>
     </div>
-    <div class="faq-list" style="--accent:#E8541A;" data-sp-faq-list></div>
+    <div class="faq-list" data-sp-faq-list></div>
   </div>
 </section>
 

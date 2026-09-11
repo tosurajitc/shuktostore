@@ -105,7 +105,20 @@
     document.body.dataset.spProductType = book.productType || 'book';
 
     /* Resolve accent color for dynamic renders */
-    const accent = book.accent || '#E8541A';
+    const accent   = book.accent   || '#E8541A';
+    const accentHi = book.accentHi || accent;
+
+    /* ── Apply accent to :root CSS variables (overrides page hardcodes) */
+    (function () {
+      var tag = document.getElementById('sp-accent-override');
+      if (!tag) { tag = document.createElement('style'); tag.id = 'sp-accent-override'; document.head.appendChild(tag); }
+      tag.textContent = ':root{--accent:' + accent + ';--accent-hi:' + accentHi + ';}';
+    })();
+
+    /* ── Update any hardcoded inline --accent on existing elements ── */
+    document.querySelectorAll('[style*="--accent"]').forEach(function (el) {
+      el.style.setProperty('--accent', accent);
+    });
 
     /* ── Page <title> ──────────────────────────────────────────── */
     if (book.title) {
