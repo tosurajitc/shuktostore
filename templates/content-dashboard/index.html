@@ -194,42 +194,6 @@
       pointer-events: none;
     }
 
-    /* ── SECTION CARDS ── */
-    .sec-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-    }
-    .sec-card {
-      background: white;
-      border: 1px solid var(--divider);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem;
-      transition: transform var(--duration-base) var(--ease-out),
-                  box-shadow var(--duration-base) var(--ease-out);
-    }
-    .sec-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-card-hover);
-    }
-    .sec-card-icon {
-      font-size: 2rem;
-      margin-bottom: 0.875rem;
-      display: block;
-    }
-    .sec-card h3 {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.375rem;
-    }
-    .sec-card p {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
     /* ── PRICING ── */
     .cd-price-box {
       background: white;
@@ -271,13 +235,12 @@
     .cd-feature-list { list-style: none; padding: 0; margin: 0 0 2rem; }
     .cd-feature-list li {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 0.625rem;
       font-size: 0.9375rem;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.625rem;
       line-height: 1.5;
     }
-    .cd-feature-list .check { color: var(--cd-blue); flex-shrink: 0; font-size: 0.875rem; margin-top: 2px; }
 
     /* ── FINAL CTA ── */
     .cd-final-cta {
@@ -294,10 +257,8 @@
     @media (max-width: 900px) {
       .two-col { grid-template-columns: 1fr; }
       .before-after-grid { grid-template-columns: 1fr; }
-      .sec-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 600px) {
-      .sec-grid { grid-template-columns: 1fr; }
       .kpi-row { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -465,171 +426,68 @@
   </div>
 </section>
 
-<!-- ── WHAT'S INSIDE ─────────────────────────────────────── -->
+<!-- ── WHAT'S INSIDE (BENTO) ─────────────────────────────── -->
 <section class="section" id="whats-inside" style="background:var(--paper);">
   <div class="container">
     <div class="section-header reveal">
-      <h2 class="heading-2">8 sections. Everything a content creator needs.</h2>
-      <p class="section-subtitle">Each section is pre-formatted, editable directly in your browser, and prints cleanly to PDF.</p>
+      <h2 class="heading-2">What's inside</h2>
+      <p class="section-subtitle">8 sections covering every part of a content creator's workflow. Pre-filled with examples, editable in any browser.</p>
     </div>
-
-    <div class="sec-grid">
-      <div class="sec-card reveal">
-        <span class="sec-card-icon">📊</span>
-        <h3>Content Overview</h3>
-        <p>Top-level KPIs — total pieces published, average weekly cadence, content by channel and a quick status summary at a glance.</p>
-      </div>
-      <div class="sec-card reveal reveal-delay-1">
-        <span class="sec-card-icon">📅</span>
-        <h3>Content Calendar</h3>
-        <p>Monthly calendar view with every piece of content mapped by date, channel and status. See gaps and clashes instantly.</p>
-      </div>
-      <div class="sec-card reveal reveal-delay-2">
-        <span class="sec-card-icon">📋</span>
-        <h3>Content Pipeline</h3>
-        <p>Full kanban-style tracker — Idea, Outline, Draft, Review, Scheduled, Published. Nothing falls through the cracks.</p>
-      </div>
-      <div class="sec-card reveal">
-        <span class="sec-card-icon">💡</span>
-        <h3>Idea Bank</h3>
-        <p>Capture every idea with a title, channel, content type, source and priority rating. Filter by channel when planning a week.</p>
-      </div>
-      <div class="sec-card reveal reveal-delay-1">
-        <span class="sec-card-icon">📈</span>
-        <h3>Performance Log</h3>
-        <p>Track views, clicks, shares and notes for every published piece. Spot your best-performing formats and topics over time.</p>
-      </div>
-      <div class="sec-card reveal reveal-delay-2">
-        <span class="sec-card-icon">🔁</span>
-        <h3>Repurposing Tracker</h3>
-        <p>One blog post → five formats. Log which pieces have been repurposed, where, and what still hasn't been reused.</p>
-      </div>
-      <div class="sec-card reveal">
-        <span class="sec-card-icon">🎯</span>
-        <h3>Monthly Goals</h3>
-        <p>Set publishing targets by channel for the month. Track actual vs goal. Review at a glance without digging through data.</p>
-      </div>
-      <div class="sec-card reveal reveal-delay-1">
-        <span class="sec-card-icon">📝</span>
-        <h3>Content Notes</h3>
-        <p>Free-text planning section. Brand voice notes, recurring series, channel-specific rules, and anything else your content team needs to know.</p>
-      </div>
-    </div>
-
-    <!-- Bonus highlight -->
-    <div class="reveal" style="margin-top:2.5rem;background:linear-gradient(135deg,#EFF6FF,#F0F9FF);border:1px solid #93C5FD;border-radius:var(--radius-xl);padding:2rem;display:flex;gap:1.5rem;align-items:flex-start;">
-      <span style="font-size:2.5rem;flex-shrink:0;">🖨️</span>
-      <div>
-        <h3 style="font-family:var(--font-display);font-size:1.125rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.375rem;color:var(--ink);">Built-in Save as PDF button</h3>
-        <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.6;">Every section prints cleanly — no truncated tables, no missing borders. Share your content plan with a client or manager as a PDF in one click. Print-optimised layout included.</p>
-      </div>
-    </div>
+    <div class="bento" data-sp-bento></div>
   </div>
 </section>
 
-<!-- ── WHO IT'S FOR ──────────────────────────────────────── -->
-<section class="section" style="background:var(--paper-warm);">
+<!-- ── STAT STRIP ─────────────────────────────────────────── -->
+<section class="stat-strip">
   <div class="container">
-    <div class="two-col">
-      <div class="reveal">
-        <h2 class="heading-3" style="margin-bottom:1.5rem;">Built for creators who ship.<br/>Not for people who plan forever.</h2>
-        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;">
-          Content Dashboard is not a complex SaaS tool with a learning curve. It's a single HTML file that opens instantly, runs in any browser, and prints to PDF without fuss.
-        </p>
-        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1.5rem;">
-          If you create content regularly — whether it's a blog, YouTube channel, LinkedIn, newsletter, or all of the above — this gives you the structure to stay consistent without the overhead.
-        </p>
-        <div style="display:flex;flex-direction:column;gap:0.625rem;">
-          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
-            <span style="color:var(--cd-blue);font-size:1rem;">✓</span> Solo content creators and bloggers
-          </div>
-          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
-            <span style="color:var(--cd-blue);font-size:1rem;">✓</span> YouTubers managing an upload schedule
-          </div>
-          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
-            <span style="color:var(--cd-blue);font-size:1rem;">✓</span> Newsletter writers and podcasters
-          </div>
-          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
-            <span style="color:var(--cd-blue);font-size:1rem;">✓</span> Social media managers handling multiple channels
-          </div>
-          <div style="display:flex;align-items:center;gap:0.625rem;font-size:0.9375rem;">
-            <span style="color:var(--cd-blue);font-size:1rem;">✓</span> Small agencies presenting content plans to clients
-          </div>
-        </div>
-      </div>
-      <div class="reveal reveal-delay-2">
-        <div style="background:white;border:1px solid var(--divider);border-radius:var(--radius-xl);padding:2rem;">
-          <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;">What you get</div>
-          <div style="display:flex;flex-direction:column;gap:0.875rem;">
-            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📄</div>
-              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Single HTML file</div><div style="font-size:0.8125rem;color:var(--text-secondary);">Open in Chrome, Firefox, Safari — any modern browser</div></div>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">✏️</div>
-              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Click-to-edit everything</div><div style="font-size:0.8125rem;color:var(--text-secondary);">All fields are editable directly in the browser</div></div>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🖨️</div>
-              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Print to PDF in one click</div><div style="font-size:0.8125rem;color:var(--text-secondary);">Built-in Save as PDF button with print-optimised styles</div></div>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.75rem;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🔄</div>
-              <div><div style="font-weight:600;font-size:0.9375rem;margin-bottom:0.125rem;">Yours forever</div><div style="font-size:0.8125rem;color:var(--text-secondary);">One-time download. No subscription. No account needed.</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="stat-grid" data-sp-stats></div>
   </div>
 </section>
 
-<!-- ── BENTO — EVERYTHING INCLUDED ──────────────────────── -->
-<section class="section" style="background:white;">
+<!-- ── WHO IS IT FOR ──────────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
   <div class="container">
     <div class="section-header reveal">
-      <h2 class="heading-2">Everything you need, nothing you don't</h2>
+      <h2 class="heading-2">Is this for you?</h2>
     </div>
+    <div class="for-grid">
+      <div class="for-card for-card-yes reveal">
+        <div class="for-card-title">
+          <span>✅</span> This is for you if…
+        </div>
+        <ul class="for-list" data-sp-for-list></ul>
+      </div>
+      <div class="for-card for-card-no reveal reveal-delay-2">
+        <div class="for-card-title">
+          <span style="color:#DC2626;">✕</span> This is not for you if…
+        </div>
+        <ul class="for-list" data-sp-not-for-list></ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="bento">
-      <div class="bento-cell span-3 reveal">
-        <div class="bento-icon">📊</div>
-        <div class="bento-title">Your entire content operation at a glance</div>
-        <div class="bento-body">The overview section shows all your key metrics — pieces published, cadence, top channels and status breakdown — without having to dig through any tables.</div>
-      </div>
-      <div class="bento-cell span-3 reveal reveal-delay-1">
-        <div class="bento-icon">📅</div>
-        <div class="bento-title">Plan a whole month in one view</div>
-        <div class="bento-body">The content calendar maps every piece by date and channel. Spot scheduling gaps, prevent over-posting, and keep a consistent cadence across all platforms.</div>
-      </div>
-      <div class="bento-cell span-2 reveal">
-        <div class="bento-icon">🔁</div>
-        <div class="bento-title">Maximise every piece you create</div>
-        <div class="bento-body">The repurposing tracker shows which content has been adapted for which channels — and what's still sitting unused. One video can become 5 posts.</div>
-      </div>
-      <div class="bento-cell span-2 reveal reveal-delay-1">
-        <div class="bento-icon">💡</div>
-        <div class="bento-title">Never run out of ideas again</div>
-        <div class="bento-body">The idea bank captures every topic thought with a priority rating and channel tag. When you need a post idea, you have a pre-sorted list ready to go.</div>
-      </div>
-      <div class="bento-cell span-2 reveal reveal-delay-2">
-        <div class="bento-icon">⚡</div>
-        <div class="bento-title">No setup, no subscriptions</div>
-        <div class="bento-body">One file. Open in any browser. No Notion account, no Airtable plan, no Trello board. Works completely offline. Start using it in under 5 minutes.</div>
-      </div>
-      <div class="bento-cell span-3 reveal">
-        <div class="bento-icon">📈</div>
-        <div class="bento-title">Track what works, drop what doesn't</div>
-        <div class="bento-body">The performance log lets you record views, engagement, and notes per piece over time. See which formats and topics consistently perform — so you can double down on what resonates.</div>
+<!-- ── AUTHOR ─────────────────────────────────────────────── -->
+<section class="section" style="background:var(--paper-warm);">
+  <div class="container" style="max-width:860px;">
+    <div class="section-header reveal">
+      <h2 class="heading-2">Built by a practitioner</h2>
+    </div>
+    <div class="author-card reveal">
+      <div class="author-avatar" data-sp-author-avatar>SC</div>
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.5rem;" data-sp-author-name>Surajit Chatterjee</h3>
+        <p class="body-base" style="color:var(--text-secondary);margin-bottom:1rem;" data-sp-author-bio>AI architect, IIM alumnus, and founder who has built content systems for productised services and agencies. The Content Dashboard came out of the same frustration every creator feels — too many scattered tools, not enough clarity on what to publish next.</p>
+        <p class="body-sm" style="color:var(--text-muted);">Publisher of Shukto Press · Author of The One-Person Company</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── PRICING ───────────────────────────────────────────── -->
-<section class="section" id="pricing" style="background:var(--paper-warm);">
+<section class="section" id="pricing" style="background:var(--paper);">
   <div class="container">
-    <div class="section-header reveal">
+    <div class="section-header centered reveal">
       <h2 class="heading-2">Simple pricing</h2>
       <p class="section-subtitle">One-time payment. Download once, use forever.</p>
     </div>
@@ -639,20 +497,7 @@
       <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--cd-blue);margin-bottom:0.75rem;">Content Dashboard — Full Pack</div>
       <div class="cd-price-num" data-sp-price>₹XX</div>
       <div class="cd-price-sub">One-time · Instant download · No subscription</div>
-      <ul class="cd-feature-list">
-        <li><span class="check">✓</span> Complete HTML dashboard file</li>
-        <li><span class="check">✓</span> Content Overview &amp; KPI strip</li>
-        <li><span class="check">✓</span> Monthly Content Calendar</li>
-        <li><span class="check">✓</span> Content Pipeline tracker (8 statuses)</li>
-        <li><span class="check">✓</span> Idea Bank with priority &amp; channel tags</li>
-        <li><span class="check">✓</span> Performance Log per piece</li>
-        <li><span class="check">✓</span> Repurposing Tracker</li>
-        <li><span class="check">✓</span> Monthly Goals tracker</li>
-        <li><span class="check">✓</span> Content Notes section</li>
-        <li><span class="check">✓</span> Print to PDF — built-in button</li>
-        <li><span class="check">✓</span> Sample data pre-filled</li>
-        <li><span class="check">✓</span> Yours forever — no account needed</li>
-      </ul>
+      <ul class="cd-feature-list" data-sp-pricing-features></ul>
       <a href="RAZORPAY_PAYMENT_LINK_CONTENT_DASHBOARD" class="cd-btn-primary" style="width:100%;justify-content:center;font-size:1.0625rem;padding:1.0625rem;" data-sp-razorpay>
         Get Content Dashboard — <span data-sp-price>₹XX</span> →
       </a>
@@ -673,25 +518,38 @@
 </section>
 
 <!-- ── FINAL CTA ─────────────────────────────────────────── -->
-<section class="hero cd-final-cta" style="padding-block:5rem;">
+<section class="final-cta cd-final-cta" style="position:relative;overflow:hidden;padding-block:var(--section-gap);text-align:center;">
   <div class="hero-bg">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
   </div>
-  <div class="container" style="position:relative;z-index:2;text-align:center;max-width:680px;">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:2;">
     <div class="reveal">
-      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;line-height:1.1;margin-bottom:1.25rem;">
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.75rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:white;margin-bottom:1.25rem;" data-sp-cta-heading>
         Stop juggling tabs.<br/>Start publishing consistently.
       </h2>
-      <p style="font-size:1.125rem;color:rgba(248,245,239,0.65);line-height:1.7;margin-bottom:2.5rem;">
+      <p style="font-size:1.125rem;color:rgba(248,245,239,0.6);max-width:480px;margin:0 auto 2.5rem;line-height:1.65;" data-sp-cta-body>
         One HTML file. Your entire content operation. Open, edit, plan, print — and get back to creating.
       </p>
-      <a href="RAZORPAY_PAYMENT_LINK_CONTENT_DASHBOARD" class="cd-btn-primary" style="font-size:1.125rem;padding:1.125rem 2.75rem;" data-sp-razorpay>
-        Get Content Dashboard — <span data-sp-price>₹XX</span> →
-      </a>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <a href="RAZORPAY_PAYMENT_LINK_CONTENT_DASHBOARD" class="cd-btn-primary" style="font-size:1.125rem;padding:1.25rem 2.75rem;" data-sp-razorpay>
+          Get Content Dashboard — <span data-sp-price>₹XX</span> →
+        </a>
+      </div>
       <p style="margin-top:1.25rem;font-size:0.8125rem;color:rgba(248,245,239,0.35);">One-time payment · HTML file · Instant delivery · No account needed</p>
     </div>
+  </div>
+</section>
+
+<!-- ── YOU MIGHT ALSO LIKE ────────────────────────────────── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="heading-3">You might also like</h2>
+    </div>
+    <div class="mini-book-grid" data-sp-also-like></div>
   </div>
 </section>
 
