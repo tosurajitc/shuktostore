@@ -395,12 +395,16 @@
       if (books)    localStorage.setItem('sp_books',    JSON.stringify(books));
       if (settings) localStorage.setItem('sp_settings', JSON.stringify(settings));
       if (homepage) localStorage.setItem('sp_homepage', JSON.stringify(homepage));
+      // Expose live books array for the modal flipper (avoids localStorage timing race)
+      if (books)    window._spLiveBooks = books;
     } else {
       // Fallback: localStorage (local dev / offline)
+      const localBooks = loadLocal('sp_books', []);
+      window._spLiveBooks = localBooks;
       applyAll(
         loadLocal('sp_settings', {}),
         loadLocal('sp_homepage', {}),
-        loadLocal('sp_books',    [])
+        localBooks
       );
     }
   }

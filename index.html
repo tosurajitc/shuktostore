@@ -1351,10 +1351,16 @@
   var _origOpenBookModal = openBookModal;
   openBookModal = function(slug) {
     _origOpenBookModal(slug);
-    /* Read previewImages from localStorage (set by site-data.js) */
+    /* Read previewImages — prefer the live in-memory array set by site-data.js
+       (window._spLiveBooks) to avoid the localStorage async timing race.
+       Fall back to localStorage for cases where site-data.js hasn't run yet. */
     var urls = [];
     try {
-      var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
+      var sources = [window._spLiveBooks];
+      if (!sources[0] || !sources[0].length) {
+        sources[0] = JSON.parse(localStorage.getItem('sp_books') || '[]');
+      }
+      var stored = sources[0] || [];
       for (var i = 0; i < stored.length; i++) {
         var b = stored[i];
         if ((b.slug === slug || b.id === slug) && Array.isArray(b.previewImages) && b.previewImages.length) {
