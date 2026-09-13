@@ -165,3 +165,23 @@
     toggle.setAttribute('aria-expanded', String(open));
   });
 })();
+
+/* ── SCROLL-TO-TOP BUTTON ────────────────────────────────────── */
+(function initScrollTop() {
+  // Inject the button once into the page
+  var btn = document.createElement('button');
+  btn.className = 'scroll-top-btn';
+  btn.setAttribute('aria-label', 'Scroll to top');
+  btn.setAttribute('title', 'Back to top');
+  btn.innerHTML = '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 9 6 15 12"/></svg>';
+  document.body.appendChild(btn);
+
+  // Show after scrolling down 400px
+  window.addEventListener('scroll', function () {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
