@@ -1256,8 +1256,18 @@
     buyBtn.style.background = book.accentSolid;
     detailsBtn.href        = book.salesPage;
 
-    /* Cover card — try real image first, fall back to gradient placeholder */
-    var src = getCoverSrc(slug);
+    /* Cover card — read cover directly from live API data (same source the
+       catalog card was rendered from), fall back through BOOKS dict and
+       localStorage via getCoverSrc only if live data is unavailable */
+    var src = null;
+    try {
+      var live = window._spLiveBooks || [];
+      for (var ci = 0; ci < live.length; ci++) {
+        var cl = live[ci];
+        if ((cl.slug === slug || cl.id === slug) && cl.cover) { src = cl.cover; break; }
+      }
+    } catch(e) {}
+    if (!src) src = getCoverSrc(slug);
     var phHtml =
       '<div class="bm-cover-ph" style="background:' + book.coverPh + ';">' +
         '<div class="bm-cover-ph-title" style="color:' + book.coverPhAccent + ';font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.25rem;">' + book.tag.toUpperCase() + '</div>' +
