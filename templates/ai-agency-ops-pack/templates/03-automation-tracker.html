@@ -48,14 +48,17 @@
     }
     [contenteditable] {
       outline: none;
+      transition: background 150ms;
+      border-radius: 2px;
+    }
+    [contenteditable]:focus { background: var(--accent-light); }
+    span[contenteditable] {
       border-bottom: 1.5px dashed var(--accent-mid);
       min-width: 40px;
       display: inline-block;
       padding: 0 2px;
-      transition: background 150ms;
-      border-radius: 2px;
     }
-    [contenteditable]:focus { background: var(--accent-light); border-bottom-color: var(--accent); }
+    span[contenteditable]:focus { border-bottom-color: var(--accent); }
     [contenteditable].block {
       display: block;
       border-bottom: none;
@@ -66,6 +69,7 @@
       min-height: 2rem;
     }
     [contenteditable].block:focus { background: var(--accent-light); border-color: var(--accent); }
+    .sample { color: var(--ink-light); font-style: italic; }
     .print-hint {
       background: var(--accent);
       color: white;
@@ -136,6 +140,9 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
     }
     .pill-live    { background: var(--green-bg);  color: var(--green); }
     .pill-build   { background: var(--yellow-bg); color: var(--yellow); }
@@ -149,7 +156,7 @@
       gap: 2px;
       align-items: center;
     }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); cursor: pointer; }
     .dot.filled { background: var(--accent); }
 
     /* ── MAIN TABLE ───────────── */
@@ -269,12 +276,24 @@
     .readme-tip { background:rgba(29,78,216,0.12);border:1px solid rgba(29,78,216,0.25);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;color:rgba(147,197,253,0.85);margin-top:0.5rem; }
 
     @media print {
+      html { font-size: 14px; }
       body { background: white; padding: 0; }
       .readme-bar { display: none; }
       .print-hint { display: none; }
-      .page { box-shadow: none; border-radius: 0; margin: 0; width: 100%; padding: 1cm 1.5cm; page-break-after: always; }
+      #add-row-btn { display: none !important; }
+      .page { box-shadow: none; border-radius: 0; margin: 0; width: 100%; min-height: 0; padding: 0.7cm 1.1cm; }
+      .page:not(:last-of-type) { page-break-after: always; }
       @page { size: A4 landscape; margin: 0; }
-      [contenteditable] { border-bottom: 1px solid #ccc; }
+      span[contenteditable] { border-bottom: 1px solid #ccc; }
+      [contenteditable].block { border: 1px solid #ccc; background: none; }
+      .doc-header { margin-bottom: 0.85rem; padding-bottom: 0.6rem; }
+      .summary-grid { margin-bottom: 0.85rem; gap: 0.5rem; }
+      .summary-card { padding: 0.5rem; }
+      :root { --section-gap: 0.85rem; }
+      .tracker-table thead th { padding: 0.35rem 0.5rem; }
+      .tracker-table tbody td { padding: 0.3rem 0.5rem; }
+      .roi-card-body { padding: 0.5rem 0.625rem; }
+      .doc-footer { margin-top: 0.75rem; padding-top: 0.4rem; }
     }
   </style>
 </head>
@@ -293,6 +312,7 @@
         <li>Your <strong style="color:#93C5FD;">single source of truth</strong> for every automation running across all client engagements.</li>
         <li>Track status, ownership, cost, and ROI in one landscape view — update it monthly or after each deployment.</li>
         <li>Use the ROI summary section to justify automation spend to clients or stakeholders.</li>
+        <li>Click <strong style="color:#93C5FD;">"+ Add Automation Row"</strong> below the table to add a new blank row — no need to edit HTML.</li>
       </ul>
     </div>
     <div class="readme-section">
@@ -305,8 +325,8 @@
           <tr><td>Client</td><td>Client name or "Internal"</td><td>Use consistent naming</td></tr>
           <tr><td>Category</td><td>Sales / Content / Ops / Finance / Support / Reporting</td><td>Use consistent labels</td></tr>
           <tr><td>Tool / Stack</td><td>Main tools used</td><td>e.g. "Make + GPT-4o"</td></tr>
-          <tr><td>Status pill</td><td>Click the pill text to change it: Live / In Build / Planned / Paused / Error</td><td>Keep updated</td></tr>
-          <tr><td>Complexity dots</td><td>Edit dot HTML — add class="dot filled" for each filled dot (1–5)</td><td>1=simple, 5=complex</td></tr>
+          <tr><td>Status pill</td><td>Click the pill to cycle through: Live → In Build → Planned → Paused → Error</td><td>Keep updated</td></tr>
+          <tr><td>Complexity dots</td><td>Click a dot to fill up to that level (1–5). Click the same dot again to clear back to zero.</td><td>1=simple, 5=complex</td></tr>
           <tr><td>Time Saved</td><td>Estimated hours saved per month</td><td>e.g. "8h / mo"</td></tr>
           <tr><td>Monthly Cost</td><td>Total tool + API cost to run it</td><td>e.g. "$20 / mo"</td></tr>
           <tr><td>Go-Live Date</td><td>When it went live (or target date)</td><td>Month + Year</td></tr>
@@ -338,15 +358,15 @@
 <div class="page">
   <div class="doc-header">
     <div class="doc-header-left">
-      <div class="agency-name"><span contenteditable spellcheck="false">Your AI Agency Name</span></div>
+      <div class="agency-name"><span class="sample" contenteditable spellcheck="false">Your AI Agency Name</span></div>
       <h1>Automation Tracker</h1>
       <div class="doc-subtitle">AI Agency Operations Pack · Template 03 · Landscape view</div>
     </div>
     <div class="doc-header-right">
-      <div><strong>Client:</strong> <span contenteditable spellcheck="false">All Clients / Client Name</span></div>
-      <div><strong>Period:</strong> <span contenteditable spellcheck="false">Q1 2025</span></div>
-      <div><strong>Updated:</strong> <span contenteditable spellcheck="false">DD / MM / YYYY</span></div>
-      <div><strong>Owner:</strong> <span contenteditable spellcheck="false">Your Name</span></div>
+      <div><strong>Client:</strong> <span class="sample" contenteditable spellcheck="false">All Clients / Client Name</span></div>
+      <div><strong>Period:</strong> <span class="sample" contenteditable spellcheck="false">Q1 2025</span></div>
+      <div><strong>Updated:</strong> <span class="sample" contenteditable spellcheck="false">DD / MM / YYYY</span></div>
+      <div><strong>Owner:</strong> <span class="sample" contenteditable spellcheck="false">Your Name</span></div>
     </div>
   </div>
 
@@ -400,8 +420,8 @@
           <td contenteditable spellcheck="false">Client A</td>
           <td contenteditable spellcheck="false">Sales</td>
           <td contenteditable spellcheck="false">Make + GPT-4o</td>
-          <td><span class="pill pill-live">Live</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-live" onclick="cyclePill(this)">Live</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">8h / mo</td>
           <td contenteditable spellcheck="false">$20 / mo</td>
           <td contenteditable spellcheck="false">Jan 2025</td>
@@ -413,8 +433,8 @@
           <td contenteditable spellcheck="false">Client A</td>
           <td contenteditable spellcheck="false">Content</td>
           <td contenteditable spellcheck="false">n8n + Claude</td>
-          <td><span class="pill pill-live">Live</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-live" onclick="cyclePill(this)">Live</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">5h / mo</td>
           <td contenteditable spellcheck="false">$15 / mo</td>
           <td contenteditable spellcheck="false">Jan 2025</td>
@@ -426,8 +446,8 @@
           <td contenteditable spellcheck="false">Client B</td>
           <td contenteditable spellcheck="false">Ops</td>
           <td contenteditable spellcheck="false">Zapier + GPT-4o</td>
-          <td><span class="pill pill-live">Live</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-live" onclick="cyclePill(this)">Live</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">4h / mo</td>
           <td contenteditable spellcheck="false">$10 / mo</td>
           <td contenteditable spellcheck="false">Feb 2025</td>
@@ -439,8 +459,8 @@
           <td contenteditable spellcheck="false">Client C</td>
           <td contenteditable spellcheck="false">Content</td>
           <td contenteditable spellcheck="false">Make + Claude</td>
-          <td><span class="pill pill-build">In Build</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-build" onclick="cyclePill(this)">In Build</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">6h / mo</td>
           <td contenteditable spellcheck="false">$18 / mo</td>
           <td contenteditable spellcheck="false">Mar 2025</td>
@@ -452,8 +472,8 @@
           <td contenteditable spellcheck="false">Internal</td>
           <td contenteditable spellcheck="false">Finance</td>
           <td contenteditable spellcheck="false">Zapier + Stripe</td>
-          <td><span class="pill pill-live">Live</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-live" onclick="cyclePill(this)">Live</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">2h / mo</td>
           <td contenteditable spellcheck="false">$8 / mo</td>
           <td contenteditable spellcheck="false">Dec 2024</td>
@@ -465,8 +485,8 @@
           <td contenteditable spellcheck="false">Client D</td>
           <td contenteditable spellcheck="false">Support</td>
           <td contenteditable spellcheck="false">Voiceflow + GPT</td>
-          <td><span class="pill pill-build">In Build</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-build" onclick="cyclePill(this)">In Build</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">10h / mo</td>
           <td contenteditable spellcheck="false">$35 / mo</td>
           <td contenteditable spellcheck="false">Apr 2025</td>
@@ -478,8 +498,8 @@
           <td contenteditable spellcheck="false">Internal</td>
           <td contenteditable spellcheck="false">Reporting</td>
           <td contenteditable spellcheck="false">n8n + GPT-4o</td>
-          <td><span class="pill pill-plan">Planned</span></td>
-          <td><div class="complexity"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+          <td><button type="button" class="pill pill-plan" onclick="cyclePill(this)">Planned</button></td>
+          <td><div class="complexity"><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot filled" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false">3h / mo</td>
           <td contenteditable spellcheck="false">$12 / mo</td>
           <td contenteditable spellcheck="false">TBD</td>
@@ -491,8 +511,8 @@
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
-          <td></td>
-          <td></td>
+          <td><button type="button" class="pill pill-plan" onclick="cyclePill(this)">Planned</button></td>
+          <td><div class="complexity"><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
@@ -504,8 +524,8 @@
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
-          <td></td>
-          <td></td>
+          <td><button type="button" class="pill pill-plan" onclick="cyclePill(this)">Planned</button></td>
+          <td><div class="complexity"><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div><div class="dot" onclick="setComplexity(this)"></div></div></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
@@ -516,6 +536,10 @@
     <div style="margin-top:0.5rem;font-size:0.625rem;color:var(--ink-light);">
       Complexity: ●●●●● = Very High · Status pills: Live = deployed &amp; running · In Build = in development · Planned = backlog · Paused = on hold · Error = needs fix
     </div>
+    <button type="button" id="add-row-btn" onclick="addAutomationRow()" style="display:flex;align-items:center;gap:0.5rem;width:100%;margin-top:0.625rem;padding:0.625rem 0.875rem;background:var(--surface);border:1.5px dashed var(--accent-mid);border-radius:6px;font-size:0.75rem;color:var(--ink-light);font-family:inherit;cursor:pointer;text-align:left;transition:background 150ms,border-color 150ms;" onmouseover="this.style.background='#EFF6FF';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--accent-mid)'">
+      <span style="font-size:1rem;font-weight:800;color:var(--accent);line-height:1;">+</span>
+      <span><strong style="color:var(--accent);">Add Automation Row</strong></span>
+    </button>
   </div>
 
   <!-- ROI CARDS -->
@@ -559,6 +583,71 @@
     <span>Internal — Update Monthly</span>
   </div>
 </div>
+
+<script>
+  var PILL_CYCLE = [
+    { cls: 'pill-live',  label: 'Live' },
+    { cls: 'pill-build', label: 'In Build' },
+    { cls: 'pill-plan',  label: 'Planned' },
+    { cls: 'pill-pause', label: 'Paused' },
+    { cls: 'pill-error', label: 'Error' }
+  ];
+
+  function cyclePill(btn) {
+    var idx = PILL_CYCLE.findIndex(function (p) { return btn.classList.contains(p.cls); });
+    var next = PILL_CYCLE[(idx + 1) % PILL_CYCLE.length];
+    PILL_CYCLE.forEach(function (p) { btn.classList.remove(p.cls); });
+    btn.classList.add(next.cls);
+    btn.textContent = next.label;
+  }
+
+  function setComplexity(dot) {
+    var dots = Array.prototype.slice.call(dot.parentElement.querySelectorAll('.dot'));
+    var idx = dots.indexOf(dot);
+    // Clicking a filled dot that is the current max clears it (so you can go back to 0)
+    var alreadyMax = dot.classList.contains('filled') && (idx === dots.length - 1 || !dots[idx + 1].classList.contains('filled'));
+    dots.forEach(function (d, i) {
+      d.classList.toggle('filled', alreadyMax ? i < idx : i <= idx);
+    });
+  }
+
+  function addAutomationRow() {
+    var tbody = document.querySelector('.tracker-table tbody');
+    var idCells = document.querySelectorAll('.tracker-table tbody td:first-child');
+    var maxNum = 0;
+    idCells.forEach(function (td) {
+      var m = td.textContent.trim().match(/^A-(\d+)$/i);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    var nextId = 'A-' + String(maxNum + 1).padStart(3, '0');
+
+    var row = document.createElement('tr');
+    row.innerHTML =
+      '<td class="sample" contenteditable spellcheck="false">' + nextId + '</td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td><button type="button" class="pill pill-plan" onclick="cyclePill(this)">Planned</button></td>' +
+      '<td><div class="complexity">' +
+        '<div class="dot" onclick="setComplexity(this)"></div>'.repeat(5) +
+      '</div></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>';
+    tbody.appendChild(row);
+    row.querySelector('[contenteditable]:nth-child(2)').focus();
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Sample/placeholder text loses its grey-italic styling once clicked into
+  document.addEventListener('focusin', function (e) {
+    if (e.target.classList && e.target.classList.contains('sample')) {
+      e.target.classList.remove('sample');
+    }
+  });
+</script>
 
 </body>
 </html>

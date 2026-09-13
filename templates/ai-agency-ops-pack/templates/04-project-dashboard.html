@@ -46,14 +46,17 @@
     }
     [contenteditable] {
       outline: none;
+      transition: background 150ms;
+      border-radius: 2px;
+    }
+    [contenteditable]:focus { background: var(--accent-light); }
+    span[contenteditable] {
       border-bottom: 1.5px dashed var(--accent-mid);
       min-width: 40px;
       display: inline-block;
       padding: 0 2px;
-      transition: background 150ms;
-      border-radius: 2px;
     }
-    [contenteditable]:focus { background: var(--accent-light); border-bottom-color: var(--accent); }
+    span[contenteditable]:focus { border-bottom-color: var(--accent); }
     [contenteditable].block {
       display: block;
       border-bottom: none;
@@ -64,6 +67,9 @@
       min-height: 2rem;
     }
     [contenteditable].block:focus { background: var(--accent-light); border-color: var(--accent); }
+    .editable-line { border-bottom: 1.5px dashed var(--accent-mid); padding: 0 2px; display: inline-block; }
+    .editable-line:focus { border-bottom-color: var(--accent); }
+    .sample { color: var(--ink-light); font-style: italic; }
     .print-hint {
       background: var(--accent);
       color: white;
@@ -184,6 +190,9 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
     }
     .pill-green  { background: var(--green-bg); color: var(--green); }
     .pill-amber  { background: #FFFBEB; color: #B45309; }
@@ -229,6 +238,17 @@
     .m-done    { background: var(--green); }
     .m-active  { background: var(--accent); }
     .m-future  { background: var(--border-strong); }
+    .milestone-dot { cursor: pointer; }
+    .milestone-row[data-status="done"] .milestone-dot   { background: var(--green); }
+    .milestone-row[data-status="active"] .milestone-dot { background: var(--accent); }
+    .milestone-row[data-status="future"] .milestone-dot { background: var(--border-strong); }
+    .milestone-row[data-status="done"] .milestone-title   { color: var(--ink); }
+    .milestone-row[data-status="active"] .milestone-title { color: var(--accent); }
+    .milestone-row[data-status="future"] .milestone-title { color: var(--ink-muted); }
+    .milestone-row[data-status="done"] .pill   { background: var(--green-bg); color: var(--green); }
+    .milestone-row[data-status="active"] .pill { background: var(--blue-bg); color: var(--blue); }
+    .milestone-row[data-status="future"] .pill { background: #F3F4F6; color: var(--gray); }
+    .milestone-title { font-size: 0.875rem; font-weight: 600; }
     .milestone-meta {
       font-size: 0.6875rem;
       color: var(--ink-light);
@@ -250,7 +270,7 @@
     .risk-table tbody tr { border-bottom: 1px solid var(--border); }
     .risk-table tbody td { padding: 0.5rem 0.75rem; vertical-align: middle; }
     .risk-table tbody tr:nth-child(even) td { background: var(--surface); }
-    .impact { display:inline-block; padding:0.125rem 0.5rem; border-radius:4px; font-size:0.625rem; font-weight:700; text-transform:uppercase; }
+    .impact { display:inline-block; padding:0.125rem 0.5rem; border-radius:4px; font-size:0.625rem; font-weight:700; text-transform:uppercase; cursor:pointer; border:none; font-family:inherit; }
     .impact-high   { background: var(--red-bg); color: var(--red); }
     .impact-medium { background: #FFF7ED; color: #C2410C; }
     .impact-low    { background: var(--green-bg); color: var(--green); }
@@ -284,12 +304,20 @@
     .readme-tip { background:rgba(180,83,9,0.12);border:1px solid rgba(180,83,9,0.25);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;color:rgba(253,211,77,0.85);margin-top:0.5rem; }
 
     @media print {
+      html { font-size: 14px; }
       body { background: white; padding: 0; }
       .readme-bar { display: none; }
       .print-hint { display: none; }
-      .page { box-shadow: none; border-radius: 0; margin: 0; width: 100%; padding: 1.5cm 2cm; page-break-after: always; }
-      [contenteditable] { border-bottom: 1px solid #ccc; }
+      .add-row-btn { display: none !important; }
+      .page { box-shadow: none; border-radius: 0; margin: 0; width: 100%; min-height: 0; padding: 0.75cm 1.6cm; }
+      .page:not(:last-of-type) { page-break-after: always; }
+      span[contenteditable] { border-bottom: 1px solid #ccc; }
       [contenteditable].block { border: 1px solid #ccc; background: none; }
+      :root { --section-gap: 1.1rem; }
+      .doc-header { margin-bottom: 1rem; padding-bottom: 0.75rem; }
+      .milestone-row { padding: 0.4rem 0; }
+      .risk-table thead th, .risk-table tbody td { padding: 0.35rem 0.625rem; }
+      .doc-footer { margin-top: 0.75rem; padding-top: 0.5rem; }
     }
   </style>
 </head>
@@ -316,11 +344,12 @@
         <thead><tr><th>Section</th><th>What to enter</th><th>Cadence</th></tr></thead>
         <tbody>
           <tr><td>Header (project/client)</td><td>Project name, client name, report date, current status pill</td><td>Every report</td></tr>
+          <tr><td>Status pill (header)</td><td>Click to cycle: On Track → At Risk → Delayed → Completed → On Hold</td><td>Every report</td></tr>
           <tr><td>KPI Strip</td><td>Overall % progress, current day/week, budget spent, open blockers</td><td>Every report — update all 4</td></tr>
           <tr><td>01 — Project Overview</td><td>Description, start/end dates, project lead, total budget</td><td>Set once, update end date if needed</td></tr>
-          <tr><td>02 — Deliverables table</td><td>Each deliverable, owner, due date, status pill, notes</td><td>Update status each report</td></tr>
-          <tr><td>03 — Milestones Timeline</td><td>5 key milestones with completion notes</td><td>Update dot colour as each milestone completes</td></tr>
-          <tr><td>04 — Risk Register</td><td>Risk, impact level, likelihood, owner, mitigation</td><td>Review weekly — add new risks, close resolved ones</td></tr>
+          <tr><td>02 — Deliverables table</td><td>Each deliverable, owner, due date, status pill, notes. Click "+ Add Deliverable Row" for more.</td><td>Update status each report</td></tr>
+          <tr><td>03 — Milestones Timeline</td><td>5 key milestones with completion notes. Click the dot to cycle its status.</td><td>Update as each milestone completes</td></tr>
+          <tr><td>04 — Risk Register</td><td>Risk, impact level (click to cycle), likelihood, owner, mitigation. Click "+ Add Risk Row" for more.</td><td>Review weekly — add new risks, close resolved ones</td></tr>
           <tr><td>05 — This Week's Actions</td><td>Agency actions (→) and client actions needed (!)</td><td>Replaced entirely each report — only current week</td></tr>
           <tr><td>06 — Notes</td><td>Any context, decisions made, things to carry forward</td><td>Optional — use as a running log</td></tr>
         </tbody>
@@ -331,13 +360,13 @@
       <ul>
         <li><strong style="color:#FCD34D;">Step 1</strong> — Duplicate the file at the start of each reporting week. Rename: <code style="background:rgba(180,83,9,0.2);padding:1px 5px;border-radius:3px;font-size:0.75rem;">dashboard-ClientName-Week3.html</code></li>
         <li><strong style="color:#FCD34D;">Step 2</strong> — Update the KPI strip first — overall progress %, days elapsed, budget, blockers.</li>
-        <li><strong style="color:#FCD34D;">Step 3</strong> — Update deliverable status pills and add notes for anything completed or changed.</li>
-        <li><strong style="color:#FCD34D;">Step 4</strong> — Advance the milestone dot colour: m-done (green) → m-active (amber) → m-future (grey).</li>
+        <li><strong style="color:#FCD34D;">Step 3</strong> — Click deliverable status pills to update them; add notes for anything completed or changed.</li>
+        <li><strong style="color:#FCD34D;">Step 4</strong> — Click each milestone's dot to advance it: Upcoming → Active → Done.</li>
         <li><strong style="color:#FCD34D;">Step 5</strong> — Replace Section 05 actions entirely with this week's specifics.</li>
         <li><strong style="color:#FCD34D;">Step 6</strong> — Print to PDF and email to client, or paste the link in your shared project channel.</li>
       </ul>
     </div>
-    <div class="readme-tip">💡 <strong>Pro tip:</strong> The status pill in the header header (<span style="background:#F0FDF4;color:#16A34A;padding:1px 6px;border-radius:9999px;font-size:0.75rem;font-weight:700;">On Track</span>) is the first thing clients see. Change it honestly — clients prefer a flagged risk over a surprise at go-live.</div>
+    <div class="readme-tip">💡 <strong>Pro tip:</strong> The status pill in the header (<span style="background:#F0FDF4;color:#16A34A;padding:1px 6px;border-radius:9999px;font-size:0.75rem;font-weight:700;">On Track</span>) is the first thing clients see. Change it honestly — clients prefer a flagged risk over a surprise at go-live.</div>
   </div>
 </div>
 
@@ -352,15 +381,15 @@
 <div class="page">
   <div class="doc-header">
     <div class="doc-header-left">
-      <div class="agency-name"><span contenteditable spellcheck="false">Your AI Agency Name</span></div>
+      <div class="agency-name"><span class="sample" contenteditable spellcheck="false">Your AI Agency Name</span></div>
       <h1>Project Dashboard</h1>
       <div class="doc-subtitle">AI Agency Operations Pack · Template 04</div>
     </div>
     <div class="doc-header-right">
-      <div><strong>Project:</strong> <span contenteditable spellcheck="false">Project Name</span></div>
-      <div><strong>Client:</strong> <span contenteditable spellcheck="false">Client Name</span></div>
-      <div><strong>Report Date:</strong> <span contenteditable spellcheck="false">DD / MM / YYYY</span></div>
-      <div><strong>Status:</strong> <span class="pill pill-green">On Track</span></div>
+      <div><strong>Project:</strong> <span class="sample" contenteditable spellcheck="false">Project Name</span></div>
+      <div><strong>Client:</strong> <span class="sample" contenteditable spellcheck="false">Client Name</span></div>
+      <div><strong>Report Date:</strong> <span class="sample" contenteditable spellcheck="false">DD / MM / YYYY</span></div>
+      <div><strong>Status:</strong> <button type="button" class="pill pill-green" onclick="cycleProjectStatus(this)">On Track</button></div>
     </div>
   </div>
 
@@ -410,7 +439,7 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;">
           <div>
             <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Project Lead</div>
-            <div style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;" contenteditable spellcheck="false">Your Name</div>
+            <div class="sample" style="font-size:0.8125rem;color:var(--ink-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;" contenteditable spellcheck="false">Your Name</div>
           </div>
           <div>
             <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);margin-bottom:0.25rem;">Budget Total</div>
@@ -439,53 +468,57 @@
           <td contenteditable spellcheck="false">Discovery call &amp; requirements doc</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">03 Jan</td>
-          <td><span class="pill pill-green">Done</span></td>
+          <td><button type="button" class="pill pill-green" onclick="cycleDeliverableStatus(this)">Done</button></td>
           <td contenteditable spellcheck="false">Signed off by client</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">Workflow mapping &amp; architecture</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">07 Jan</td>
-          <td><span class="pill pill-green">Done</span></td>
+          <td><button type="button" class="pill pill-green" onclick="cycleDeliverableStatus(this)">Done</button></td>
           <td contenteditable spellcheck="false">Shared on Notion</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">Lead scoring model prompt (v1)</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">12 Jan</td>
-          <td><span class="pill pill-amber">In Review</span></td>
+          <td><button type="button" class="pill pill-amber" onclick="cycleDeliverableStatus(this)">In Review</button></td>
           <td contenteditable spellcheck="false">Client reviewing output quality</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">Make.com automation build</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">18 Jan</td>
-          <td><span class="pill pill-blue">In Progress</span></td>
+          <td><button type="button" class="pill pill-blue" onclick="cycleDeliverableStatus(this)">In Progress</button></td>
           <td contenteditable spellcheck="false">CRM access needed</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">UAT &amp; testing with client team</td>
           <td contenteditable spellcheck="false">Agency + Client</td>
           <td contenteditable spellcheck="false">24 Jan</td>
-          <td><span class="pill pill-gray">Upcoming</span></td>
+          <td><button type="button" class="pill pill-gray" onclick="cycleDeliverableStatus(this)">Upcoming</button></td>
           <td contenteditable spellcheck="false"></td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">Go-live &amp; handover documentation</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">31 Jan</td>
-          <td><span class="pill pill-gray">Upcoming</span></td>
+          <td><button type="button" class="pill pill-gray" onclick="cycleDeliverableStatus(this)">Upcoming</button></td>
           <td contenteditable spellcheck="false"></td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
-          <td></td>
+          <td><button type="button" class="pill pill-gray" onclick="cycleDeliverableStatus(this)">Upcoming</button></td>
           <td contenteditable spellcheck="false"></td>
         </tr>
       </tbody>
     </table>
+    <button type="button" class="add-row-btn" onclick="addDeliverableRow()" style="display:flex;align-items:center;gap:0.5rem;width:100%;margin-top:0.625rem;padding:0.625rem 0.875rem;background:var(--surface);border:1.5px dashed var(--accent-mid);border-radius:6px;font-size:0.75rem;color:var(--ink-light);font-family:inherit;cursor:pointer;text-align:left;" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--surface)'">
+      <span style="font-size:1rem;font-weight:800;color:var(--accent);line-height:1;">+</span>
+      <span><strong style="color:var(--accent);">Add Deliverable Row</strong></span>
+    </button>
   </div>
 
   <div class="doc-footer">
@@ -503,7 +536,7 @@
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;padding-bottom:1rem;border-bottom:2px solid var(--accent);">
     <div>
       <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">Project Dashboard (cont.)</div>
-      <div style="font-size:1rem;font-weight:700;color:var(--ink);" contenteditable spellcheck="false">Project Name — Client Name</div>
+      <div class="editable-line sample" style="font-size:1rem;font-weight:700;color:var(--ink);" contenteditable spellcheck="false">Project Name — Client Name</div>
     </div>
     <div style="font-size:0.75rem;color:var(--ink-light);">Page 2 of 2</div>
   </div>
@@ -512,45 +545,45 @@
   <div class="section-block">
     <div class="section-label">03 — Milestones Timeline</div>
     <div>
-      <div class="milestone-row">
-        <div class="milestone-dot m-done"></div>
+      <div class="milestone-row" data-status="done">
+        <div class="milestone-dot" onclick="cycleMilestone(this)"></div>
         <div style="flex:1;">
-          <div style="font-size:0.875rem;font-weight:600;color:var(--ink);" contenteditable spellcheck="false">Milestone 1: Kickoff &amp; Discovery Complete</div>
+          <div class="milestone-title" contenteditable spellcheck="false">Milestone 1: Kickoff &amp; Discovery Complete</div>
           <div class="milestone-meta" contenteditable spellcheck="false">Completed 03 Jan 2025 · Kickoff call held, brief signed, access granted</div>
         </div>
-        <div><span class="pill pill-green">✓ Done</span></div>
+        <div><span class="pill">✓ Done</span></div>
       </div>
-      <div class="milestone-row">
-        <div class="milestone-dot m-done"></div>
+      <div class="milestone-row" data-status="done">
+        <div class="milestone-dot" onclick="cycleMilestone(this)"></div>
         <div style="flex:1;">
-          <div style="font-size:0.875rem;font-weight:600;color:var(--ink);" contenteditable spellcheck="false">Milestone 2: Architecture &amp; Design Approved</div>
+          <div class="milestone-title" contenteditable spellcheck="false">Milestone 2: Architecture &amp; Design Approved</div>
           <div class="milestone-meta" contenteditable spellcheck="false">Completed 07 Jan 2025 · Architecture doc reviewed and approved by client</div>
         </div>
-        <div><span class="pill pill-green">✓ Done</span></div>
+        <div><span class="pill">✓ Done</span></div>
       </div>
-      <div class="milestone-row">
-        <div class="milestone-dot m-active"></div>
+      <div class="milestone-row" data-status="active">
+        <div class="milestone-dot" onclick="cycleMilestone(this)"></div>
         <div style="flex:1;">
-          <div style="font-size:0.875rem;font-weight:600;color:var(--accent);" contenteditable spellcheck="false">Milestone 3: Build &amp; Integration (Current)</div>
+          <div class="milestone-title" contenteditable spellcheck="false">Milestone 3: Build &amp; Integration (Current)</div>
           <div class="milestone-meta" contenteditable spellcheck="false">Target: 18 Jan 2025 · Make.com scenario + CRM integration in progress</div>
         </div>
-        <div><span class="pill pill-blue">Active</span></div>
+        <div><span class="pill">Active</span></div>
       </div>
-      <div class="milestone-row">
-        <div class="milestone-dot m-future"></div>
+      <div class="milestone-row" data-status="future">
+        <div class="milestone-dot" onclick="cycleMilestone(this)"></div>
         <div style="flex:1;">
-          <div style="font-size:0.875rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">Milestone 4: UAT &amp; Client Testing</div>
+          <div class="milestone-title" contenteditable spellcheck="false">Milestone 4: UAT &amp; Client Testing</div>
           <div class="milestone-meta" contenteditable spellcheck="false">Target: 24 Jan 2025 · Client + agency test session with real leads</div>
         </div>
-        <div><span class="pill pill-gray">Upcoming</span></div>
+        <div><span class="pill">Upcoming</span></div>
       </div>
-      <div class="milestone-row">
-        <div class="milestone-dot m-future"></div>
+      <div class="milestone-row" data-status="future">
+        <div class="milestone-dot" onclick="cycleMilestone(this)"></div>
         <div style="flex:1;">
-          <div style="font-size:0.875rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">Milestone 5: Go-Live &amp; Handover</div>
+          <div class="milestone-title" contenteditable spellcheck="false">Milestone 5: Go-Live &amp; Handover</div>
           <div class="milestone-meta" contenteditable spellcheck="false">Target: 31 Jan 2025 · Full deployment + SOP documentation delivered</div>
         </div>
-        <div><span class="pill pill-gray">Upcoming</span></div>
+        <div><span class="pill">Upcoming</span></div>
       </div>
     </div>
   </div>
@@ -571,41 +604,45 @@
       <tbody>
         <tr>
           <td contenteditable spellcheck="false">Client delays providing CRM access</td>
-          <td><span class="impact impact-high">High</span></td>
+          <td><button type="button" class="impact impact-high" onclick="cycleImpact(this)">High</button></td>
           <td contenteditable spellcheck="false">Medium</td>
           <td contenteditable spellcheck="false">Client</td>
           <td contenteditable spellcheck="false">Escalate at next check-in; mock-test with dummy data in parallel</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">GPT API cost overrun in production</td>
-          <td><span class="impact impact-medium">Medium</span></td>
+          <td><button type="button" class="impact impact-medium" onclick="cycleImpact(this)">Medium</button></td>
           <td contenteditable spellcheck="false">Low</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">Set hard token limits; switch to GPT-4o-mini for bulk tasks</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">Lead scoring prompts returning inconsistent output</td>
-          <td><span class="impact impact-high">High</span></td>
+          <td><button type="button" class="impact impact-high" onclick="cycleImpact(this)">High</button></td>
           <td contenteditable spellcheck="false">Medium</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">A/B test prompts on 100 historical leads before go-live</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false">Client team not trained on new system</td>
-          <td><span class="impact impact-medium">Medium</span></td>
+          <td><button type="button" class="impact impact-medium" onclick="cycleImpact(this)">Medium</button></td>
           <td contenteditable spellcheck="false">Low</td>
           <td contenteditable spellcheck="false">Agency</td>
           <td contenteditable spellcheck="false">Record a Loom walkthrough + prepare one-page SOP</td>
         </tr>
         <tr>
           <td contenteditable spellcheck="false"></td>
-          <td></td>
+          <td><button type="button" class="impact impact-low" onclick="cycleImpact(this)">Low</button></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
           <td contenteditable spellcheck="false"></td>
         </tr>
       </tbody>
     </table>
+    <button type="button" class="add-row-btn" onclick="addRiskRow()" style="display:flex;align-items:center;gap:0.5rem;width:100%;margin-top:0.625rem;padding:0.625rem 0.875rem;background:var(--surface);border:1.5px dashed var(--accent-mid);border-radius:6px;font-size:0.75rem;color:var(--ink-light);font-family:inherit;cursor:pointer;text-align:left;" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--surface)'">
+      <span style="font-size:1rem;font-weight:800;color:var(--accent);line-height:1;">+</span>
+      <span><strong style="color:var(--accent);">Add Risk Row</strong></span>
+    </button>
   </div>
 
   <!-- NEXT ACTIONS -->
@@ -665,6 +702,84 @@
     <span>Client-facing safe · Update weekly</span>
   </div>
 </div>
+
+<script>
+  function makeCycler(states) {
+    return function (btn) {
+      var idx = states.findIndex(function (s) { return btn.classList.contains(s.cls); });
+      var next = states[(idx + 1) % states.length];
+      states.forEach(function (s) { btn.classList.remove(s.cls); });
+      btn.classList.add(next.cls);
+      btn.textContent = next.label;
+    };
+  }
+
+  var cycleProjectStatus = makeCycler([
+    { cls: 'pill-green', label: 'On Track' },
+    { cls: 'pill-amber', label: 'At Risk' },
+    { cls: 'pill-red',   label: 'Delayed' },
+    { cls: 'pill-blue',  label: 'Completed' },
+    { cls: 'pill-gray',  label: 'On Hold' }
+  ]);
+
+  var cycleDeliverableStatus = makeCycler([
+    { cls: 'pill-gray',  label: 'Upcoming' },
+    { cls: 'pill-blue',  label: 'In Progress' },
+    { cls: 'pill-amber', label: 'In Review' },
+    { cls: 'pill-green', label: 'Done' }
+  ]);
+
+  var cycleImpact = makeCycler([
+    { cls: 'impact-low',    label: 'Low' },
+    { cls: 'impact-medium', label: 'Medium' },
+    { cls: 'impact-high',   label: 'High' }
+  ]);
+
+  var MILESTONE_CYCLE = ['future', 'active', 'done'];
+  var MILESTONE_LABEL = { done: '✓ Done', active: 'Active', future: 'Upcoming' };
+  function cycleMilestone(dot) {
+    var row = dot.closest('.milestone-row');
+    var idx = MILESTONE_CYCLE.indexOf(row.dataset.status);
+    var next = MILESTONE_CYCLE[(idx + 1) % MILESTONE_CYCLE.length];
+    row.dataset.status = next;
+    row.querySelector('.pill').textContent = MILESTONE_LABEL[next];
+  }
+
+  function addDeliverableRow() {
+    var tbody = document.querySelector('.proj-table tbody');
+    var row = document.createElement('tr');
+    row.innerHTML =
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td><button type="button" class="pill pill-gray" onclick="cycleDeliverableStatus(this)">Upcoming</button></td>' +
+      '<td contenteditable spellcheck="false"></td>';
+    tbody.appendChild(row);
+    row.querySelector('[contenteditable]').focus();
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function addRiskRow() {
+    var tbody = document.querySelector('.risk-table tbody');
+    var row = document.createElement('tr');
+    row.innerHTML =
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td><button type="button" class="impact impact-low" onclick="cycleImpact(this)">Low</button></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>' +
+      '<td contenteditable spellcheck="false"></td>';
+    tbody.appendChild(row);
+    row.querySelector('[contenteditable]').focus();
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Sample/placeholder text loses its grey-italic styling once clicked into
+  document.addEventListener('focusin', function (e) {
+    if (e.target.classList && e.target.classList.contains('sample')) {
+      e.target.classList.remove('sample');
+    }
+  });
+</script>
 
 </body>
 </html>

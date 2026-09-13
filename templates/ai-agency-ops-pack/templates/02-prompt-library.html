@@ -41,14 +41,18 @@
     }
     [contenteditable] {
       outline: none;
+      transition: background 150ms;
+      border-radius: 2px;
+    }
+    [contenteditable]:focus { background: var(--accent-light); }
+    span[contenteditable] {
       border-bottom: 1.5px dashed var(--accent-mid);
       min-width: 60px;
       display: inline-block;
       padding: 0 2px;
-      transition: background 150ms;
-      border-radius: 2px;
     }
-    [contenteditable]:focus { background: var(--accent-light); border-bottom-color: var(--accent); }
+    span[contenteditable]:focus { border-bottom-color: var(--accent); }
+    .cat-tag[contenteditable] { border-bottom: none; min-width: 0; display: inline-flex; align-items: center; padding: 0.2rem 0.625rem; }
     [contenteditable].block {
       display: block;
       border-bottom: none;
@@ -59,6 +63,7 @@
       min-height: 2.25rem;
     }
     [contenteditable].block:focus { background: var(--accent-light); border-color: var(--accent); }
+    .sample { color: var(--ink-light); font-style: italic; }
     .print-hint {
       background: var(--accent);
       color: white;
@@ -247,11 +252,20 @@
     .readme-tip { background:rgba(13,148,136,0.12);border:1px solid rgba(13,148,136,0.25);border-radius:6px;padding:0.5rem 0.75rem;font-size:0.75rem;color:rgba(94,234,212,0.85);margin-top:0.5rem; }
 
     @media print {
+      html { font-size: 14px; }
       body { background: white; padding: 0; }
       .readme-bar { display: none; }
       .print-hint { display: none; }
-      .page { box-shadow: none; border-radius: 0; margin: 0; width:100%; padding:1.5cm 2cm; page-break-after:always; }
-      [contenteditable] { border-bottom: 1px solid #ccc; }
+      #add-card-btn { display: none !important; }
+      .page { box-shadow: none; border-radius: 0; margin: 0; width:100%; min-height:0; padding:0.7cm 1.6cm; }
+      .page:not(:last-of-type) { page-break-after: always; }
+      .prompt-card { margin-bottom: 0.375rem; }
+      .prompt-card-body { padding: 0.4rem 0.875rem; }
+      .prompt-text { min-height: 2.75rem; }
+      .prompt-meta-row { margin-top: 0.3rem; }
+      .doc-header { margin-bottom: 1rem; padding-bottom: 0.75rem; }
+      .doc-footer { margin-top: 0.6rem; padding-top: 0.4rem; }
+      span[contenteditable] { border-bottom: 1px solid #ccc; }
       [contenteditable].block { border: 1px solid #ccc; background: none; }
     }
   </style>
@@ -294,7 +308,7 @@
       <ul>
         <li><strong style="color:#5EEAD4;">Step 1</strong> — Keep one master file. Do not create per-client copies — this is your agency-wide library.</li>
         <li><strong style="color:#5EEAD4;">Step 2</strong> — When you discover a prompt that reliably works, add it immediately. Don't let good prompts live only in chat history.</li>
-        <li><strong style="color:#5EEAD4;">Step 3</strong> — Update the index table on Page 1 first, then add the detail card on Page 2 (duplicate a card block).</li>
+        <li><strong style="color:#5EEAD4;">Step 3</strong> — Update the index table on Page 1 first, then click the <strong style="color:#5EEAD4;">"+ Add New Prompt Card"</strong> button at the bottom of Page 2 to insert a blank card, and fill it in.</li>
         <li><strong style="color:#5EEAD4;">Step 4</strong> — When you improve an existing prompt, update the text and increment the date. Do not delete the old version — add a note in Limitations.</li>
         <li><strong style="color:#5EEAD4;">Step 5</strong> — Print to PDF monthly as an archived snapshot. Keep the HTML as the live working version.</li>
       </ul>
@@ -314,14 +328,14 @@
 <div class="page">
   <div class="doc-header">
     <div class="doc-header-left">
-      <div class="agency-name"><span contenteditable spellcheck="false">Your AI Agency Name</span></div>
+      <div class="agency-name"><span class="sample" contenteditable spellcheck="false">Your AI Agency Name</span></div>
       <h1>Prompt Library</h1>
       <div class="doc-subtitle">AI Agency Operations Pack · Template 02</div>
     </div>
     <div class="doc-header-right">
-      <div><strong>Updated:</strong> <span contenteditable spellcheck="false">DD / MM / YYYY</span></div>
-      <div><strong>Version:</strong> <span contenteditable spellcheck="false">1.0</span></div>
-      <div><strong>Owner:</strong> <span contenteditable spellcheck="false">Team / Agent Name</span></div>
+      <div><strong>Updated:</strong> <span class="sample" contenteditable spellcheck="false">DD / MM / YYYY</span></div>
+      <div><strong>Version:</strong> <span class="sample" contenteditable spellcheck="false">1.0</span></div>
+      <div><strong>Owner:</strong> <span class="sample" contenteditable spellcheck="false">Team / Agent Name</span></div>
     </div>
   </div>
 
@@ -491,7 +505,7 @@
     <div class="prompt-card-header">
       <span class="prompt-id" contenteditable spellcheck="false">P-001</span>
       <div style="display:flex;gap:0.5rem;align-items:center;">
-        <span class="cat-tag orange">Sales</span>
+        <span class="cat-tag orange" contenteditable spellcheck="false">Sales</span>
         <span style="font-size:0.75rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">Cold Outreach Email Writer</span>
       </div>
     </div>
@@ -522,7 +536,7 @@
     <div class="prompt-card-header">
       <span class="prompt-id" contenteditable spellcheck="false">P-002</span>
       <div style="display:flex;gap:0.5rem;align-items:center;">
-        <span class="cat-tag blue">Content</span>
+        <span class="cat-tag blue" contenteditable spellcheck="false">Content</span>
         <span style="font-size:0.75rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">LinkedIn Post Generator</span>
       </div>
     </div>
@@ -553,7 +567,7 @@
     <div class="prompt-card-header">
       <span class="prompt-id" contenteditable spellcheck="false">P-003</span>
       <div style="display:flex;gap:0.5rem;align-items:center;">
-        <span class="cat-tag purple">Ops</span>
+        <span class="cat-tag purple" contenteditable spellcheck="false">Ops</span>
         <span style="font-size:0.75rem;font-weight:600;color:var(--ink-muted);" contenteditable spellcheck="false">Client Report Summariser</span>
       </div>
     </div>
@@ -579,9 +593,45 @@
     </div>
   </div>
 
-  <div style="margin-top:1rem;padding:0.875rem 1rem;background:var(--surface);border:1px dashed var(--accent-mid);border-radius:8px;font-size:0.8125rem;color:var(--ink-light);">
-    <strong style="color:var(--accent);">+ Add New Prompt Card:</strong> Duplicate this page and fill in the ID, category, prompt text, variables, model, rating, and notes for each new prompt.
-  </div>
+  <button type="button" id="add-card-btn" onclick="addPromptCard()" style="display:flex;align-items:center;gap:0.5rem;width:100%;margin-top:1rem;padding:0.875rem 1rem;background:var(--surface);border:1.5px dashed var(--accent-mid);border-radius:8px;font-size:0.8125rem;color:var(--ink-light);font-family:inherit;cursor:pointer;text-align:left;transition:background 150ms,border-color 150ms;" onmouseover="this.style.background='var(--surface-teal)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--accent-mid)'">
+    <span style="font-size:1.125rem;font-weight:800;color:var(--accent);line-height:1;">+</span>
+    <span><strong style="color:var(--accent);">Add New Prompt Card</strong> — inserts a blank card above, ready to fill in.</span>
+  </button>
+
+  <script>
+    function addPromptCard() {
+      var cards = document.querySelectorAll('.prompt-card');
+      var nextNum = cards.length + 1;
+      var nextId = 'P-' + String(nextNum).padStart(3, '0');
+
+      var card = document.createElement('div');
+      card.className = 'prompt-card';
+      card.innerHTML =
+        '<div class="prompt-card-header">' +
+          '<span class="prompt-id sample" contenteditable spellcheck="false">' + nextId + '</span>' +
+          '<div style="display:flex;gap:0.5rem;align-items:center;">' +
+            '<span class="cat-tag sample" contenteditable spellcheck="false">Category</span>' +
+            '<span style="font-size:0.75rem;font-weight:600;color:var(--ink-muted);" class="sample" contenteditable spellcheck="false">New Prompt Title</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="prompt-card-body">' +
+          '<div class="prompt-label">Prompt Text</div>' +
+          '<div class="prompt-text" contenteditable spellcheck="false"></div>' +
+          '<div class="prompt-meta-row">' +
+            '<div class="prompt-meta-item"><div class="prompt-label">Variables to Replace</div><div style="font-size:0.8125rem;color:var(--ink-muted);" contenteditable spellcheck="false"></div></div>' +
+            '<div class="prompt-meta-item"><div class="prompt-label">Recommended Model</div><div style="font-size:0.8125rem;color:var(--ink-muted);" contenteditable spellcheck="false"></div></div>' +
+            '<div class="prompt-meta-item"><div class="prompt-label">Quality Rating</div><div style="font-size:0.8125rem;color:var(--ink-muted);" contenteditable spellcheck="false"></div></div>' +
+          '</div>' +
+          '<div class="prompt-label">Known Limitations / Notes</div>' +
+          '<div style="font-size:0.8125rem;color:var(--ink-muted);" contenteditable spellcheck="false"></div>' +
+        '</div>';
+
+      var addBtn = document.getElementById('add-card-btn');
+      addBtn.parentNode.insertBefore(card, addBtn);
+      card.querySelector('[contenteditable]').focus();
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  </script>
 
   <div class="doc-footer">
     <span class="brand">AI Agency Operations Pack</span>

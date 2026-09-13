@@ -47,19 +47,39 @@
     }
 
     /* ── EDITABLE FIELDS ───────────────────────── */
+    /* Base: focus highlight only. No forced display/width here — that was
+       collapsing block-level field boxes and breaking table-cell layout. */
     [contenteditable] {
       outline: none;
-      border-bottom: 1.5px dashed var(--accent-mid);
-      min-width: 60px;
-      display: inline-block;
-      padding: 0 2px;
       transition: background 150ms;
       border-radius: 2px;
     }
     [contenteditable]:focus {
       background: var(--accent-light);
+    }
+    /* Inline text fields (header meta, checklist labels, status badge) —
+       short spans that should size to their content, with a dashed underline
+       as the "click to edit" cue. */
+    span[contenteditable] {
+      border-bottom: 1.5px dashed var(--accent-mid);
+      min-width: 60px;
+      display: inline-block;
+      padding: 0 2px;
+    }
+    span[contenteditable]:focus {
       border-bottom-color: var(--accent);
     }
+    /* Short fill-in-the-blank lines (signature name/date, repeated headers) —
+       same dashed cue, but sized to their own content rather than the parent. */
+    .editable-line {
+      border-bottom: 1.5px dashed var(--accent-mid);
+      padding: 0 2px;
+      display: inline-block;
+    }
+    .editable-line:focus { border-bottom-color: var(--accent); }
+    /* Large free-text boxes: fill their container width (.field-value already
+       has its own solid border box; .block is the dashed-box variant used
+       elsewhere in the pack). */
     [contenteditable].block {
       display: block;
       border-bottom: none;
@@ -73,6 +93,8 @@
       background: var(--accent-light);
       border-color: var(--accent);
     }
+    /* Sample/placeholder content — visually distinct until the buyer edits it */
+    .sample { color: var(--ink-light); font-style: italic; }
 
     /* ── PRINT HINT BAR ────────────────────────── */
     .print-hint {
@@ -235,6 +257,7 @@
       height: 16px;
       border: 2px solid var(--border-strong);
       border-radius: 4px;
+      cursor: pointer;
       flex-shrink: 0;
       margin-top: 1px;
     }
@@ -247,6 +270,7 @@
       color: white;
       font-size: 9px;
     }
+    .check-box.done::after { content: '✓'; font-weight: 800; }
 
     /* ── TABLE ─────────────────────────────────── */
     table {
@@ -330,6 +354,7 @@
 
     /* ── PRINT STYLES ──────────────────────────── */
     @media print {
+      html { font-size: 14px; }
       body { background: white; padding: 0; }
       .readme-bar { display: none; }
       .print-hint { display: none; }
@@ -338,10 +363,20 @@
         border-radius: 0;
         margin: 0;
         width: 100%;
-        padding: 1.5cm 2cm;
+        min-height: 0;
+        padding: 0.85cm 1.6cm;
+      }
+      .page:not(:last-of-type) {
         page-break-after: always;
       }
-      [contenteditable] {
+      .section-block { margin-bottom: 1.1rem; }
+      .doc-header { margin-bottom: 1.1rem; padding-bottom: 0.85rem; }
+      .doc-footer { margin-top: 0.75rem; padding-top: 0.5rem; }
+      .sig-grid { margin-top: 0.75rem; }
+      .field-group .field-value.tall { min-height: 4rem; }
+      .checklist { gap: 0.375rem; }
+      .checklist li { padding: 0.375rem 0.75rem; }
+      span[contenteditable] {
         border-bottom: 1px solid #ccc;
       }
       [contenteditable].block {
@@ -378,7 +413,7 @@
           <tr><td>02 — Business Snapshot</td><td>What they do, who their customer is, team size, tech stack</td><td>During discovery call</td></tr>
           <tr><td>03 — Goals &amp; Metrics</td><td>Primary goal, KPIs, timeline, budget</td><td>During discovery call</td></tr>
           <tr><td>04 — Scope of Work table</td><td>Each deliverable, who owns it, due date</td><td>After scoping session</td></tr>
-          <tr><td>05 — Onboarding Checklist</td><td>Tick each box as steps are completed</td><td>Ongoing during onboarding week</td></tr>
+          <tr><td>05 — Onboarding Checklist</td><td>Click each box to tick it off as steps are completed</td><td>Ongoing during onboarding week</td></tr>
           <tr><td>06 — Risks &amp; Notes</td><td>Any blockers, out-of-scope items, dependencies</td><td>Before sending to client</td></tr>
           <tr><td>07 — Signatures</td><td>Print → sign physically, or use a tool like DocuSign / HelloSign</td><td>Before work begins</td></tr>
         </tbody>
@@ -404,6 +439,16 @@
   <button onclick="window.print()">🖨 Print / Save as PDF</button>
 </div>
 
+<script>
+  // Sample/placeholder text (agency name, date, project ID, etc.) is styled
+  // grey + italic until the buyer clicks in to replace it.
+  document.addEventListener('focusin', function (e) {
+    if (e.target.classList && e.target.classList.contains('sample')) {
+      e.target.classList.remove('sample');
+    }
+  });
+</script>
+
 <!-- ═══════════════════════════════════════════════════════════
      PAGE 1 — CLIENT BRIEF & SCOPE
 ══════════════════════════════════════════════════════════════ -->
@@ -412,15 +457,15 @@
   <!-- HEADER -->
   <div class="doc-header">
     <div class="doc-header-left">
-      <div class="agency-name"><span contenteditable spellcheck="false">Your AI Agency Name</span></div>
+      <div class="agency-name"><span class="sample" contenteditable spellcheck="false">Your AI Agency Name</span></div>
       <h1>Client Onboarding<br/>Brief</h1>
       <div class="doc-subtitle">AI Agency Operations Pack · Template 01</div>
     </div>
     <div class="doc-header-right">
-      <div><strong>Date:</strong> <span contenteditable spellcheck="false">DD / MM / YYYY</span></div>
-      <div><strong>Project ID:</strong> <span contenteditable spellcheck="false">PROJ-001</span></div>
-      <div><strong>Version:</strong> <span contenteditable spellcheck="false">1.0</span></div>
-      <div style="margin-top:0.5rem;"><span class="status-badge"><span class="status-dot"></span>New Client</span></div>
+      <div><strong>Date:</strong> <span class="sample" contenteditable spellcheck="false">DD / MM / YYYY</span></div>
+      <div><strong>Project ID:</strong> <span class="sample" contenteditable spellcheck="false">PROJ-001</span></div>
+      <div><strong>Version:</strong> <span class="sample" contenteditable spellcheck="false">1.0</span></div>
+      <div style="margin-top:0.5rem;"><span class="status-badge"><span class="status-dot"></span><span contenteditable spellcheck="false">New Client</span></span></div>
     </div>
   </div>
 
@@ -483,7 +528,7 @@
       </div>
       <div class="field-group">
         <label>Revenue Stage</label>
-        <div class="field-value" contenteditable spellcheck="false">Pre-revenue / Seed / Growth</div>
+        <div class="field-value sample" contenteditable spellcheck="false">Pre-revenue / Seed / Growth</div>
       </div>
       <div class="field-group">
         <label>Tech Stack (key tools)</label>
@@ -534,7 +579,7 @@
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;padding-bottom:1rem;border-bottom:2px solid var(--accent);">
     <div>
       <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">Client Onboarding Brief (cont.)</div>
-      <div style="font-size:1rem;font-weight:700;color:var(--ink);" contenteditable spellcheck="false">Client Name — Project Name</div>
+      <div class="editable-line sample" style="font-size:1rem;font-weight:700;color:var(--ink);" contenteditable spellcheck="false">Client Name — Project Name</div>
     </div>
     <div style="font-size:0.75rem;color:var(--ink-light);">Page 2 of 2</div>
   </div>
@@ -590,14 +635,14 @@
   <div class="section-block">
     <div class="section-label">05 — Onboarding Checklist</div>
     <ul class="checklist">
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">Kickoff call scheduled and completed</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">Client provided access to existing tools / platforms</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">NDA / contract signed by both parties</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">Brand assets &amp; guidelines received</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">First invoice issued and payment confirmed</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">Project management board shared with client</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">Communication channel set up (Slack / email / WhatsApp)</span></li>
-      <li><div class="check-box"></div><span contenteditable spellcheck="false">Weekly check-in cadence agreed</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">Kickoff call scheduled and completed</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">Client provided access to existing tools / platforms</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">NDA / contract signed by both parties</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">Brand assets &amp; guidelines received</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">First invoice issued and payment confirmed</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">Project management board shared with client</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">Communication channel set up (Slack / email / WhatsApp)</span></li>
+      <li><div class="check-box" onclick="this.classList.toggle('done')"></div><span contenteditable spellcheck="false">Weekly check-in cadence agreed</span></li>
     </ul>
   </div>
 
@@ -632,16 +677,16 @@
         <div class="sig-label">Agency Representative</div>
         <div class="sig-line"></div>
         <div style="font-size:0.8125rem;margin-top:0.5rem;">
-          <div contenteditable spellcheck="false">Name: ___________________________</div>
-          <div contenteditable spellcheck="false">Date: ___________________________</div>
+          <div class="editable-line" contenteditable spellcheck="false">Name: ___________________________</div>
+          <div class="editable-line" contenteditable spellcheck="false">Date: ___________________________</div>
         </div>
       </div>
       <div class="sig-box">
         <div class="sig-label">Client Representative</div>
         <div class="sig-line"></div>
         <div style="font-size:0.8125rem;margin-top:0.5rem;">
-          <div contenteditable spellcheck="false">Name: ___________________________</div>
-          <div contenteditable spellcheck="false">Date: ___________________________</div>
+          <div class="editable-line" contenteditable spellcheck="false">Name: ___________________________</div>
+          <div class="editable-line" contenteditable spellcheck="false">Date: ___________________________</div>
         </div>
       </div>
     </div>
