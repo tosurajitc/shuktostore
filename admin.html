@@ -502,6 +502,13 @@ select option{background:#1A2130;color:#F8F5EF}
         </div>
       </div>
     </div>
+    <!-- ── FAQ (visible for both books and templates) ── -->
+    <div class="card">
+      <div class="card-title">❓ FAQ</div>
+      <div class="dynamic-list" id="faq-list"></div>
+      <button class="add-item-btn" onclick="addFaqItem()">+ Add FAQ item</button>
+    </div>
+
     <!-- ── BOOK-ONLY SECTIONS (hidden for templates) ── -->
     <div id="book-only-content">
     <div class="card">
@@ -523,11 +530,6 @@ select option{background:#1A2130;color:#F8F5EF}
           <span class="field-hint">Follows up with the book's approach or story hook.</span>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-title">❓ FAQ</div>
-      <div class="dynamic-list" id="faq-list"></div>
-      <button class="add-item-btn" onclick="addFaqItem()">+ Add FAQ item</button>
     </div>
     <div class="card">
       <div class="card-title">👤 Author Bio</div>
