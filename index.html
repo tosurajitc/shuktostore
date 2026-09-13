@@ -1146,7 +1146,9 @@
 
   var _prevFocus  = null;
 
-  /* ── Merge admin data (price + positioning + razorpay + cover) ─ */
+  /* ── Merge admin data (price + positioning + razorpay) from localStorage ─ */
+  /* Cover is NOT read from localStorage — it is always sourced from the live
+     API response (window._spLiveBooks) to guarantee the DB base64 is used. */
   try {
     var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
     stored.forEach(function(b) {
@@ -1156,32 +1158,20 @@
       if (b.subtitle)    BOOKS[key].subtitle    = b.subtitle;
       if (b.price)       BOOKS[key].price       = b.price;
       if (b.positioning) BOOKS[key].positioning = b.positioning;
-      if (b.cover)       BOOKS[key].cover       = b.cover;
       if (b.razorpay && !b.razorpay.startsWith('RAZORPAY_')) BOOKS[key].buyLink = b.razorpay;
     });
   } catch(e) {}
 
   /* ── Cover src helper ───────────────────────────────────────── */
   function getCoverSrc(slug) {
-    /* 1. Check live in-memory books (API response via site-data.js) */
-    try {
-      var live = window._spLiveBooks || [];
-      for (var j = 0; j < live.length; j++) {
-        var lb = live[j];
-        if ((lb.slug === slug || lb.id === slug) && lb.cover) return lb.cover;
-      }
-    } catch(e) {}
-    /* 2. Check the hardcoded BOOKS dict (merged from localStorage at page load) */
-    if (BOOKS[slug] && BOOKS[slug].cover) return BOOKS[slug].cover;
-    /* 3. Check localStorage directly */
-    try {
-      var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
-      for (var i = 0; i < stored.length; i++) {
-        var b = stored[i];
-        if ((b.slug === slug || b.id === slug) && b.cover) return b.cover;
-      }
-    } catch(e) {}
-    /* No cover found — return null so the placeholder renders immediately */
+    /* Single source of truth: live in-memory books from the API response.
+       Never read cover from localStorage — covers are stripped there to
+       avoid quota errors. */
+    var live = window._spLiveBooks || [];
+    for (var j = 0; j < live.length; j++) {
+      var lb = live[j];
+      if ((lb.slug === slug || lb.id === slug) && lb.cover) return lb.cover;
+    }
     return null;
   }
 
@@ -1189,41 +1179,39 @@
   function openBookModal(slug) {
     var book = BOOKS[slug];
 
-    /* Fall back to sp_books (admin-added books not in hardcoded BOOKS dict) */
+    /* Fall back to live API books for admin-added books not in hardcoded BOOKS dict */
     if (!book) {
-      try {
-        var accentCycle = [
-          { solid:'#E8541A', bg:'rgba(184,135,75,0.15)', color:'#A07030', accent:'rgba(184,135,75,0.28)', grad:'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
-          { solid:'#DD7C3F', bg:'rgba(221,124,63,0.15)',  color:'#9A4B15', accent:'rgba(221,124,63,0.25)', grad:'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)' },
-          { solid:'#E8541A', bg:'rgba(47,174,157,0.15)',  color:'#1a7a6e', accent:'rgba(232,84,26,0.22)', grad:'linear-gradient(135deg,#2A1510 0%,#6B2B1A 50%,#1A1412 100%)' },
-          { solid:'#7C6AF5', bg:'rgba(124,106,245,0.15)', color:'#4B3CBF', accent:'rgba(124,106,245,0.22)', grad:'linear-gradient(135deg,#1A1240 0%,#2E2470 50%,#110E30 100%)' },
-          { solid:'#E05C8A', bg:'rgba(224,92,138,0.15)',  color:'#A02050', accent:'rgba(224,92,138,0.22)', grad:'linear-gradient(135deg,#2A0A18 0%,#5A1535 50%,#200812 100%)' },
-        ];
-        var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
-        var idx = stored.findIndex(function(b) { return (b.slug || b.id) === slug; });
-        var b = stored[idx];
-        if (b) {
-          var ac = accentCycle[idx % accentCycle.length];
-          book = {
-            id:          slug,
-            productType: b.productType || 'book',
-            title:       b.title    || 'Untitled',
-            subtitle:    b.subtitle || '',
-            tag:         b.tag      || b.genre || '',
-            tagBg:       b.tagBg    || ac.bg,
-            tagColor:    b.tagColor || ac.color,
-            accent:      ac.accent,
-            accentSolid: b.accentSolid || ac.solid,
-            coverPh:     b.coverPh  || ac.grad,
-            coverPhAccent: b.accentSolid || ac.solid,
-            positioning: b.positioning || b.desc || b.description || '',
-            desc:        b.desc     || b.description || '',
-            price:        b.price    || '',
-            salesPage:   b.salesPage || ((b.productType === 'template' ? 'templates/' : 'books/') + slug + '/index.html'),
-            buyLink:     b.razorpay || '#'
-          };
-        }
-      } catch(e) {}
+      var accentCycle = [
+        { solid:'#E8541A', bg:'rgba(184,135,75,0.15)', color:'#A07030', accent:'rgba(184,135,75,0.28)', grad:'linear-gradient(135deg,#0A0E13 0%,#1E2940 50%,#12181F 100%)' },
+        { solid:'#DD7C3F', bg:'rgba(221,124,63,0.15)',  color:'#9A4B15', accent:'rgba(221,124,63,0.25)', grad:'linear-gradient(135deg,#1E3630 0%,#2A4F48 50%,#0F2A26 100%)' },
+        { solid:'#E8541A', bg:'rgba(47,174,157,0.15)',  color:'#1a7a6e', accent:'rgba(232,84,26,0.22)', grad:'linear-gradient(135deg,#2A1510 0%,#6B2B1A 50%,#1A1412 100%)' },
+        { solid:'#7C6AF5', bg:'rgba(124,106,245,0.15)', color:'#4B3CBF', accent:'rgba(124,106,245,0.22)', grad:'linear-gradient(135deg,#1A1240 0%,#2E2470 50%,#110E30 100%)' },
+        { solid:'#E05C8A', bg:'rgba(224,92,138,0.15)',  color:'#A02050', accent:'rgba(224,92,138,0.22)', grad:'linear-gradient(135deg,#2A0A18 0%,#5A1535 50%,#200812 100%)' },
+      ];
+      var live = window._spLiveBooks || [];
+      var idx  = live.findIndex(function(b) { return (b.slug || b.id) === slug; });
+      var b    = live[idx];
+      if (b) {
+        var ac = accentCycle[idx % accentCycle.length];
+        book = {
+          id:            slug,
+          productType:   b.productType || 'book',
+          title:         b.title    || 'Untitled',
+          subtitle:      b.subtitle || '',
+          tag:           b.tag      || b.genre || '',
+          tagBg:         b.tagBg    || ac.bg,
+          tagColor:      b.tagColor || ac.color,
+          accent:        ac.accent,
+          accentSolid:   b.accentSolid || ac.solid,
+          coverPh:       b.coverPh  || ac.grad,
+          coverPhAccent: b.accentSolid || ac.solid,
+          positioning:   b.positioning || b.desc || b.description || '',
+          desc:          b.desc     || b.description || '',
+          price:         b.price    || '',
+          salesPage:     b.salesPage || ((b.productType === 'template' ? 'templates/' : 'books/') + slug + '/index.html'),
+          buyLink:       b.razorpay || '#'
+        };
+      }
     }
 
     if (!book) return;
@@ -1256,18 +1244,8 @@
     buyBtn.style.background = book.accentSolid;
     detailsBtn.href        = book.salesPage;
 
-    /* Cover card — read cover directly from live API data (same source the
-       catalog card was rendered from), fall back through BOOKS dict and
-       localStorage via getCoverSrc only if live data is unavailable */
-    var src = null;
-    try {
-      var live = window._spLiveBooks || [];
-      for (var ci = 0; ci < live.length; ci++) {
-        var cl = live[ci];
-        if ((cl.slug === slug || cl.id === slug) && cl.cover) { src = cl.cover; break; }
-      }
-    } catch(e) {}
-    if (!src) src = getCoverSrc(slug);
+    /* Cover card — read base64 cover from the live API data only */
+    var src = getCoverSrc(slug);
     var phHtml =
       '<div class="bm-cover-ph" style="background:' + book.coverPh + ';">' +
         '<div class="bm-cover-ph-title" style="color:' + book.coverPhAccent + ';font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.25rem;">' + book.tag.toUpperCase() + '</div>' +
@@ -1372,24 +1350,16 @@
   var _origOpenBookModal = openBookModal;
   openBookModal = function(slug) {
     _origOpenBookModal(slug);
-    /* Read previewImages — prefer the live in-memory array set by site-data.js
-       (window._spLiveBooks) to avoid the localStorage async timing race.
-       Fall back to localStorage for cases where site-data.js hasn't run yet. */
+    /* Read previewImages from the live API array only */
     var urls = [];
-    try {
-      var sources = [window._spLiveBooks];
-      if (!sources[0] || !sources[0].length) {
-        sources[0] = JSON.parse(localStorage.getItem('sp_books') || '[]');
+    var live = window._spLiveBooks || [];
+    for (var i = 0; i < live.length; i++) {
+      var b = live[i];
+      if ((b.slug === slug || b.id === slug) && Array.isArray(b.previewImages) && b.previewImages.length) {
+        urls = b.previewImages;
+        break;
       }
-      var stored = sources[0] || [];
-      for (var i = 0; i < stored.length; i++) {
-        var b = stored[i];
-        if ((b.slug === slug || b.id === slug) && Array.isArray(b.previewImages) && b.previewImages.length) {
-          urls = b.previewImages;
-          break;
-        }
-      }
-    } catch(e) {}
+    }
     flipperUrls = urls;
     if (sampleBtn) {
       sampleBtn.classList.toggle('hidden', urls.length === 0);

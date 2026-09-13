@@ -1,7 +1,7 @@
 /**
  * SHUKTO PRESS — site-data.js
  * Loads homepage content from the API (/api/books, /api/settings, /api/homepage)
- * and renders it live. Falls back to localStorage for local development.
+ * and renders it live.
  *
  * Included in index.html only.
  */
@@ -20,7 +20,7 @@
     }
   }
 
-  /* ── localStorage fallback (local dev only) ──────────────────── */
+  /* ── localStorage helpers (settings/homepage only — not books) ── */
   function loadLocal(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch { return fallback; }
   }
@@ -379,34 +379,29 @@
     });
   }
 
-  /* ── Main: fetch from API, fall back to localStorage ─────────── */
+  /* ── Main: fetch from API ────────────────────────────────────── */
   async function init() {
-    // Try API first (production)
     const [books, settings, homepage] = await Promise.all([
       fetchJSON('/api/books'),
       fetchJSON('/api/settings'),
       fetchJSON('/api/homepage'),
     ]);
 
-    // If API returned data, use it
-    if (books !== null || settings !== null || homepage !== null) {
-      applyAll(settings || {}, homepage || {}, books || []);
-      // Also keep localStorage in sync for admin preview
-      if (books)    localStorage.setItem('sp_books',    JSON.stringify(books));
-      if (settings) localStorage.setItem('sp_settings', JSON.stringify(settings));
-      if (homepage) localStorage.setItem('sp_homepage', JSON.stringify(homepage));
-      // Expose live books array for the modal flipper (avoids localStorage timing race)
-      if (books)    window._spLiveBooks = books;
-    } else {
-      // Fallback: localStorage (local dev / offline)
-      const localBooks = loadLocal('sp_books', []);
-      window._spLiveBooks = localBooks;
-      applyAll(
-        loadLocal('sp_settings', {}),
-        loadLocal('sp_homepage', {}),
-        localBooks
-      );
-    }
+    // books array from the API is the single source of truth for covers;
+    // settings/homepage fall back to localStorage when the API is unavailable.
+    applyAll(
+      settings || loadLocal('sp_settings', {}),
+      homepage || loadLocal('sp_homepage', {}),
+      books    || []
+    );
+
+    // Cache settings/homepage for offline fallback (no large blobs).
+    if (settings) { try { localStorage.setItem('sp_settings', JSON.stringify(settings)); } catch(e) {} }
+    if (homepage) { try { localStorage.setItem('sp_homepage', JSON.stringify(homepage)); } catch(e) {} }
+
+    // Expose the live books array (with base64 covers from the DB) so the
+    // modal can read covers directly without touching localStorage.
+    if (books) window._spLiveBooks = books;
   }
 
   if (document.readyState === 'loading') {
@@ -415,12 +410,12 @@
     init();
   }
 
-  /* Expose for admin preview */
+  /* Expose for admin preview (settings/homepage only — books come from API) */
   window._spApplyAll = function () {
     applyAll(
       loadLocal('sp_settings', {}),
       loadLocal('sp_homepage', {}),
-      loadLocal('sp_books',    [])
+      window._spLiveBooks || []
     );
   };
 })();
