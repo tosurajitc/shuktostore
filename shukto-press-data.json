@@ -548,6 +548,87 @@
       ],
       "razorpay": "RAZORPAY_PAYMENT_LINK_HOME_SORTED",
       "download": "NOTION_TEMPLATE_LINK_HOME_SORTED"
+    },
+    {
+      "id": "content-dashboard",
+      "productType": "template",
+      "title": "Content Dashboard",
+      "subtitle": "Plan, track and manage all your content — in one browser-based dashboard.",
+      "author": "Shukto Press",
+      "category": "HTML Template · Content Planning",
+      "audienceLine": "Creators, bloggers, YouTubers, newsletter writers, and social media managers",
+      "slug": "content-dashboard",
+      "positioning": "Content Dashboard is a single, self-contained HTML file that gives content creators a full planning and tracking system — calendar, pipeline, idea bank, performance log, repurposing tracker, and monthly goals — all in one clean, browser-editable file. Open in any browser, click to edit, print to PDF in one click. No subscriptions, no accounts, no setup.",
+      "accent": "#2563EB",
+      "accentHi": "#3B82F6",
+      "heroBg": "#0A1628",
+      "rotation": "-2",
+      "cover": null,
+      "insideItems": [
+        { "icon": "📊", "title": "Content Overview", "body": "Top-level KPIs — total pieces published, average weekly cadence, content by channel and a quick status summary at a glance." },
+        { "icon": "📅", "title": "Content Calendar", "body": "Monthly calendar view with every piece of content mapped by date, channel and status. See scheduling gaps and clashes instantly." },
+        { "icon": "📋", "title": "Content Pipeline", "body": "Full kanban-style tracker — Idea, Outline, Draft, Review, Scheduled, Published. Nothing falls through the cracks." },
+        { "icon": "💡", "title": "Idea Bank", "body": "Capture every idea with a title, channel, content type, source and priority rating. Filter by channel when planning a week." },
+        { "icon": "📈", "title": "Performance Log", "body": "Track views, clicks, shares and notes per published piece. Spot your best-performing formats and topics over time." },
+        { "icon": "🔁", "title": "Repurposing Tracker", "body": "Log which pieces have been repurposed, for which channel, and what still hasn't been reused. Maximise every asset you create." },
+        { "icon": "🎯", "title": "Monthly Goals", "body": "Set publishing targets by channel. Track actual vs. goal. Review at a glance without digging through data." },
+        { "icon": "📝", "title": "Content Notes", "body": "Brand voice notes, recurring series guidelines, channel rules, and anything else your content operation needs to stay consistent." }
+      ],
+      "forItems": [
+        "Solo content creators and bloggers managing a posting schedule",
+        "YouTubers tracking upload schedules and video pipelines",
+        "Newsletter writers and podcasters who need consistency",
+        "Social media managers handling multiple channels at once",
+        "Small agencies presenting content plans to clients"
+      ],
+      "notForItems": [
+        "Teams needing real-time collaborative editing (this is a single-user local file)",
+        "Those wanting automated analytics pulled from social platforms",
+        "Anyone looking for a full CMS or publishing tool"
+      ],
+      "faqItems": [
+        { "q": "What format is the template?", "a": "It's a single HTML file. Open it in any modern browser — Chrome, Firefox, Safari, Edge. Click any cell or field to edit it directly. Use the built-in Save as PDF button when done." },
+        { "q": "Do I need to know HTML or code anything?", "a": "No. The dashboard is fully pre-built. Open the file and click to edit — no coding involved at any point." },
+        { "q": "Can I edit the colours or layout to match my brand?", "a": "Yes — with basic HTML/CSS knowledge you can customise colours, fonts and layout. The file is clean and well-commented. Most people use it as-is." },
+        { "q": "Does it work on mobile?", "a": "The dashboard is designed for desktop use. It will open on mobile but is best used on a laptop or desktop browser." },
+        { "q": "Is there a refund policy?", "a": "Yes. 30-day no-questions-asked refund. Email shuktoai@gmail.com and we'll process within 2 business days." }
+      ],
+      "stats": [
+        { "num": "8", "label": "Sections covering every content need" },
+        { "num": "1", "label": "File — no apps, no subscriptions" },
+        { "num": "5", "label": "Minutes to set up and start planning" },
+        { "num": "∞", "label": "Channels you can manage with it" }
+      ],
+      "pullQuote": "\"Did I already post about this? What was I working on last week? Where's that draft I had? — Content Dashboard answers all of it.\"",
+      "promiseHeading": "Your entire content operation. One clean file.",
+      "promiseBody": "Content Dashboard was built by asking one question for every section: 'Does this help a creator publish more consistently?' If not, it was cut.",
+      "authorBioName": "Surajit Chatterjee",
+      "authorInitial": "SC",
+      "authorBio": "AI architect, IIM alumnus, and founder who has built content systems for productised services and agencies. The Content Dashboard came out of the same frustration every creator feels — too many scattered tools, not enough clarity on what to publish next.",
+      "authorPhoto": null,
+      "ctaHeading": "Stop juggling tabs. Start publishing consistently.",
+      "ctaBody": "One HTML file. Your entire content operation. Open, edit, plan, print — and get back to creating.",
+      "startSteps": [
+        { "title": "Download the HTML file", "body": "Save it somewhere accessible — your Documents folder, Dropbox, or Desktop." },
+        { "title": "Open it in your browser", "body": "Double-click the file to open it in Chrome, Firefox, or Safari. You'll see the full dashboard immediately." },
+        { "title": "Replace the sample data", "body": "Click any field to edit. Fill in your own channels, ideas, and content pieces. Sample data shows you how everything works." },
+        { "title": "Print to PDF when needed", "body": "Use the Save as PDF button at the top. For best results, use Chrome with default margins." }
+      ],
+      "bookTestimonials": [],
+      "price": "299",
+      "pricingFeatures": [
+        "Complete HTML dashboard file",
+        "Content Calendar, Pipeline & Overview",
+        "Idea Bank with priority & channel tags",
+        "Performance Log per piece",
+        "Repurposing Tracker",
+        "Monthly Goals tracker",
+        "Content Notes section",
+        "Built-in Print to PDF button",
+        "Sample data pre-filled"
+      ],
+      "razorpay": "RAZORPAY_PAYMENT_LINK_CONTENT_DASHBOARD",
+      "download": "CONTENT_DASHBOARD_DOWNLOAD_LINK"
     }
   ],
   "settings": {
