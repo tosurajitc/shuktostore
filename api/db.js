@@ -4,6 +4,8 @@
  */
 'use strict';
 
+const path = require('path');
+const fs   = require('fs');
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -118,6 +120,34 @@ async function patchData() {
         [JSON.stringify(p.razorpay), p.id]
       );
     }
+
+    // Patch cover images — seed.js uses ON CONFLICT DO NOTHING so books
+    // seeded before the cover field existed have no cover in the DB.
+    // Read covers from shukto-press-data.json and write them into any row
+    // where the cover field is currently missing.
+    try {
+      const jsonPath = path.join(__dirname, '..', 'shukto-press-data.json');
+      if (fs.existsSync(jsonPath)) {
+        const fileData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+        if (fileData.books && fileData.books.length) {
+          for (const book of fileData.books) {
+            if (!book.cover) continue;
+            await client.query(
+              `UPDATE books
+               SET data = jsonb_set(data, '{cover}', $1::jsonb, true),
+                   updated_at = now()
+               WHERE id = $2
+                 AND (data->>'cover') IS NULL`,
+              [JSON.stringify(book.cover), book.id || book.slug]
+            );
+          }
+          console.log('[db] Cover patch applied.');
+        }
+      }
+    } catch (err) {
+      console.error('[db] Cover patch error:', err.message);
+    }
+
     console.log('[db] Data patches applied.');
   } catch (err) {
     console.error('[db] patchData error:', err.message);
