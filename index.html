@@ -1163,9 +1163,7 @@
 
   /* ── Cover src helper ───────────────────────────────────────── */
   function getCoverSrc(slug) {
-    /* 1. Check the hardcoded BOOKS dict (already merged with admin data above) */
-    if (BOOKS[slug] && BOOKS[slug].cover) return BOOKS[slug].cover;
-    /* 2. Check live in-memory books (API response via site-data.js — avoids async race) */
+    /* 1. Check live in-memory books (API response via site-data.js) */
     try {
       var live = window._spLiveBooks || [];
       for (var j = 0; j < live.length; j++) {
@@ -1173,7 +1171,9 @@
         if ((lb.slug === slug || lb.id === slug) && lb.cover) return lb.cover;
       }
     } catch(e) {}
-    /* 3. Check localStorage (admin-uploaded base64 / offline fallback) */
+    /* 2. Check the hardcoded BOOKS dict (merged from localStorage at page load) */
+    if (BOOKS[slug] && BOOKS[slug].cover) return BOOKS[slug].cover;
+    /* 3. Check localStorage directly */
     try {
       var stored = JSON.parse(localStorage.getItem('sp_books') || '[]');
       for (var i = 0; i < stored.length; i++) {
@@ -1181,8 +1181,8 @@
         if ((b.slug === slug || b.id === slug) && b.cover) return b.cover;
       }
     } catch(e) {}
-    /* 4. Last resort: try conventional assets/covers/<slug>.jpg */
-    return 'assets/covers/' + slug + '.jpg';
+    /* No cover found — return null so the placeholder renders immediately */
+    return null;
   }
 
   /* ── Open modal ─────────────────────────────────────────────── */
